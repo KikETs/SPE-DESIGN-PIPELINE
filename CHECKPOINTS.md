@@ -8,7 +8,7 @@ regular repository file-size limit.
 
 - Release: `v0.1.0`
 - Asset: `paper-model-checkpoints-v0.1.0.tar.gz`
-- URL: `https://github.com/KikETs/test/releases/download/v0.1.0/paper-model-checkpoints-v0.1.0.tar.gz`
+- URL: `https://github.com/KikETs/SPE-DESIGN-PIPELINE/releases/download/v0.1.0/paper-model-checkpoints-v0.1.0.tar.gz`
 - Size: `415524028` bytes
 - SHA256: `9bd1cf640e9519e18b4919c8b1248ee7d39b854b79d0d29fb3eb6c205053ffd6`
 

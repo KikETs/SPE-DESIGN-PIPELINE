@@ -14,7 +14,7 @@ from urllib.request import Request, urlopen
 
 
 ASSET_URL = (
-    "https://github.com/KikETs/test/releases/download/v0.1.0/"
+    "https://github.com/KikETs/SPE-DESIGN-PIPELINE/releases/download/v0.1.0/"
     "paper-model-checkpoints-v0.1.0.tar.gz"
 )
 ASSET_SHA256 = "9bd1cf640e9519e18b4919c8b1248ee7d39b854b79d0d29fb3eb6c205053ffd6"
