@@ -76,6 +76,9 @@ def count_csv_rows(path: Path) -> int:
 
 def check_required_files(root: Path) -> None:
     required = [
+        "LICENSE",
+        "CITATION.cff",
+        "CHECKPOINTS.md",
         "MY_PAPER_RELATED/MODELS/README.md",
         "MY_PAPER_RELATED/MODELS/data/simulation-trajectory-aggregate_aligned.csv",
         "MY_PAPER_RELATED/MODELS/FCD_runs/final_summary_all_models_repeated.csv",

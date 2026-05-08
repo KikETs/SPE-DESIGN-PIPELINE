@@ -52,6 +52,18 @@ After installing dependencies, include import checks:
 python scripts/repro_smoke.py --check-imports
 ```
 
+## Optional Pretrained Checkpoints
+
+Pretrained model weights are distributed through the `v0.1.0` GitHub Release,
+not through Git history:
+
+```bash
+python scripts/download_checkpoints.py
+```
+
+See `CHECKPOINTS.md` for the asset URL, checksum, included paths, and excluded
+cache artifacts.
+
 ## Reproduction Entry Points
 
 1. Inspect the release structure and expected files:
@@ -94,3 +106,9 @@ python MY_PAPER_RELATED/revised/polybert_weighted_evidence/scripts/train_polyber
 
 The current tracked tree is designed to stay below normal GitHub file-size
 limits without requiring Git LFS.
+
+## Citation And License
+
+Use `CITATION.cff` for software citation metadata. Original source code and
+documentation are released under the top-level `LICENSE`; third-party and
+vendored components retain their own license terms as listed in `NOTICE.md`.
