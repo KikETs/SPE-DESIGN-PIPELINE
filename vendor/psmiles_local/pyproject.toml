@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "psmiles"
+version = "0.6.10"
+description = "Local vendored psmiles package for the reproducibility release."
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+dependencies = [
+  "canonicalize-psmiles==0.1.2",
+  "numpy",
+  "pandas",
+  "rdkit",
+  "scikit-learn",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]

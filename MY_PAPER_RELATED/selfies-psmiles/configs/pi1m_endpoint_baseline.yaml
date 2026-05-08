@@ -1,0 +1,36 @@
+seed: 42
+
+experiment:
+  name: pi1m_endpoint_baseline
+  output_root: outputs/experiments
+
+data:
+  dataset_dir: outputs/pi1m_endpoint_dataset
+  train_file: train.jsonl
+  valid_file: valid.jsonl
+  test_file: test.jsonl
+  min_token_freq: 1
+  max_train_samples: null
+  max_valid_samples: null
+
+model:
+  embed_dim: 256
+  hidden_dim: 256
+  num_layers: 2
+  dropout: 0.2
+
+training:
+  device: cuda
+  epochs: 30
+  batch_size: 128
+  learning_rate: 0.0003
+  weight_decay: 0.01
+  grad_clip: 1.0
+  early_stopping_patience: 6
+  num_workers: 0
+
+evaluation:
+  split: test
+  constrained_decoding: true
+  augmentation_eval_samples: 200
+  max_variants_per_sample: 4

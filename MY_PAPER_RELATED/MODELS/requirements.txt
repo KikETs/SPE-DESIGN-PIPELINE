@@ -1,0 +1,18 @@
+torch
+numpy
+pandas
+scipy
+scikit-learn
+tqdm
+matplotlib
+ipywidgets
+ipython
+rdkit
+selfies>=2.2.0
+sentence-transformers
+umap-learn
+Pillow
+
+-e MY_PAPER_RELATED/selfies-psmiles
+./vendor/canonicalize_psmiles-0.1.2-py3-none-any.whl
+-e ./vendor/psmiles_local

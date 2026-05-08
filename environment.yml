@@ -1,0 +1,18 @@
+name: paper-repro
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - pillow
+  - tqdm
+  - ipywidgets
+  - jupyter
+  - nbformat
+  - pip:
+      - -r requirements.txt

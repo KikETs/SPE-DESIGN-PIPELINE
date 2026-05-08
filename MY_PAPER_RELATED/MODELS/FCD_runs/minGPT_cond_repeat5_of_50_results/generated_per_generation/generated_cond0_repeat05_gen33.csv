@@ -1,0 +1,1076 @@
+target_conductivity,repeat,generation_idx,mol_smiles,duplicate,diversity,validity,has_two_ends
+0,5,33,CCCC(NC(=O)[Au])C(C)(O[Cu])C(C)F,False,novel,ok,True
+0,5,33,CCN(CCCF)C(=O)C(C)(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,O=CNCC(CO[Cu])NC(=O)CCF)NC(=O)[Au],False,novel,"SMILES Parse Error: extra close parentheses while parsing: O=CNCC(CO[Cu])NC(=O)CCF)NC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'O=CNCC(CO[Cu])NC(=O)CCF)NC(=O)[Au]' for input: 'O=CNCC(CO[Cu])NC(=O)CCF)NC(=O)[Au]'",True
+0,5,33,CC(C)(CCO[Cu])NC(=O)C(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCCC(=O)(N[Cu])C(=O)COCOC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CCCC(=O)(N[Cu])C(=O)COCOC(=O)[Au]',True
+0,5,33,C=COCC(CNC(=O)[Au])C(C)(C)CO[Cu],False,novel,ok,True
+0,5,33,C=C(C)CNC(=O)CC(CN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CNC(=O)COC(=O)[Au])(O[Cu])C(C)(C)C,False,novel,ok,True
+0,5,33,C=C(C)C(OC(=O)[Au])C(C)C(C)O[Cu],False,novel,ok,True
+0,5,33,CCN(C)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCNCCC(C)(C)O[Cu])CNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)C(COC(=O)[Au])NC(=O)CO[Cu],False,novel,ok,True
+0,5,33,C#CC(CO[Cu])N(C)C(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)N(C)CC(CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCC(C)C(N[Cu])C(=O)NCCCCNC(=O)[Au],False,novel,ok,True
+0,5,33,O=C(COCC(O[Cu])C(COC(=O)[Au])(=O)C,False,novel,SMILES Parse Error: extra open parentheses for input: 'O=C(COCC(O[Cu])C(COC(=O)[Au])(=O)C',True
+0,5,33,CCO=CC(=O)NC(CO[Cu])COC(=O)[Au],False,novel,"Explicit valence for atom # 2 O, 3, is greater than permitted",True
+0,5,33,COC(=O)CNCC(CCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCC(C)(O[Cu])C(=O)NCC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,=O)N(CCCO[Cu])CC(C)(OC(=O)[Au],False,novel,"SMILES Parse Error: syntax error while parsing: =O)N(CCCO[Cu])CC(C)(OC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES '=O)N(CCCO[Cu])CC(C)(OC(=O)[Au]' for input: '=O)N(CCCO[Cu])CC(C)(OC(=O)[Au]'",True
+0,5,33,C=C(COC(=O)[Au])(C)N(C)C(CC)(C)C,False,novel,"Explicit valence for atom # 1 C, 5, is greater than permitted",False
+0,5,33,CCCC(CC)NC(=O)C(CO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(CNC(C)CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,O=C([Au])NCC(CNC(=S)(=O)CO[Cu])CC,False,novel,"Explicit valence for atom # 8 C, 6, is greater than permitted",True
+0,5,33,CCCCN(CCCCOC(=O)[Au])CCO[Cu],False,novel,ok,True
+0,5,33,CCOC(=O)C(COC(=O)[Au])OCCO[Cu],False,novel,ok,True
+0,5,33,CCC(CN[Cu])NC(=O)CCNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(COC(=O)[Au])NC(=O)COCCN[Cu],False,novel,ok,True
+0,5,33,CC(CCOC(=O)[Au])NC(=O)C(C)(C)N[Cu],False,novel,ok,True
+0,5,33,CCCC(=O)NC(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CO[Cu])CN(C)CC(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCCOC(=O)[Au])N(CO[Cu])CC#N,False,novel,ok,True
+0,5,33,C#CCC=CC=CCN(C)CC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CNC(=O)COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,COC(C)OCCC(=O)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(CCO[Cu])NC(=O)C(C)(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCOC(=O)[Au])SCC(C#N)(C)CO[Cu],False,novel,ok,True
+0,5,33,CCC(CNCC(CN(C)N[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(CNCC(CN(C)N[Cu])OC(=O)[Au]',True
+0,5,33,CCC(C)(CNC(=O)[Au])NCCO[Cu],False,novel,ok,True
+0,5,33,CC(CN[Cu])CCOCCCNC(=O)[Au],False,novel,ok,True
+0,5,33,COCC(C)(O[Cu])C(=O)NC(C)COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C)(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CO[Cu])OC(CNC(=O)[Au])OC(=O)[Au],False,novel,More than two ends,False
+0,5,33,CCCNC(CCOC(=O)[Au])C(C)(C)CN[Cu],False,novel,ok,True
+0,5,33,CCC(CNCC(CO[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(CNCC(CO[Cu])OC(=O)[Au]',True
+0,5,33,CCN(CC)C(=O)CC(CNC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CCCC(C)(COC(=O)[Au])C(N[Cu])C(=O,False,novel,SMILES Parse Error: extra open parentheses for input: 'CCCC(C)(COC(=O)[Au])C(N[Cu])C(=O',True
+0,5,33,CC(CN[Cu])NC(C)CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC=C(C)(CN[Cu])NCCOC(=O)[Au],False,novel,"Explicit valence for atom # 2 C, 5, is greater than permitted",True
+0,5,33,C(C)(O[Cu])C(C)(OC(=O)[Au])C(=O)O,False,novel,ok,True
+0,5,33,CN(CC(=O)O)CC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(=O)C(NCC(CCNC(=O)[Au])N[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(=O)C(NCC(CCNC(=O)[Au])N[Cu]',True
+0,5,33,CC(C)CN(C)CC(CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,C=CC=CC(=O)NCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCCCCN(C)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CCCO[Cu])NC(=O)C(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)C(CNC(=O)CCCO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCO[Cu])NC(COCC)CC)OC(=O)[Au],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(CCO[Cu])NC(COCC)CC)OC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(CCO[Cu])NC(COCC)CC)OC(=O)[Au]' for input: 'CC(CCO[Cu])NC(COCC)CC)OC(=O)[Au]'",True
+0,5,33,CNC(=O)CNC(=O)C(CN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CN[Cu])CN(C)CNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCCNC(=O)[Au])NCC(C)(C)N[Cu],False,novel,ok,True
+0,5,33,CF(C)(C)CC(CNC(=O)[Au])O[Cu],False,novel,"Explicit valence for atom # 1 F, 4, is greater than permitted",True
+0,5,33,CC(CCN(C)C(=O)C(C)N[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CNCC(C)(C)O[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCC(C=C(C)(C)N[Cu])OC(=O)[Au],False,novel,"Explicit valence for atom # 5 C, 5, is greater than permitted",True
+0,5,33,O=C([Au])OCCSC(=O)CCN[Cu],False,novel,ok,True
+0,5,33,CC(COC(=O)C(NC)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CN(C)CC(N[Cu])C(C)OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CN(C)CC(N[Cu])C(C)OC(=O)[Au]',True
+0,5,33,CC(CCC#N)N(C)CC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COCC(C)(CN(C)C(COC(=O)[Au])O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'COCC(C)(CN(C)C(COC(=O)[Au])O[Cu]',True
+0,5,33,CNC(=O)CSCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCN(CCNC(=O)[Au])C(=(C)O)O[Cu],False,novel,"SMILES Parse Error: syntax error while parsing: CCCN(CCNC(=O)[Au])C(=(C)O)O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CCCN(CCNC(=O)[Au])C(=(C)O)O[Cu]' for input: 'CCCN(CCNC(=O)[Au])C(=(C)O)O[Cu]'",True
+0,5,33,CCCC(O[Cu])C(C)C(=O)OC(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCN(CC(=O)C(CC)F)NC(=O)[Au])O[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CCCN(CC(=O)C(CC)F)NC(=O)[Au])O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CCCN(CC(=O)C(CC)F)NC(=O)[Au])O[Cu]' for input: 'CCCN(CC(=O)C(CC)F)NC(=O)[Au])O[Cu]'",True
+0,5,33,CNC(CN[Cu])C(=O)NCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(CNC(C(C)O[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)CC(CNC(C(C)O[Cu])OC(=O)[Au]',True
+0,5,33,COC(=O)C(CO[Cu])NCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(O[Cu])C(=O)NCOCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CN(CCOC(=O)[Au])CC(C)O[Cu],False,novel,ok,True
+0,5,33,CC(CN[Cu])CNC(=O)C(C)(C)CNC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCCOCCNC(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C)C(CN[Cu])SCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCNC(C)(C)(C)CNC(=O)[Au])O[Cu],False,novel,"Explicit valence for atom # 5 C, 5, is greater than permitted",True
+0,5,33,CCC(C)=CC(=O)NCC(COC(C=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCCCN(C)CC(CNC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,COCC(O[Cu])C(=O)OCCCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCC(C)(OC(=O)[Au])C(=O)NCCCCO[Cu],False,In the original data set,ok,True
+0,5,33,CC(=O)NC(=O)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(NCC(COC(=O)[Au])C(=O)OCCCN[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(NCC(COC(=O)[Au])C(=O)OCCCN[Cu]',True
+0,5,33,CC(N[Cu])C(=O)NCCCCCF,False,novel,More than two ends,False
+0,5,33,CCC(COC(=O)[Au])N(C)CC(C)COC(C)O[Cu],False,novel,ok,True
+0,5,33,CCCCC(C)C(CN[Cu])NC(C)(OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCCCC(C)C(CN[Cu])NC(C)(OC(=O)[Au]',True
+0,5,33,CCC(C)(CNC(C)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COC(CO[Cu])C(=O)NCCCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C)(C)NC(=O)C(CO[Cu])NC(=O)[Au],False,In the original data set,ok,True
+0,5,33,C=CC(CCO[Cu])C(OC(=O)[Au])C(C)(C)C,False,novel,ok,True
+0,5,33,CCC(CCO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCCNC(=O)CCCN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)NCC(COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CCC(COC(=O)[Au])SCCC(C)(CO[Cu])C,False,novel,ok,True
+0,5,33,CC(OC(C)C(CO[Cu])CC)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC#CC(COCCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(OCC(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,COC(OCCCN[Cu])C(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(NC(CCO[Cu])C(=O)OCCCNC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(NC(CCO[Cu])C(=O)OCCCNC(=O)[Au]',True
+0,5,33,COCCCNC(=O)NC(C)(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)NC(=O)N(C)(CO[Cu])COC(=O)[Au],False,novel,"Explicit valence for atom # 6 N, 4, is greater than permitted",True
+0,5,33,C#CCCC(CO[Cu])NCCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCOCC(CNCC(C)O[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,O=C([Au])OCCN(CCO[Cu])CC(F)F,False,In the original data set,ok,True
+0,5,33,CC(O[Cu])C(=O)NC(C)(C#N)=CCOC(=O)[Au],False,novel,"Explicit valence for atom # 7 C, 5, is greater than permitted",True
+0,5,33,CCN(CC(=O)C(C)(C)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)C(O[Cu])C(=O)OCCC(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,CNCC(C)(O[Cu])C(=O)NC(C)(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])OCCSCCN[Cu],False,In the original data set,ok,True
+0,5,33,CC(O[Cu])C(=O)NCC(CC#N)OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NC(CNC(=O)CC(CF)CO[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'O=C([Au])NC(CNC(=O)CC(CF)CO[Cu]',True
+0,5,33,CC(C)CC#CNCC(C)(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CCOCCN[Cu])CC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCCOC(=O)[Au])C,False,novel,More than two ends,False
+0,5,33,CC(CCSCCO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C)(C#CCNCCC(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,COCC(CNCC[Au])O[Cu],False,novel,ok,True
+0,5,33,CSCC(COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CCCOC(=O)CNC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCCN(CCOC(=O)[Au])C(=O)CO[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CCCN(CCOC(=O)[Au])C(=O)CO[Cu]',True
+0,5,33,CCOCC(CNCCC(C)OC(=S)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)(CN[Cu])NCCCNC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C)C(=O)NC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C#CC(=O)N(C)CC(COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CN(CCN[Cu])CC(CCC(=C)O)OC(=O)[Au],False,novel,ok,True
+0,5,33,COCC(O[Cu])C(=O)OCCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CO[Cu])(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,(CNCCCCCCCCNC(=O)[Au])N[Cu],False,novel,"SMILES Parse Error: syntax error while parsing: (CNCCCCCCCCNC(=O)[Au])N[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES '(CNCCCCCCCCNC(=O)[Au])N[Cu]' for input: '(CNCCCCCCCCNC(=O)[Au])N[Cu]'",True
+0,5,33,O=C(O)CCC(CCO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CNC(=O)C(CO[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(CNC(=O)C(CO[Cu])OC(=O)[Au]',True
+0,5,33,CN(CC=C(O)O)[Au])C(=O)C(C)C(C)N[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CN(CC=C(O)O)[Au])C(=O)C(C)C(C)N[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CN(CC=C(O)O)[Au])C(=O)C(C)C(C)N[Cu]' for input: 'CN(CC=C(O)O)[Au])C(=O)C(C)C(C)N[Cu]'",True
+0,5,33,CCN(CCOCCCO[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NC(CO[Cu])C(=O)NCCCOCF,False,novel,ok,True
+0,5,33,CC(C)CCCNCC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCCN[Cu])C(=O)C(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(O[Cu])C(C)C(CCC#N)OC(=O)[Au],False,novel,ok,True
+0,5,33,COC(=O)CNC(=CCOC(=O)[Au])CO[Cu],False,novel,ok,True
+0,5,33,CC(CNC(CO[Cu])CC(=O)COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CNC(CO[Cu])CC(=O)COC(=O)[Au]',True
+0,5,33,CCOCC(C)NCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C=C(CNCCC(CO[Cu])OC(=O)[Au])NC(C)=O,False,novel,ok,True
+0,5,33,C#CCCC(O[Cu])C(=O)NCCC=CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(COC(=O)CN[Cu])NCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(OC(=O)[Au])C(=O)NCC(C)CO[Cu],False,novel,ok,True
+0,5,33,CC(CO[Cu])N(C)CCOCCC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCCCO[Cu])CNC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C)(OC(=O)[Au])C(=O)N(C)CCN[Cu],False,In the original data set,ok,True
+0,5,33,O=C(CO[Cu])NCCCCCC(F)NC(=O)[Au],False,novel,ok,True
+0,5,33,COCCC(CN[Cu])NCC(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,COC(CCN((=O)CCO[Cu])OC(=O)[Au],False,novel,"SMILES Parse Error: syntax error while parsing: COC(CCN((=O)CCO[Cu])OC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'COC(CCN((=O)CCO[Cu])OC(=O)[Au]' for input: 'COC(CCN((=O)CCO[Cu])OC(=O)[Au]'",True
+0,5,33,CCC(O[Cu])C(=O)NCCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCCCCN[Cu])CC(C(C)NC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CN(CCCCCN[Cu])CC(C(C)NC(=O)[Au]',True
+0,5,33,C=CCN(C)CCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CCN[Cu])C(=O)CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCOCCNCC(COC(C)CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(N[Cu])C(NC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)CC(N[Cu])C(NC(=O)[Au]',True
+0,5,33,CCC(CNC(=O)NC(=O)CCOC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,O=C(O)CN(CCO[Cu])CC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCCN(CCN(C)CCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CN(=O)CCNCCN[Cu])OC(=O)[Au],False,novel,"Explicit valence for atom # 3 N, 4, is greater than permitted",True
+0,5,33,CN(CCN[Cu])CC(=O)COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(CN(C)C(=O)CCNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CNCCC(C)NCCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COCCC(C)(CO[Cu])C(=O)NCCOC(=O)[Au],False,novel,ok,True
+0,5,33,COCCC(CNCCCCCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COCCNCC(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,O=C(CCN[Cu])NC(COC(=O)[Au])C(C)F)C,False,novel,"SMILES Parse Error: extra close parentheses while parsing: O=C(CCN[Cu])NC(COC(=O)[Au])C(C)F)C
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'O=C(CCN[Cu])NC(COC(=O)[Au])C(C)F)C' for input: 'O=C(CCN[Cu])NC(COC(=O)[Au])C(C)F)C'",True
+0,5,33,CCCCC(CNCCOC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CN(CCO[Cu])C(COC(=O)[Au])C(C)(C)C,False,novel,ok,True
+0,5,33,COCC(C)N(C)CC(CN[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCC(C)NCCC(C)(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,=OC([Au])OCC(COC(N[Cu])C(C)C)F,False,novel,"SMILES Parse Error: syntax error while parsing: =OC([Au])OCC(COC(N[Cu])C(C)C)F
+[16:53:42] SMILES Parse Error: Failed parsing SMILES '=OC([Au])OCC(COC(N[Cu])C(C)C)F' for input: '=OC([Au])OCC(COC(N[Cu])C(C)C)F'",True
+0,5,33,COCCCC(CN[Cu])NC(C)C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCOCC(CNCC(C)COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,C=C(C)CCCNC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCOC(=O)C(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C#CC(O[Cu])C(=O)NCCOC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C)C(CNC(=O)CCN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CN(CCO[Cu])CCNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(OC(=O)[Au])C(=O)N(C)CCCO[Cu],False,novel,ok,True
+0,5,33,C=CC(O[Cu])C(=O)NCC(C)(C)(C)OC(=O)[Au],False,novel,"Explicit valence for atom # 9 C, 5, is greater than permitted",True
+0,5,33,C=CCCC(CNC(=O)[Au])CO[Cu],False,novel,ok,True
+0,5,33,C#CCCN(CCCOC(=O)[Au])CCO[Cu],False,In the original data set,ok,True
+0,5,33,O=C([Au])NCCCCCNC(=O)CCCN[Cu],False,novel,ok,True
+0,5,33,CC(CNCCCC(=O)CC(C)NC(C)O[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CCOC(=O)CC(CC(COC(=O)[Au])N[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCOC(=O)CC(CC(COC(=O)[Au])N[Cu]',True
+0,5,33,C#CCNC(=O)CC(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(CNC(CNC(=O)[Au])C(C)C(C)O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(CNC(CNC(=O)[Au])C(C)C(C)O[Cu]',True
+0,5,33,CC(C)(CNC(=O)[Au])NC(=O)C(C)O[Cu],False,novel,ok,True
+0,5,33,CCCN(CCOC(=O)[Au])CC(C)(C)O[Cu],False,In the original data set,ok,True
+0,5,33,CC(CN(CCOC(=O)[Au])C(C)O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CN(CCOC(=O)[Au])C(C)O[Cu]',True
+0,5,33,CC(N[Cu])C(=O)N(C(=O)CCCNC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(N[Cu])C(=O)N(C(=O)CCCNC(=O)[Au]',True
+0,5,33,C=CC(OC(=O)[Au])C(=O)NC(C)(C)O[Cu],False,novel,ok,True
+0,5,33,C[Si](CCOC(=O)[Au])NC(=O)CCCO[Cu],False,novel,ok,True
+0,5,33,CCC(C)(CN(C)CC(C)(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COCC(CNC(C)C(=O)C(C)NC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(CCNC(=O)=CCO[Cu])NC(=O)[Au],False,novel,"Explicit valence for atom # 5 C, 5, is greater than permitted",True
+0,5,33,CC(CNC(=O)CO[Cu])NC(=O)[Au])C(=O)O,False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(CNC(=O)CO[Cu])NC(=O)[Au])C(=O)O
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(CNC(=O)CO[Cu])NC(=O)[Au])C(=O)O' for input: 'CC(CNC(=O)CO[Cu])NC(=O)[Au])C(=O)O'",True
+0,5,33,CC(CNC(=O)NCCCO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(NC(=O)CN[Cu])C(=O)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCCCC(CNC(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(N[Cu])C(=O)NCC(C)(C)CNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(OC(=O)[Au])C(=O)NCC(C)(C)O[Cu],False,In the original data set,ok,True
+0,5,33,COC(CC)C(COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CCC(CN(CCC(C)O[Cu])C(=O)[Au])OC,False,novel,ok,True
+0,5,33,C#C(C)CN(CCC)(CO[Cu])CCOC(=O)[Au],False,novel,"Explicit valence for atom # 1 C, 5, is greater than permitted",True
+0,5,33,C#CCCN(CC)CC(C)(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C)(O[Cu])C(=O)NCCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CN[Cu])CNC(=O)C(C)NC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C#CCC=CC(COC(=O)[Au])O[Cu])OC,False,novel,ok,True
+0,5,33,CCC(C)N(C)CC(CN[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CO[Cu])CNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)NC(=O)NC(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCCC(CCC(=O)O)C(C)NC(=O)[Au])O[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CCCCC(CCC(=O)O)C(C)NC(=O)[Au])O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CCCCC(CCC(=O)O)C(C)NC(=O)[Au])O[Cu]' for input: 'CCCCC(CCC(=O)O)C(C)NC(=O)[Au])O[Cu]'",True
+0,5,33,CCC(CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCC(CNC(C)CCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CNCCC(OC(=O)[Au])C(=O)NCC(C)N[Cu],False,novel,ok,True
+0,5,33,C=C(C)CN(C)CC(O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)(COC(=O)CCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCN(CC)CC(OC(C)(C(C)O[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCN(CC)CC(OC(C)(C(C)O[Cu])OC(=O)[Au]',True
+0,5,33,CCC(CCC)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CC(C)C(=O)NC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CSCCS(=O)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCOCC(CNC(=O)[Au])OCC(C)O[Cu],False,novel,ok,True
+0,5,33,CCCC(O[Cu])C(COC(=O)[Au])C(=O)O,False,novel,ok,True
+0,5,33,CC(C#N)CC(=O)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CSC=CCCN(CO[Cu])CC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(N[Cu])C(COC(=O)[Au])NCCCCF,False,novel,ok,True
+0,5,33,CCC(C)N(CCO[Cu])CCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C)(C)C(=O)N(CCCO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,COCC(N[Cu])C(=O)NC(C)(CC)COC(=O)[Au],False,novel,ok,True
+0,5,33,CCSCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C#CCC(OC(=O)[Au])C(C)O[Cu],False,novel,ok,True
+0,5,33,CC(C)C(=O)N(C)C(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CNCC(C)N[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)NC(=O)C(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(C)CC(CO[Cu])OC(=O)[Au],True,novel,ok,True
+0,5,33,CCC(C)(CN(C)C(C)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CCC(O[Cu])C(C)(C)(COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'C=CCC(O[Cu])C(C)(C)(COC(=O)[Au]',True
+0,5,33,C=C(F)C(CO[Cu])NC(=O)C(C)(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCN[Cu])C(F)(F)CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)(CNC(=O)[Au])NC(=O)CC)CO[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CCC(C)(CNC(=O)[Au])NC(=O)CC)CO[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CCC(C)(CNC(=O)[Au])NC(=O)CC)CO[Cu]' for input: 'CCC(C)(CNC(=O)[Au])NC(=O)CC)CO[Cu]'",True
+0,5,33,CC(COC(=O)[Au])S(C)(C)CCCO[Cu],False,novel,ok,True
+0,5,33,C=C(COC(=O)[Au])C(=O)NCC(C)CO[Cu],False,novel,ok,True
+0,5,33,CC(COC(=O)[Au])CSCCCCN[Cu],False,novel,ok,True
+0,5,33,CCC(CNCC(OC(=O)[Au])C(C)(C)C)O[Cu],False,In the original data set,ok,True
+0,5,33,CC(COC(=O)[Au])NC(CC(C)C)O[Cu],False,novel,ok,True
+0,5,33,CC(CNCC(C)(C)CCN[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(CO[Cu])NC(C)C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCC(CNC(=O)[Au])C(=O)O[Cu],False,novel,ok,True
+0,5,33,CC(C)(CNCC(CC(F)OC(=O)[Au])O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)(CNCC(CC(F)OC(=O)[Au])O[Cu]',True
+0,5,33,CC(C)(O[Cu])C(=O)NC(COC(=O)[Au])C(C)C,False,novel,ok,True
+0,5,33,CCC(CO[Cu])C(=O)N(C)CCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CNC(=O)CC(C)NC(=O)[Au])N[Cu],False,In the original data set,ok,True
+0,5,33,CC(CN[Cu])N(C)CCCNC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CCNCC(F)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CN(CCCO[Cu])SC(=O)[Au],False,novel,ok,True
+0,5,33,CN(C)C(=O)NCC(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(COC(=O)[Au])NCC(CO[Cu])C(C)C,False,novel,ok,True
+0,5,33,CC(C)C(CO[Cu])NCC(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CO[Cu])CNC(COC(=O)[Au])C(C)N,False,novel,ok,True
+0,5,33,CNC(=O)C(=O)CC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CCC)N(CCN[Cu])CCNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(=O)NC(CCO[Cu])CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)C(CN[Cu])NCCCCNC(=O)[Au],False,novel,ok,True
+0,5,33,C=C(C)CN(CC)CC(CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CNC(=O)CCCO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])OCCS(=O)CCOCCCO[Cu],False,novel,ok,True
+0,5,33,COCC(NCC(C)(C)C(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CC(O)=O)CC(OC(=O)[Au])C(C)O[Cu],False,novel,ok,True
+0,5,33,CCC(C)C(C)NCC(OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(OC(=O)[Au])C(CNC(=O)C=CCN[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(OC(=O)[Au])C(CNC(=O)C=CCN[Cu]',True
+0,5,33,O=C(CC(CN)NC(=O)[Au])NCCCO[Cu],False,novel,ok,True
+0,5,33,CC(C)NCC(=O)NCC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCO[Cu])CCNCCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CNCC(C)(C)(OC(=O)[Au])C(C)N[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CNCC(C)(C)(OC(=O)[Au])C(C)N[Cu]',True
+0,5,33,CCN(CC)C(=O)CCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(CNC(CCO(=O)[Au])C(C)C)O[Cu],False,novel,"Explicit valence for atom # 8 O, 3, is greater than permitted",True
+0,5,33,O=C(O)CCNCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)(CSC(=O)[Au])NCCCO[Cu],False,novel,ok,True
+0,5,33,CC=C(C)CN(CCOC(=O)[Au])CCCO[Cu],False,novel,ok,True
+0,5,33,CCC(COC(COC(=O)[Au])CO[Cu])OCC#N,False,novel,ok,True
+0,5,33,CCN(CC=N)CC(C(CO[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCN(CC=N)CC(C(CO[Cu])OC(=O)[Au]',True
+0,5,33,CCC(N[Cu])C(O)C(=O)NCC(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,COCCS(=O)C(=O)(CNC(=O)[Au])O[Cu],False,novel,"Explicit valence for atom # 6 C, 5, is greater than permitted",True
+0,5,33,C=CC(C)N(C)CC(CN[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCOCC(CNCCCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(COC(=O)[Au])OCCCO[Cu],False,novel,ok,True
+0,5,33,CC(NCC=CCC(CO[Cu])OC(F)OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(NCC=CCC(CO[Cu])OC(F)OC(=O)[Au]',True
+0,5,33,COCCCN(C)C(=O)C(CNC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,COC(=O)CCN(C)CC(COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CC(CO[Cu])CNC(=O)C(COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CO[Cu])CNC(=O)C(COC(=O)[Au]',True
+0,5,33,CCC(CNCC(C)(C)O[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCCNC(=O)C(CN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])OCCSCCCCCCO[Cu],False,novel,ok,True
+0,5,33,CCCCNC(=O)C(CO[Cu])NC(=O)[Au],False,In the original data set,ok,True
+0,5,33,C#CCCCN(CC)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCCOCCNC(CN[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCC(=O)NC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,SC(=O)CN(=O)CC(COC(=O)[Au])O[Cu],False,novel,"Explicit valence for atom # 4 N, 4, is greater than permitted",True
+0,5,33,O=C(CCCF)NC(N[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCN(CC(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(O[Cu])C(=O)NCC(C)(C)OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCC(CN(CCO[Cu])C(=O)[Au])COC,False,novel,ok,True
+0,5,33,CCC(C)NCC(=O)C(CCNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CCOCC(=O)[Au])NCC(CN[Cu])OC(=O)[Au],False,novel,More than two ends,False
+0,5,33,CCCC(CN[Cu])NC(=O)C(C)F,False,novel,More than two ends,False
+0,5,33,CN(CCCNC(=O)[Au])C(=O)C(C)(C)CCO[Cu],False,novel,ok,True
+0,5,33,O=C([Au])OCCS(=O)CCCCCO[Cu],False,novel,ok,True
+0,5,33,CC(CO[Cu])C(C)NC(=O)COC(=O)[Au],False,novel,ok,True
+0,5,33,CCNCCNCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)(O[Cu])C(COC(=O)[Au])C(F)F,False,novel,ok,True
+0,5,33,CCCC(C)(CCNC(=O)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CSCC(CN(CCCCOC(=O)[Au])O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CSCC(CN(CCCCOC(=O)[Au])O[Cu]',True
+0,5,33,CC(CNC(=O)CCNC(C)NC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(OC(=O)[Au])C(=O)NC(C)CCO[Cu],False,novel,ok,True
+0,5,33,CC(CO[Cu])SCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCCN(=O)CC(CO[Cu])C(CC)NC(=O)[Au],False,novel,"Explicit valence for atom # 3 N, 4, is greater than permitted",True
+0,5,33,CC(NC(=O)[Au])C(C)C)NCC(C)(C)CN[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(NC(=O)[Au])C(C)C)NCC(C)(C)CN[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(NC(=O)[Au])C(C)C)NCC(C)(C)CN[Cu]' for input: 'CC(NC(=O)[Au])C(C)C)NCC(C)(C)CN[Cu]'",True
+0,5,33,CNC(=O)CNC(=O)CC(CNC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,C=CC(CNCCC(C)(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COCC(CC(CC)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(C)(C)N(CC(C)CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COC(=O)CNC(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,O=C([Au])NCCCCCNCCCCN[Cu],False,novel,ok,True
+0,5,33,C=CC(=O)NC(C)C(=O)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CCN(CCO[Cu])CC(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])OCCOCC(=O)O[Cu],False,novel,ok,True
+0,5,33,CNC(=O)CN(CCO[Cu])C(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCC#N)NC(=O)C(CCNC(=O)[Au])N[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CCCC#N)NC(=O)C(CCNC(=O)[Au])N[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CCCC#N)NC(=O)C(CCNC(=O)[Au])N[Cu]' for input: 'CCCC#N)NC(=O)C(CCNC(=O)[Au])N[Cu]'",True
+0,5,33,CCC=CC(CNC(=O)[Au])CO[Cu],False,novel,ok,True
+0,5,33,CCCC(C)CN(C)CC(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COC(=O)C(C)N(C)C(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CO[Cu])NCC(=O)CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCOCCN[Cu])CC(C)(C)OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CCNCC(OC(=O)[Au])C(C)C)O[Cu],False,novel,ok,True
+0,5,33,CC(CCCCONC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,O=C([Au])OCCCC(CC(=O)O[Cu])C(N)=O)O,False,novel,"SMILES Parse Error: extra close parentheses while parsing: O=C([Au])OCCCC(CC(=O)O[Cu])C(N)=O)O
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'O=C([Au])OCCCC(CC(=O)O[Cu])C(N)=O)O' for input: 'O=C([Au])OCCCC(CC(=O)O[Cu])C(N)=O)O'",True
+0,5,33,CC(C)(C)CCNC(=O)[Au](C(C)C)N[Cu],False,novel,More than one bonds at the end point,True
+0,5,33,C#CC(CCNC(=O)[Au])C(CO(C)CO[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'C#CC(CCNC(=O)[Au])C(CO(C)CO[Cu]',True
+0,5,33,COCCC(=O)NC(COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,O=C([Au])NC(CNCC(F)F)CC(F)F,False,novel,More than two ends,False
+0,5,33,CCCCCC(C)NCC(CNC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,C=CC(CNC(=O)C(CCN[Cu])CNC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'C=CC(CNC(=O)C(CCN[Cu])CNC(=O)[Au]',True
+0,5,33,CC(CCN[Cu])C(C)CNC(=O)[Au],False,novel,ok,True
+0,5,33,CNCC(C)(O[Cu])C(=O)C(C)CNC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCC(CNCCCCCCO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(OC(C)CC(C)(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(CCNCCCC(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C[Si]CC(N[Cu])C(=O)NC(C)CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(COC(=O)[Au])S(=O)CCNCC(CO[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(COC(=O)[Au])S(=O)CCNCC(CO[Cu]',True
+0,5,33,C=CC(CO[Cu])NC(=O)C(NC(C)OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'C=CC(CO[Cu])NC(=O)C(NC(C)OC(=O)[Au]',True
+0,5,33,COC(CCNC(C)CCCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(O[Cu])C(=O)OCC(CCl)COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CO[Cu])OC(=O)C(=O)COC(=O)[Au],False,novel,ok,True
+0,5,33,COC(C)C(=O)NCC(COC(=O)[Au])CO[Cu],False,novel,ok,True
+0,5,33,CCCCCCN(CCN[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(C)(CN[Cu])CNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(CCCOC)CO[Cu],False,novel,More than two ends,False
+0,5,33,CCC(N[Cu])C(=O)NCC(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCCNC(=O)CCCO[Cu],False,novel,ok,True
+0,5,33,N#CCCN(CCCCO[Cu])CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CNCCOCCCO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCC(CCN(C)CCCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(COC(=O)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(N[Cu])C(=O)NCCC=COC(=O)[Au],False,novel,ok,True
+0,5,33,CSCC(N[Cu])C(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(CNCC(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)CNC(=O)C(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,O=C([Au])NCCNCC(=O)CCNC(CF)N[Cu],False,novel,ok,True
+0,5,33,C#CC(CN(C)CCC(C)(COC(=O)[Au])O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'C#CC(CN(C)CCC(C)(COC(=O)[Au])O[Cu]',True
+0,5,33,CC(N)=CC(=O)NCC(COCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CCCCN(CC)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)C(CNC(=O)CCCNC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(CCCO[Cu])NC(=O)CCCNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CC)C(=O)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,O=C(COCC(=O)[Au])NCCC(N[Cu])C(F,False,novel,SMILES Parse Error: extra open parentheses for input: 'O=C(COCC(=O)[Au])NCCC(N[Cu])C(F',True
+0,5,33,CC(CCNC(=O)[Au])C(CO[Cu])C(C)CC)(C,False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(CCNC(=O)[Au])C(CO[Cu])C(C)CC)(C
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(CCNC(=O)[Au])C(CO[Cu])C(C)CC)(C' for input: 'CC(CCNC(=O)[Au])C(CO[Cu])C(C)CC)(C'",True
+0,5,33,C#CC(=O)N(C)CC(OC(=O)[Au])C(C)CO[Cu],False,novel,ok,True
+0,5,33,C=CC(CN(C)CC(CO[Cu])COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'C=CC(CN(C)CC(CO[Cu])COC(=O)[Au]',True
+0,5,33,CN(CC(O)C(CO[Cu])NC(=O)[Au])NC(C)C,False,novel,ok,True
+0,5,33,CCC(CC)(CNCC(C)(COC(=O)[Au])O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(CC)(CNCC(C)(COC(=O)[Au])O[Cu]',True
+0,5,33,CN(CCCCO[Cu])C(=O)CCNC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCCN(CC(C)CC(C)(CO[Cu])NC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'C#CCCN(CC(C)CC(C)(CO[Cu])NC(=O)[Au]',True
+0,5,33,C=C(C#N)CC(=O)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,O=C([Au])OCCS(=O)(=O)(C)(CO[Cu])C,False,novel,"Explicit valence for atom # 6 S, 8, is greater than permitted",True
+0,5,33,CC(C)=C(C)NC(=O)CC(C)(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCCN(CCOC(=O)[Au])CO[Cu],False,novel,ok,True
+0,5,33,CCN(CCNCC(O[Cu])COC(=O)[Au])C(C)C,False,novel,ok,True
+0,5,33,CN(CCNC(C)CCN[Cu])CCNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CCN(CCCO[Cu])CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CC)(CO[Cu])NC(=O)C(CC)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(F)CNCC(=O)C(=O)[Au]N[Cu])OC(C,False,novel,"SMILES Parse Error: extra close parentheses while parsing: CCC(F)CNCC(=O)C(=O)[Au]N[Cu])OC(C
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CCC(F)CNCC(=O)C(=O)[Au]N[Cu])OC(C' for input: 'CCC(F)CNCC(=O)C(=O)[Au]N[Cu])OC(C'",True
+0,5,33,CC(=O)C(=O)NC(CO[Cu])C(C)OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,N=CCNC(=O)NCC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC=CCOCC(CNCCO[Cu])OC(==O)[Au],False,novel,"SMILES Parse Error: syntax error while parsing: CC=CCOCC(CNCCO[Cu])OC(==O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC=CCOCC(CNCCO[Cu])OC(==O)[Au]' for input: 'CC=CCOCC(CNCCO[Cu])OC(==O)[Au]'",True
+0,5,33,CC(CCNC(=O)[Au])CCNCC(C)(C)N[Cu],False,novel,ok,True
+0,5,33,CCC(C)OC(=O)N(CO[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(O[Cu])C(NC(=O)CCCCCNC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(O[Cu])C(NC(=O)CCCCCNC(=O)[Au]',True
+0,5,33,COC(=O)CN(C)CC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(C)(O[Cu])C(C)(OC(=O)[Au])C(=O)O,False,novel,ok,True
+0,5,33,CCNC(=O)CNCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC#CC(NCC(C)O[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CCOC(=O)[Au])CC(N[Cu])C(C)(C)C,False,novel,ok,True
+0,5,33,CC(CO[Cu])SCCCCCCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,COCC=CC(CNCC(C)(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C(CNCCCNC(C)OC(=O)[Au])O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'C=CC(C(CNCCCNC(C)OC(=O)[Au])O[Cu]',True
+0,5,33,CC(O[Cu])C(=O)NCCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCCC(CN(C)CCCO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CO[Cu])CNC(=O)C(O)C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(CNC(=O)CCCNC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(CCN[Cu])NCC(COC(=O)[Au])C(C)C,False,novel,ok,True
+0,5,33,CCCC(NC(=O)[Au])C(=O)N(C)CCN[Cu],False,novel,ok,True
+0,5,33,CCC(CCCNC(C)C(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CCOC(=O)[Au])NC(C)C(NC(C)C[Au])O[Cu],False,novel,More than two ends,False
+0,5,33,CCN(CCOC)C(CO[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCCCF)NCC(CO[Cu])C(C,False,novel,"SMILES Parse Error: extra close parentheses while parsing: O=C([Au])NCCCF)NCC(CO[Cu])C(C
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'O=C([Au])NCCCF)NCC(CO[Cu])C(C' for input: 'O=C([Au])NCCCF)NCC(CO[Cu])C(C'",True
+0,5,33,CC(C)C(C)(CN[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCCOC(CN(C)C(=O)CCN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(OC(=O)[Au])C(=O)N(C)CCCO[Cu],False,novel,ok,True
+0,5,33,CC(CCNC(=O)CCCOC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(COC(C)COC(C)COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CCC(C)(N[Cu])C(C)C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(CN(C)CC(C)(C)O[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CCNC(=O)CCCN[Cu])NC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCC(COC(=O)[Au])N(C)CN[Cu],False,novel,ok,True
+0,5,33,CC(F)C(CN(C)CCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CN[Cu])NCC(C)(C)CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CN(CC)C(C)C(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(#CC(C)C(C)(O[Cu])C(C)COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(#CC(C)C(C)(O[Cu])C(C)COC(=O)[Au]',True
+0,5,33,O=C([Au])OCCCF)CC(=O)NC(F)CO[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: O=C([Au])OCCCF)CC(=O)NC(F)CO[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'O=C([Au])OCCCF)CC(=O)NC(F)CO[Cu]' for input: 'O=C([Au])OCCCF)CC(=O)NC(F)CO[Cu]'",True
+0,5,33,C=C(CO[Cu])C(=O)NCC=CCOC(=O)[Au],False,novel,ok,True
+0,5,33,C=C(C)C(CNC(CO[Cu])C(C)OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'C=C(C)C(CNC(CO[Cu])C(C)OC(=O)[Au]',True
+0,5,33,CCC(C)C(=O)NCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(=O)NCC(CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,O=C([Au])NCCNCC(CCN[Cu])C(=O)C(=O)O,False,novel,ok,True
+0,5,33,O=C([Au])CN(CCCCCO[Cu])C(=O)OC,False,novel,ok,True
+0,5,33,CC(C)(CCC(CC)C(C)CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)C(OC(=O)[Au])C(=O)NC(C)CO[Cu],False,novel,ok,True
+0,5,33,O=C([Au])OCC(CCO[Cu])C(OC(F)F)F,False,novel,ok,True
+0,5,33,CCC(F)(CO[Cu])NC(=O)CC(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CNC(=O)[Au])C(=O)NCC(N[Cu])C(C)C,False,novel,ok,True
+0,5,33,CC(CC(=O)N(C)C)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C#N(C)CC(C)C(=O)O[Cu])OC(=O)[Au],False,novel,"Explicit valence for atom # 3 N, 5, is greater than permitted",True
+0,5,33,C=C(COC(=O)[Au])C(=S)O,False,novel,More than two ends,False
+0,5,33,CC(C)C(CNCCCCCCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,O=C(CCCN(C)CCO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCCCN(CCNC(=O)[Au])CCC(C)O[Cu],False,novel,ok,True
+0,5,33,CCCCC(CN(C)CC(C)N[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,COCC(C)(COC(=O)[Au])C(=O)CCO[Cu],False,novel,ok,True
+0,5,33,C=CC(O[Cu])C(=O)NC(CC)COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,C#CCOCC(CN[Cu])OC(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,COC(=O)CSCC(CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,N#CCCC(CN[Cu])=O)NCC(COC(=O)[Au],False,novel,"SMILES Parse Error: extra close parentheses while parsing: N#CCCC(CN[Cu])=O)NCC(COC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'N#CCCC(CN[Cu])=O)NCC(COC(=O)[Au]' for input: 'N#CCCC(CN[Cu])=O)NCC(COC(=O)[Au]'",True
+0,5,33,CN(CCOC(=O)[Au])CC(F)(C)(C)CN[Cu],False,novel,"Explicit valence for atom # 9 C, 5, is greater than permitted",True
+0,5,33,C=CC()CN(CC(=O)C(CCF)OC(=O)[Au])O[Cu],False,novel,"SMILES Parse Error: syntax error while parsing: C=CC()CN(CC(=O)C(CCF)OC(=O)[Au])O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'C=CC()CN(CC(=O)C(CCF)OC(=O)[Au])O[Cu]' for input: 'C=CC()CN(CC(=O)C(CCF)OC(=O)[Au])O[Cu]'",True
+0,5,33,CC(C)CC(NC(OCCO[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)CC(NC(OCCO[Cu])OC(=O)[Au]',True
+0,5,33,CCCCNC(=O)C(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(CNC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(C)(C)NC(=O)C(CCNC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,C#CC=CC(=O)N(C)CC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(FC(F)OC(=O)[Au])C(N[Cu])C(F,False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(FC(F)OC(=O)[Au])C(N[Cu])C(F',True
+0,5,33,CC(C)NCCC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCN(CCCO[Cu])CC(NC(=O)[Au])C(C)C,False,novel,ok,True
+0,5,33,CC(CNCC(C#O)C)(C)(C)OC(=O)[Au])O[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(CNCC(C#O)C)(C)(C)OC(=O)[Au])O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(CNCC(C#O)C)(C)(C)OC(=O)[Au])O[Cu]' for input: 'CC(CNCC(C#O)C)(C)(C)OC(=O)[Au])O[Cu]'",True
+0,5,33,CC(O[Cu])C(=O)NCCOC(=O)COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(C)OC(=O)[Au])CC(C)(C)(C)O[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(C)(C)OC(=O)[Au])CC(C)(C)(C)O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(C)(C)OC(=O)[Au])CC(C)(C)(C)O[Cu]' for input: 'CC(C)(C)OC(=O)[Au])CC(C)(C)(C)O[Cu]'",True
+0,5,33,CC(CCN[Cu])SCCOCCOC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCCSCCN[Cu],False,In the original data set,ok,True
+0,5,33,CC(CCNC(=O)C(C)C(C)NC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CNCC(=O)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(N[Cu])C(=O)NC(C)C(C)(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCOC(=O)[Au])CC(C)(C(C)O[Cu])C,False,novel,ok,True
+0,5,33,CC(CCNC(=O)CNCCNC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(C)(CNC(=S)O)(=O)[Au],False,novel,"Explicit valence for atom # 1 C, 6, is greater than permitted",False
+0,5,33,N=C(=SCC#[Cu])NCC(COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'N=C(=SCC#[Cu])NCC(COC(=O)[Au]',True
+0,5,33,CCC(CC)(CNCC(C)N[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,C=CCC(N[Cu])C(=O)NCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCCNCC(=O)NC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(NC(=O)CC(CO[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(NC(=O)CC(CO[Cu])OC(=O)[Au]',True
+0,5,33,CC(CCOC(=O)[Au])N(C)CCCO[Cu],False,novel,ok,True
+0,5,33,CCC(CO[Cu])NCCCC(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CC(=O)OCCNC(CO[Cu])COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CC(=O)OCCNC(CO[Cu])COC(=O)[Au]',True
+0,5,33,CCCCC(NC(C)C(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCCCC(=O)N(C)C(COC(=O)[Au])CO[Cu],False,novel,ok,True
+0,5,33,CCOC(=O)CNC(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C)(CNC(=O)C(C)NC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,C=CC(OC(=O)[Au])C(=O)OCC(C)CN[Cu],False,novel,ok,True
+0,5,33,CC(NC(=O)CCO[Cu])C(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,O=CC(=CF)NCCC(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CSCC(OC(=O)[Au])C(=O)OCCN[Cu],False,novel,ok,True
+0,5,33,CC(C)NC(=O)C(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CCC(CO[Cu])OC(=O)[Au])C(C)C,False,novel,ok,True
+0,5,33,CC(CN(C)CCCC(CN[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CN(C)CCCC(CN[Cu])OC(=O)[Au]',True
+0,5,33,CCC(CC)NC(=O)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CO[Cu])(C)NCCCC(F)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCCN(CCN[Cu])CC(CF)(F)F,False,novel,ok,True
+0,5,33,CCCC#CC(=O)N(CCO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(O[Cu])C(=O)NCCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C)C(C)NCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CN(C)CCC(CO[Cu])C(=O)CNC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCCCC(CN[Cu])CP(=O)O)O,False,novel,"SMILES Parse Error: extra close parentheses while parsing: O=C([Au])NCCCC(CN[Cu])CP(=O)O)O
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'O=C([Au])NCCCC(CN[Cu])CP(=O)O)O' for input: 'O=C([Au])NCCCC(CN[Cu])CP(=O)O)O'",True
+0,5,33,CC(NCC(N[Cu])C(=O)OCCNC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(NCC(N[Cu])C(=O)OCCNC(=O)[Au]',True
+0,5,33,CC(C)(CCCNCCCCN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CNC(=O)CC(C)NC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CCCCC(CNCC(CF)O[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CN(CCCCCOC(=O)[Au])CCC(C)NC(=O)[Au],False,novel,More than two ends,False
+0,5,33,CN(CC(=O)O)CC(COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CNC(C)C(=O)C(COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CN(CCCCO[Cu])C(C)(CC)OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCCC(CNCC(C)OC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CC(CNC(=O)O)C(C)(C)NC(=O)[Au])N[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(CNC(=O)O)C(C)(C)NC(=O)[Au])N[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(CNC(=O)O)C(C)(C)NC(=O)[Au])N[Cu]' for input: 'CC(CNC(=O)O)C(C)(C)NC(=O)[Au])N[Cu]'",True
+0,5,33,CC(NCC(C)(CC)CCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,COC(=O)CN(CC)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCC(CNC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CCC(CNC(C)(C)CCCNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(CCO[Cu])NC(=O)COCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC#CC(C)(C)CNCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)(N[Cu])C(=O)NC(C)CNC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCCOC(=O)[Au])CNCCC(F)O[Cu],False,novel,ok,True
+0,5,33,C=CCCC(CN(C)CCCN[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,O=C([Au])NCC(F)(F)C(=O)OCCO[Cu],False,novel,ok,True
+0,5,33,CNCCCCNC(=O)CN[Cu])OC(=O)[Au],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CNCCCCNC(=O)CN[Cu])OC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CNCCCCNC(=O)CN[Cu])OC(=O)[Au]' for input: 'CNCCCCNC(=O)CN[Cu])OC(=O)[Au]'",True
+0,5,33,CN(C)CCNC(=O)C(CO[Cu])NC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCC(CO[Cu])NOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(C)C(=N)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,O=C([Au])OCC(CN[Cu])NCC(CF)F,False,novel,ok,True
+0,5,33,CCC(CNC(C)CC(C)CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CC)CC(=SCCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CNNC(C)C(C)COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CCOC(=O)CNC(=O)C(CN[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C)(O[Cu])C(=O)NCCOC(=O)[Au],True,In the original data set,ok,True
+0,5,33,CC(C)(OC(=O)[Au])C(=O)NCC(C)(C)O[Cu],False,novel,ok,True
+0,5,33,CC(C)(CNC(=O)[Au])N[Cu],False,In the original data set,ok,True
+0,5,33,COC(CN[Cu])C(=O)N(C)CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CNC(=O)CC(NC(=O)[Au])C(C)(C)O[Cu],False,novel,ok,True
+0,5,33,O=C([Au])OCC(CCC(F)(F)F)CCO[Cu],False,novel,ok,True
+0,5,33,CC(CCOC(=O)[Au])(N[Cu])C(=O)O,False,novel,ok,True
+0,5,33,CCC(CN(C)CCC(COC(=O)[Au])O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(CN(C)CCC(COC(=O)[Au])O[Cu]',True
+0,5,33,C#CC(C)(COC(=O)[Au])NCC(N[Cu])C(F)F,False,novel,ok,True
+0,5,33,CCC(N[Cu])C(=O)NC(CCNC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(N[Cu])C(=O)NC(CCNC(=O)[Au]',True
+0,5,33,CC(C)(CNC(=O)CCCNC(=O)[Au])N[Cu],True,novel,ok,True
+0,5,33,CC(CCO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCC(C)CN(C)CC(COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,C#CC(C)CNCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(N[Cu])C(C)=O)NCCOCC(=O)[Au],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(N[Cu])C(C)=O)NCCOCC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(N[Cu])C(C)=O)NCCOCC(=O)[Au]' for input: 'CC(N[Cu])C(C)=O)NCCOCC(=O)[Au]'",True
+0,5,33,CC(C)(CO[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)(CO[Cu]',False
+0,5,33,O=C([Au])NCCSCC(=O)(F)(C)N[Cu],False,novel,"Explicit valence for atom # 8 C, 6, is greater than permitted",True
+0,5,33,C=CCCC(CNCC(C)CCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)C(CO[Cu])NC(COC)COC(=O)[Au],False,novel,ok,True
+0,5,33,COC(CO[Cu])C(=O)OCCCCNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C=CC(=O)NC(CO[Cu])COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C=CC(=O)NC(CO[Cu])COC(=O)[Au]',True
+0,5,33,CCC(CO[Cu])CNC(=O)CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCOCCCN[Cu],False,novel,More than two ends,False
+0,5,33,C=CC(C)C(CO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)OC(CN[Cu])CC(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CO[Cu])CN(C)CCCOC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])OC(CNC(=O)CCCN[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'O=C([Au])OC(CNC(=O)CCCN[Cu]',True
+0,5,33,C=C(C(CO)C(C)(C)CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CNC(=O)CCCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(=O)NCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,COC(C)N(CCOC(=O)[Au])CC(C)CO[Cu],False,novel,ok,True
+0,5,33,O=C([Au])NC(COCCO[Cu])C(F)(F)(F,False,novel,SMILES Parse Error: extra open parentheses for input: 'O=C([Au])NC(COCCO[Cu])C(F)(F)(F',True
+0,5,33,CC(OC(=O)[Au])C(=O)NCC(=O)N[Cu],False,novel,ok,True
+0,5,33,CCOC(=O)CN(C)CC(CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,O=C([Au])NCC(O[Cu])C(F)F(=O)N,False,novel,"Explicit valence for atom # 10 F, 4, is greater than permitted",True
+0,5,33,CC(CCNC(=O)COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,O=C([Cu])CNCC(F)(F)(F)CCNC(=O)[Au],False,novel,"Explicit valence for atom # 6 C, 5, is greater than permitted",True
+0,5,33,CC(CNC(=O)[Au])CNC(=O)CCCN[Cu],False,novel,ok,True
+0,5,33,COCC(C)(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CN(C)(C)CC(C)OC(=O)[Au])O[Cu],False,novel,"Explicit valence for atom # 3 N, 4, is greater than permitted",True
+0,5,33,CN(CCCCOC(=O)[Au])CCCN[Cu],False,In the original data set,ok,True
+0,5,33,O=C([Au])OCCC=CNCCNCCN[Cu],False,novel,ok,True
+0,5,33,CCCCC(CO[Cu])NCC(C)(C)OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCC(CNC(C)C(CC)NC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(CCCO[Cu])NCC(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(=O)NCC(NC(=O)[Au])C(C)CO[Cu],False,novel,ok,True
+0,5,33,CC(CCNC(=O)[Au])ONC(=O)CCO[Cu],False,novel,ok,True
+0,5,33,CC(NC(C)C(=O)C(=O)NC(COC(=O)[Au])C)O[Cu],False,novel,ok,True
+0,5,33,C#CC(CO[Cu])NC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C)CN(C)CC(CO[Cu])OC(=O)[Au],True,In the original data set,ok,True
+0,5,33,COCC(CC(CO[Cu])NC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'COCC(CC(CO[Cu])NC(=O)[Au]',True
+0,5,33,CC(CN[Cu])NC(=O)C(C)NCCNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(O[Cu])C(=O)N(CC)CCC(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,COCC(C)(CO[Cu])NC(C)C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCC(CN[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'O=C([Au])NCC(CN[Cu]',True
+0,5,33,CCN(CC(C)(C)CO[Cu])CC(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)(CNC(C)CCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COCCCC(COC(C)C(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CC(O[Cu])C(=O)NCC(COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'C=CC(O[Cu])C(=O)NCC(COC(=O)[Au]',True
+0,5,33,O=C(CCCOC(=O)[Au])NO[Cu],False,novel,ok,True
+0,5,33,C#CCCNC(=O)CC(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(CCNC(C)CCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)(CNCCCCCOC(=C)[Au])N[Cu],False,novel,ok,True
+0,5,33,CCCCCCC(CNCCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CCCC(C)(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=C(CO[Cu])C(=O)OCCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCNC(=O)[Au])C(=O)NC(C)CO[Cu],False,novel,ok,True
+0,5,33,CC(NC(CC)(C)CCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CCC(CN[Cu])NCC(C)(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CN(CCC#N)CCOC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CCN(CC(CC)(C)(C)CO[Cu])OC(=O)[Au],False,novel,"Explicit valence for atom # 4 C, 5, is greater than permitted",True
+0,5,33,CCN(CCN[Cu])C(=O)CC(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NC(CC(=O)O)CCCO[Cu],False,novel,ok,True
+0,5,33,CC(CCO[Cu])NC(=O)C(C)(C)CNC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCN(CC)CC(C)(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C(CCO[Cu])NC(COC(=O)[Au])C(=O)O,False,novel,ok,True
+0,5,33,CC(C#N(C)C(=O)CC(CN[Cu])NC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C#N(C)C(=O)CC(CN[Cu])NC(=O)[Au]',True
+0,5,33,CCS(=O)(=O)(C)CC(CO[Cu])C(C)OC,False,novel,"Explicit valence for atom # 2 S, 7, is greater than permitted",False
+0,5,33,C=C(CCC)CC(N([Au])C(=O)O[Cu])C=C,False,novel,ok,True
+0,5,33,CCOCC(CO[Cu])NC(=O)C(C)CCNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)C(CC#NC(C)CO[Cu])OC(=O)[Au],False,novel,"Explicit valence for atom # 6 N, 4, is greater than permitted",True
+0,5,33,O=C([Au])OCC(CN[Cu])NC(=O)CC(C)C,False,novel,ok,True
+0,5,33,CC(O[Cu])C(OC(=O)C(OC(=O)[Au])C(F)Cl,False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(O[Cu])C(OC(=O)C(OC(=O)[Au])C(F)Cl',True
+0,5,33,C=CC(CO[Cu])NCC(OC(=O)[Au])C(F)C,False,novel,ok,True
+0,5,33,C=CC=CCCN(CCOC(=O)[Au])CCO[Cu],False,novel,ok,True
+0,5,33,C=CCN(C)CC(C)OC(=O)[Au])O[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: C=CCN(C)CC(C)OC(=O)[Au])O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'C=CCN(C)CC(C)OC(=O)[Au])O[Cu]' for input: 'C=CCN(C)CC(C)OC(=O)[Au])O[Cu]'",True
+0,5,33,O=C([Au])NCCCSCSCCN[Cu],False,novel,ok,True
+0,5,33,CC(=O)NC(C)NC(=O)C(CO[Cu])OC=O)[Au],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(=O)NC(C)NC(=O)C(CO[Cu])OC=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(=O)NC(C)NC(=O)C(CO[Cu])OC=O)[Au]' for input: 'CC(=O)NC(C)NC(=O)C(CO[Cu])OC=O)[Au]'",True
+0,5,33,CCCC(C)CNC(CO[Cu])C(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])OCC(CN[Cu])NCCCNCCOC(=O)[Au],False,novel,More than two ends,False
+0,5,33,CCCN(CC)C(CO[Cu])C(=O)C(F)(C)F,False,novel,More than two ends,False
+0,5,33,CC(C)(C)CN(CCC(C)O[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,COC(=O)CNCC(CCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CCNC(=O)C(C)(C)O[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CC(C)(C)CC(CO[Cu])NC(=O)[Au])OC,False,novel,ok,True
+0,5,33,CC(C)C#CC(=O)NCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCS(=O)(=O)C(CO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CCCN(C)CCN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CCC(=O)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)(C)(CO[Cu])C(=O)NC(=O)CCC)O,False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(C)(C)(CO[Cu])C(=O)NC(=O)CCC)O
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(C)(C)(CO[Cu])C(=O)NC(=O)CCC)O' for input: 'CC(C)(C)(CO[Cu])C(=O)NC(=O)CCC)O'",False
+0,5,33,CC(COCC(C)O[Cu])NC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)NC(=O)C(CN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])OCCCN(CCO[Cu])C(F)F,False,novel,ok,True
+0,5,33,CN(CC(COC)C(=O)[Au])C(C)(C)CO[Cu],False,novel,ok,True
+0,5,33,CC(NCNC(=O)[Au])C(=O)NCCN[Cu])C(C)C,False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(NCNC(=O)[Au])C(=O)NCCN[Cu])C(C)C
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(NCNC(=O)[Au])C(=O)NCCN[Cu])C(C)C' for input: 'CC(NCNC(=O)[Au])C(=O)NCCN[Cu])C(C)C'",True
+0,5,33,CC(O[Cu])C(=O)OCCCCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CF)(N[Cu])C(=O)NCC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCCCC(=O)NCCO[Cu],False,novel,ok,True
+0,5,33,C=CC(CNCCNCCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC#CCN(CC)C(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,C=C(C)C(C)(CNC(=O)CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CNCC(CC)C(C)(C)NC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C#CCOCC(=O)OCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCC=CC(=O)NCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCCCNC(CN[Cu])CNC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCCN(C)CC(=O)C(OC(C)O[Cu])C(C,False,novel,SMILES Parse Error: extra open parentheses for input: 'CCCCN(C)CC(=O)C(OC(C)O[Cu])C(C',False
+0,5,33,CCC(NC(=O)[Au])CCNC(C)(C)(C)O[Cu],False,novel,"Explicit valence for atom # 10 C, 5, is greater than permitted",True
+0,5,33,COC(=O)C(COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,COCC(CNCCCCO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCC(CCO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,C=CCNC(=O)NC(CO[Cu])CCOC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCC(NC(=S)CS)(=O)O),False,novel,"SMILES Parse Error: extra close parentheses while parsing: O=C([Au])NCC(NC(=S)CS)(=O)O)
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'O=C([Au])NCC(NC(=S)CS)(=O)O)' for input: 'O=C([Au])NCC(NC(=S)CS)(=O)O)'",False
+0,5,33,CC(CCOC(=O)[Au])N[Cu],False,In the original data set,ok,True
+0,5,33,CCN(CCC(N[Cu])C(C)C)(COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCN(CCC(N[Cu])C(C)C)(COC(=O)[Au]',True
+0,5,33,CN(CCO[Cu])CC(NC(=O)[Au])C(F)(C)F,False,novel,ok,True
+0,5,33,CCCN(CCO[Cu])C(C)CN(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C)(O[Cu])C(=O)NCC=CCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(COC(=O)C(C)O[Cu])NC(C)[Au],False,novel,ok,True
+0,5,33,CN(CCCCN(C)CCOC(=O)[Au])CCO[Cu],False,novel,ok,True
+0,5,33,CCCC(CNC(=O)C(C)NC(=O)[Au])N[Cu]Cl,False,novel,More than one bonds at the end point,True
+0,5,33,O=C(CN[Au])CNCC(=O)NCC(N[Cu])F,False,novel,ok,True
+0,5,33,CC(=O)C(=O)NCC(CNCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC#COCCOCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(OC(C)O[Cu])C(=O)NC(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CNCCC(=O)C(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CCCN(CCO[Cu])CC(C)OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,NNCC(CCCCF)(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,O=C(CCOC(=O)[Au])NC(=CCl)CO[Cu],False,novel,ok,True
+0,5,33,CC(CO[Cu])N(C)CC(C)(OC(=O)[Au])C(=O),False,novel,ok,True
+0,5,33,CCC(=O)CNC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCC(CO[Cu])(NC=N)=O)O,False,novel,"SMILES Parse Error: extra close parentheses while parsing: O=C([Au])NCC(CO[Cu])(NC=N)=O)O
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'O=C([Au])NCC(CO[Cu])(NC=N)=O)O' for input: 'O=C([Au])NCC(CO[Cu])(NC=N)=O)O'",True
+0,5,33,CCCC(C)(OC(=O)[Au])C(=O)O,False,novel,More than two ends,False
+0,5,33,C#CCN(C(=O)CC)(CO[Cu])COC(=O)[Au],False,novel,"Explicit valence for atom # 3 N, 4, is greater than permitted",True
+0,5,33,CCC(COC(=O)[Au])NCC=CCN[Cu],False,novel,ok,True
+0,5,33,CC(=O)CNC(O[Cu])C(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,C[Si]OC(=O)CC(=O)C(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)NC(=O)CNC(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C)OCC(=O)NC(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,COCCC(CNC(C)C(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(CO[Cu])NCC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(O[Cu])C(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CC(CNC(=O)[Au])OC)(C)C(C(C)C)O[Cu],False,novel,"Explicit valence for atom # 1 N, 4, is greater than permitted",True
+0,5,33,CC(CCO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CCOCN(CCCO[Cu])CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CN[Cu])COC(=O)C(C)(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C)(O[Cu])C(=O)NC(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCCCSCC(COC(=O)[Au])CO[Cu],False,novel,ok,True
+0,5,33,COCCN(C)C(=O)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)C(COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(C)(CCCN(C)CCNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,NCCC(=O)CN(CCOC(=O)[Au])CCO[Cu],False,novel,ok,True
+0,5,33,CCC(CNCC(C)(O[Cu])C(C)OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(CNCC(C)(O[Cu])C(C)OC(=O)[Au]',True
+0,5,33,CC(C)C(NCC(C)O[Cu])C(C(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)C(NCC(C)O[Cu])C(C(=O)[Au]',True
+0,5,33,CCC(C)#CNC(=O)NC(CCO[Cu])COC(=O)[Au],False,novel,"Explicit valence for atom # 2 C, 5, is greater than permitted",True
+0,5,33,CCC(C)CNCC(CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CN[Cu])NCCC#N,False,novel,More than two ends,False
+0,5,33,C#CCN(C)CCN[Cu])CC(COC(=O)[Au],False,novel,"SMILES Parse Error: extra close parentheses while parsing: C#CCN(C)CCN[Cu])CC(COC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'C#CCN(C)CCN[Cu])CC(COC(=O)[Au]' for input: 'C#CCN(C)CCN[Cu])CC(COC(=O)[Au]'",True
+0,5,33,CSC(=O)CC(N[Cu])NC(COC(=O)[Au])C,False,novel,ok,True
+0,5,33,O=C([Au])NCCCCNCN(CCCCF)N[Cu],False,novel,ok,True
+0,5,33,CC(C)N(CCO[Cu])CC(COC(=O)[Au])C(C)C,False,novel,ok,True
+0,5,33,CCC(C)(O[Cu])C(=O)NCCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CN(CCN[Cu])CC(C)C)OC(=O)O,False,novel,More than two ends,False
+0,5,33,C#CCCCCN(CCO[Cu])CCOC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCN(CCC#N)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CCCOC(=O)[Au])CO[Cu],False,novel,ok,True
+0,5,33,C=CC(CO[Cu])NCC(COC(=O)[Au])OC,False,novel,ok,True
+0,5,33,C=CC(O[Cu])C(=O)NC(C)(C)CNC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC#CC(NC(COC(=O)[Au])C(C)O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCCC#CC(NC(COC(=O)[Au])C(C)O[Cu]',True
+0,5,33,CN(CCCO[Cu])CC(C)(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,COC(=O)CCC(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CC)CNCC(=O)[Au])O[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(CC)CNCC(=O)[Au])O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(CC)CNCC(=O)[Au])O[Cu]' for input: 'CC(CC)CNCC(=O)[Au])O[Cu]'",True
+0,5,33,CCC(CNC(=O)[Au])NC(=O)CO[Cu],False,novel,ok,True
+0,5,33,COCCCC(CO[Cu])NC(=O)COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(CN(C)CCN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCCCCOCC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(C)N(C)CC(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)OCC(=O)C(C)(O[Cu])C(=O)OC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCN(C)C(C)(C)CCNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CO[Cu])NC(=O)COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,O=C([Au])OCCCCCN[Cu],False,novel,ok,True
+0,5,33,CC(CCN[Cu])NC(=O)CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(CO[Cu])NC(CCOC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)CC(CO[Cu])NC(CCOC(=O)[Au]',True
+0,5,33,CC(CCNC(=O)C(C)(C)(C)COC(=O)[Au])O[Cu],False,novel,"Explicit valence for atom # 7 C, 5, is greater than permitted",True
+0,5,33,C(C)C(C)NC(=O)C(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,COC(C)C(O[Cu])C(=O)NCC(C)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCNC(=O)CNCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CC(CNCCC(C)CCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CCN(C)CC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C(CCNCCCOC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(OCCNC(CO[Cu])COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(OCCNC(CO[Cu])COC(=O)[Au]',True
+0,5,33,CC=C(OC(=O)[Au])C(CN(=O)CCCO[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC=C(OC(=O)[Au])C(CN(=O)CCCO[Cu]',True
+0,5,33,COCC(CO[Cu])NC(CCOC(=O)[Au])OC,False,novel,ok,True
+0,5,33,CCCCCN(C)CCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(NCCCN(C)CCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COCC(C)(O[Cu])C(C)C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCCOC(=O)C(C)OC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,C=CC(O[Cu])C(=O)NCCCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(CCNCC(C(C)C)(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(O[Cu])C(=O)NC(CCOC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(O[Cu])C(=O)NC(CCOC(=O)[Au]',True
+0,5,33,CC(CCC(N)O[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CCNC(=O)[Au])C(CN[Cu])C(=O)C=OO,False,novel,"Explicit valence for atom # 16 O, 3, is greater than permitted",True
+0,5,33,CNC(CO[Cu])CCCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,C#CC(C)(OC(=O)NCCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CO[Cu])NCC(NC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CO[Cu])NCC(NC(=O)[Au]',True
+0,5,33,COC(CN(C)C[Au])CC(C)(C)O[Cu],False,novel,ok,True
+0,5,33,CCCCNC(CO[Cu])C(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,NC(=O)C(=O)CNCC(CN[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)C(CNC(=O)CCN[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,O=C(O)C(CNC(=O)[Au])NCCO[Cu],False,novel,ok,True
+0,5,33,CC(C)C(CNCC(C)(C)O[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CN(C)CC(=O)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C#CCC(COC(=O)[Au])NCC(C)CO[Cu],False,novel,ok,True
+0,5,33,C=C(CCO[Cu])N(C)CCOC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC=C(O)CNC(CN[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCC(CNCC(C)(C)(C)O[Cu])COC(=O)[Au],False,novel,"Explicit valence for atom # 7 C, 5, is greater than permitted",True
+0,5,33,CNC(CNC(=O)[Au])CC(CO[Cu])C(C)C,False,novel,ok,True
+0,5,33,CCCCN(CCOC(=O)[Au])CC(C)(C)O[Cu],False,novel,ok,True
+0,5,33,CCC(CO[Cu])NC(=O)C(C)NC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCCCCOCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CNCCC(C)(O[Cu])C(C)OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CNCCC(C)(O[Cu])C(C)OC(=O)[Au]',True
+0,5,33,CC(N[Cu])C(NC(=O)[Au])C(=O)O,False,novel,ok,True
+0,5,33,CC(C)COC(=O)C(CN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CC(C)O[Cu])NC(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCCCC(N[Cu])C(C)C(OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'C=CCCCC(N[Cu])C(C)C(OC(=O)[Au]',True
+0,5,33,N#CNCC(=O)C(CO[Cu])CCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCCNCC(=O)NCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)N(CCCOC(=O)[Au])CCN[Cu],False,novel,ok,True
+0,5,33,CC(C)(C)C(=O)NCC(CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,C=CC(C)NC(=O)C(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CC(CNC(CC(C)C)CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)C(CCNCCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)(O[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,COCCC(CO[Cu])NC(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NC(CO[Cu])C(=O)NC(=O)CO,False,novel,ok,True
+0,5,33,CC(C)C(O[Cu])C(=O)N(C)CC(C)CF)OC,False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(C)C(O[Cu])C(=O)N(C)CC(C)CF)OC
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(C)C(O[Cu])C(=O)N(C)CC(C)CF)OC' for input: 'CC(C)C(O[Cu])C(=O)N(C)CC(C)CF)OC'",False
+0,5,33,CC(CCN(C)CCCO[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CC)CC(O[Cu])C(=O)C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CC(=O)NCC(CO[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CC(=O)NCC(CO[Cu])OC(=O)[Au]',True
+0,5,33,CC(CNNC(=O)[Au])CC(C)CCO[Cu],False,novel,ok,True
+0,5,33,COC(=O)C(O[Cu])C(C)OCC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCCOC(=O)C(CF)(F)(F)N[Cu],False,novel,"Explicit valence for atom # 9 C, 5, is greater than permitted",True
+0,5,33,O=C([Au])N(CCCO[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'O=C([Au])N(CCCO[Cu]',True
+0,5,33,N#CCCCNC(=O)[Au],False,novel,More than two ends,False
+0,5,33,CCCC(CNCCC(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCC(=O)NC(CCO[Cu])C(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(OC(=O)[Au])C(N)C(C)O[Cu])OC,False,novel,"SMILES Parse Error: extra close parentheses while parsing: C=CC(OC(=O)[Au])C(N)C(C)O[Cu])OC
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'C=CC(OC(=O)[Au])C(N)C(C)O[Cu])OC' for input: 'C=CC(OC(=O)[Au])C(N)C(C)O[Cu])OC'",True
+0,5,33,CCCN(C)CC(C)(O[Cu])C(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(CN(C)CC(CO[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)CC(CN(C)CC(CO[Cu])OC(=O)[Au]',True
+0,5,33,CC(CO[Cu])(COC(=O)[Au])N(C)CC(C)C,False,novel,ok,True
+0,5,33,CC(CC(O[Cu])NCCCC)(C)(C)NC(=O)[Au],False,novel,"Explicit valence for atom # 1 C, 5, is greater than permitted",True
+0,5,33,CC(C)CCC(CN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C#N)N(C)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCNC(COC(=O)[Au])CO[Cu])C(F)F,False,novel,ok,True
+0,5,33,CC(CNC(=O)C(CO[Cu])C(C)OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CNC(=O)C(CO[Cu])C(C)OC(=O)[Au]',True
+0,5,33,CCC(C)CN(C)CC(COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CC(O[Cu])C(N)C(=O)[Au])C(=O)NCCC(C#N,False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(O[Cu])C(N)C(=O)[Au])C(=O)NCCC(C#N
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(O[Cu])C(N)C(=O)[Au])C(=O)NCCC(C#N' for input: 'CC(O[Cu])C(N)C(=O)[Au])C(=O)NCCC(C#N'",True
+0,5,33,CC(CO[Cu])C(=O)OCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCCN(CCO[Cu])CCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,O=C([Au])OCCC=CC(O[Cu])C(=O)O,False,novel,ok,True
+0,5,33,CCC(COC(=O)[Au])C(=O)NCCCO[Cu],False,In the original data set,ok,True
+0,5,33,N=C(CCCO[Cu])NCC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CN(CC(C)C(C)OC(=O)[Au])O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CN(CC(C)C(C)OC(=O)[Au])O[Cu]',True
+0,5,33,CC(NC(=O)[Au])C(=O)SCCCCC(F)(C)O[Cu],False,novel,ok,True
+0,5,33,CC#CN(CCOC(=O)[Au])CCCO[Cu],False,novel,ok,True
+0,5,33,CC(C)C#CC(=O)NCC(COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CCC(CO[Cu])NC(OC(=O)[Au])C(C)(C)C,False,novel,ok,True
+0,5,33,O=C([Au])OCC(CNC(=O)C(C)(F)(F)F)F)O[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: O=C([Au])OCC(CNC(=O)C(C)(F)(F)F)F)O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'O=C([Au])OCC(CNC(=O)C(C)(F)(F)F)F)O[Cu]' for input: 'O=C([Au])OCC(CNC(=O)C(C)(F)(F)F)F)O[Cu]'",True
+0,5,33,CC(C)(CC(=O)NCC(COC(=O)[Au])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)(CC(=O)NCC(COC(=O)[Au])OC(=O)[Au]',False
+0,5,33,CC(CCNC(C)(OC(=O)[Au])C(C)C(C)O[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CCNC(C)(OC(=O)[Au])C(C)C(C)O[Cu]',True
+0,5,33,O=C([Au])OC(CCCCCCCCF)O[Cu],False,novel,ok,True
+0,5,33,CCC(CC)CNC(CCCNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCCC#CC(COC(=O)[Au])NC(=O)CO[Cu],False,novel,ok,True
+0,5,33,CCCC(C)(CCNCC(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CN(CC#N)CC(CO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)C(NC(CO[Cu])C(F)F)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(#COC)NCC(COC(=O)[Au])O[Cu],False,novel,"Explicit valence for atom # 1 C, 5, is greater than permitted",True
+0,5,33,CCC(CCCCOC(=O)[Au])NCCC(C)O[Cu],False,novel,ok,True
+0,5,33,CC(C)C(CNC(=O)CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C(=O)NCC(CN[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(C(=O)NCC(CN[Cu])OC(=O)[Au]',True
+0,5,33,C=C(CO[Cu])C(=O)NCCCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,O=C(CCF)NC(=O)CC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CNC(=O)[Au])C(C)O[Cu],False,novel,ok,True
+0,5,33,CN(CCCO[Cu])C(C)(OC(=O)[Au])C(C,False,novel,SMILES Parse Error: extra open parentheses for input: 'CN(CCCO[Cu])C(C)(OC(=O)[Au])C(C',True
+0,5,33,O=C([Au])NCCCN[Cu],False,In the original data set,ok,True
+0,5,33,C#CC(C)CN(CCO[Cu])CC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CC(=O)OCCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC=CC(COC(=O)[Au])NC(=O)CO[Cu],False,novel,ok,True
+0,5,33,CC(C)C(C(CCOC(=O)[Au])NC(=O)CO[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)C(C(CCOC(=O)[Au])NC(=O)CO[Cu]',True
+0,5,33,CSCCCN(CN[Cu])CC(C)(OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CSCCCN(CN[Cu])CC(C)(OC(=O)[Au]',True
+0,5,33,C=CC(CC)N(CCCOC(=O)[Au])CCO[Cu],False,novel,ok,True
+0,5,33,COCC(CO[Cu])NC(=O)CC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(N[Cu])C(=O)N(C)CCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(=O)NC(CO[Cu])COC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C)CC(COC(=O)[Au])NCCCO[Cu],False,novel,ok,True
+0,5,33,CC#CC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CCCC(CN(C)CCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC=C(O[Cu])C(=O)NCCC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCN(CC)CNC(=O)C(COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(CSC(=O)C(C)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,O=C([Au])NC(CS)(=O)NCCCOCCN[Cu],False,novel,"Explicit valence for atom # 4 C, 5, is greater than permitted",True
+0,5,33,CC(C)CNCCOCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C#CC(=N)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCCC#CC(=O)NC(CN[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CO[Cu])(CN(C)CC(C)COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CO[Cu])(CN(C)CC(C)COC(=O)[Au]',True
+0,5,33,CCC(NCC(=O)[Au])C(O[Cu])C(F)C(C)F,False,novel,ok,True
+0,5,33,CC(CCNC(=O)C(C)NC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,O=C(C)NCC(CCO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(CO[Cu])NCC(C)(C)CNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCCCN(C)CCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CNCC(C)(C)CO[Cu])OC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CN(C)N=NC(=O)CCNC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCCN(CCCOC(=O)[Au])C(C)(C)O[Cu],False,novel,ok,True
+0,5,33,CCC(CNC(=O)C(CO[Cu])NC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCC(CNC(=O)C(CO[Cu])NC(=O)[Au]',True
+0,5,33,CC(C)(C)C(CNC(=O)[Au])NCCC#N)O[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(C)(C)C(CNC(=O)[Au])NCCC#N)O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(C)(C)C(CNC(=O)[Au])NCCC#N)O[Cu]' for input: 'CC(C)(C)C(CNC(=O)[Au])NCCC#N)O[Cu]'",True
+0,5,33,CCCC(N[Cu])C(=O)NCCC(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(C)N(CCCO[Cu])CCO)OC(=O)[Au],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CCCC(C)N(CCCO[Cu])CCO)OC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CCCC(C)N(CCCO[Cu])CCO)OC(=O)[Au]' for input: 'CCCC(C)N(CCCO[Cu])CCO)OC(=O)[Au]'",True
+0,5,33,CC(C)C(C)(C)CNC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(OC(=O)C(CCO[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCCC(OC(=O)C(CCO[Cu])OC(=O)[Au]',True
+0,5,33,CCC(CN(C)CCCCOC(=O)[Au])CO[Cu],False,novel,ok,True
+0,5,33,CCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(C)N(C)CC(C)(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)C(CNC(=O)CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C)(CNC(C)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CNC(=O)[Au])N(C)CC(=O)CCCO[Cu],False,novel,ok,True
+0,5,33,C=CC(C)CN(CCO[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,N=C(O)CNC(=O)C(COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,O=C([Au])OCC(COCCO[Cu])C(F)F,False,novel,ok,True
+0,5,33,CCC(CO[Cu])COC(=O)CCNC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])OCC(=O)NCC=CCN[Cu],False,novel,ok,True
+0,5,33,CC(C)CCCCNC(=O)C(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(CO[Cu])SCCC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCOC(=O)CC(N[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(N[Cu])C(=O)NCCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CN(C)CCCCNCC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(O[Cu])C(=O)NCC(OC(F)F)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)=CCN(C)CC(O[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCNC(=O)CCO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(NC(CO[Cu])C(C)COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)CC(NC(CO[Cu])C(C)COC(=O)[Au]',True
+0,5,33,CN(CC(CC)(C)(C)O[Cu])COC(=O)[Au],False,novel,"Explicit valence for atom # 3 C, 5, is greater than permitted",True
+0,5,33,CCCC(NCCOC(=O)[Au])C(=O)CCCN[Cu],False,novel,ok,True
+0,5,33,CCCCNCC(CCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CNC(=O)CC(C)(C)N[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CO[Cu])CN(C)(C)CCOC(=O)[Au],False,novel,"Explicit valence for atom # 6 N, 4, is greater than permitted",True
+0,5,33,COC(=O)CN(C)CC(O[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(CN(C)CCNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CNCCNCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)(CCN(C)CCCCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)CC(CNC(C)C(C)NOC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(CONCC(CC)(C)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)N(C)C(=O)C(CO[Cu])NC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCC(CN[Cu])N(C)C(=O)CC(CC)OC(=O)[Au],False,novel,ok,True
+0,5,33,CN(CCO[Cu])C(=O)CCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(CNC(CO[Cu])C(C)C)OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(C)(NC(=O)C(=O)C(CO[Cu])NC(C)O,False,novel,SMILES Parse Error: extra open parentheses for input: 'C=CC(C)(NC(=O)C(=O)C(CO[Cu])NC(C)O',False
+0,5,33,COCCC(CN[Cu])C(OC(=O)[Au])C(=O)O,False,novel,ok,True
+0,5,33,C#CC(NC(=O)NC(CC)C(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCCN(C)C)CC(COC(=O)[Au])N[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: C=CCCN(C)C)CC(COC(=O)[Au])N[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'C=CCCN(C)C)CC(COC(=O)[Au])N[Cu]' for input: 'C=CCCN(C)C)CC(COC(=O)[Au])N[Cu]'",True
+0,5,33,CC(CC(=O)OCCNC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CCC(CNC(=O)C(C)CNC(=O)[Au])N[Cu],False,In the original data set,ok,True
+0,5,33,CCC(CNC(=O)OCCN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCCC(CO[Cu])NC(=O)CC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CSCC(C)(C)C)(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)(C)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CNC(=O)C(=C)NC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CN[Cu])CC(CCNC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CN[Cu])CC(CCNC(=O)[Au]',True
+0,5,33,CN(CCNC(=O)[Au])CCC(C)=O)OCCO[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CN(CCNC(=O)[Au])CCC(C)=O)OCCO[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CN(CCNC(=O)[Au])CCC(C)=O)OCCO[Cu]' for input: 'CN(CCNC(=O)[Au])CCC(C)=O)OCCO[Cu]'",True
+0,5,33,CCC(CCO[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCO[Cu])(OC(=O)[Au])C(=O)OCCCl,False,novel,ok,True
+0,5,33,COC(=O)CNC(CN[Cu])CNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(COC(C)CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)(OC(=O)[Au])C(=O)NCC(C)CO[Cu],True,novel,ok,True
+0,5,33,CN(CCO[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,COCC#N)NCC(COC(=O)[Au])O[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: COCC#N)NCC(COC(=O)[Au])O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'COCC#N)NCC(COC(=O)[Au])O[Cu]' for input: 'COCC#N)NCC(COC(=O)[Au])O[Cu]'",True
+0,5,33,CC(C)(CNC(C)C(=O)CCCNC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(C)C(C)(CN[Cu])NCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CN(C)C(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,COCC(CC(C)NC(COC(=O)[Au])N[Cu],False,novel,SMILES Parse Error: extra open parentheses for input: 'COCC(CC(C)NC(COC(=O)[Au])N[Cu]',True
+0,5,33,CC(C)(CC(=O)NCC(CO[Cu])NC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)(CC(=O)NCC(CO[Cu])NC(=O)[Au]',True
+0,5,33,CCC(C)CNC(=O)C(CNC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CCCCC(CNCC(C)N[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CNC(=O)C(C)NC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(C)C(CCC(OC(=O)[Au])C(C)C)C)N[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(C)C(CCC(OC(=O)[Au])C(C)C)C)N[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(C)C(CCC(OC(=O)[Au])C(C)C)C)N[Cu]' for input: 'CC(C)C(CCC(OC(=O)[Au])C(C)C)C)N[Cu]'",True
+0,5,33,CCCCN(CC)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NCCNCC(=O)NCCN[Cu],False,In the original data set,ok,True
+0,5,33,CCC(CCNCCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CN(CCO[Cu])C(=O)C(=O)C(C)(C)NC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCCC(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CN(CCCNC(=O)[Au])C(=O)CCN[Cu],False,In the original data set,ok,True
+0,5,33,CN(CCCS[Cu])C(OC(=O)[Au])C(C)C,False,novel,ok,True
+0,5,33,COC(C)N(C)CC(CO[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CCC)N(CC(CO[Cu])COC(=O)[Au],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(C)CCC)N(CC(CO[Cu])COC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(C)CCC)N(CC(CO[Cu])COC(=O)[Au]' for input: 'CC(C)CCC)N(CC(CO[Cu])COC(=O)[Au]'",True
+0,5,33,CC(CN(CC(F)F)COCCNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(C)CN(CCCN[Cu])CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(O[Cu])C(=O)NC(COC(=O)[Au])C(C)C,False,novel,ok,True
+0,5,33,CC(=O)NC(CCOC(=O)[Au])C(CO[Cu])C,False,novel,ok,True
+0,5,33,C=C(C)CCNCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C#CC(=O)N(C)C(C)C(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(=O)CNCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)CC(NC(=O)CCCN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCSCCCCO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)C(NC(CO[Cu])C(C)(C)COC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)C(NC(CO[Cu])C(C)(C)COC(=O)[Au]',True
+0,5,33,CCCCCC(CN[Cu])NC(=O)[Au],False,novel,ok,True
+0,5,33,CC(N[Cu])C(=O)OCCNCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(NC(=O)[Au])C(C)(C)(C)OCCO[Cu],False,novel,"Explicit valence for atom # 7 C, 5, is greater than permitted",True
+0,5,33,CCC(CNCCCCOC(C)O[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)N(C)CC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCC=CC(=O)C(CO[Cu])(C)COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCCN(C)CC(C)(C)OC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CC(CO[Cu])NCCC(CC)(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CNC(=O)[Au])(C)P)(CO[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(CNC(=O)[Au])(C)P)(CO[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(CNC(=O)[Au])(C)P)(CO[Cu]' for input: 'CC(CNC(=O)[Au])(C)P)(CO[Cu]'",True
+0,5,33,CNC(=O)C(=O)CCC(CCOC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CCC(CNC(C)(C)C(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C#CCCC(CN(C)CC(C)N[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CC)(C)NC(=O)C(OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CCC(CNC(C)(C)CC(C)(C)NC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,CN(CC(C)CCNC(=O)[Au])CC(C)(C)N[Cu],False,novel,ok,True
+0,5,33,CC(C)N(=O)CC(C)(=O)O[Cu])NC(=O)[Au],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(C)N(=O)CC(C)(=O)O[Cu])NC(=O)[Au]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(C)N(=O)CC(C)(=O)O[Cu])NC(=O)[Au]' for input: 'CC(C)N(=O)CC(C)(=O)O[Cu])NC(=O)[Au]'",True
+0,5,33,CSCC(CNCC(C)CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(CC)NC(CO[Cu])CCCOC(=O)[Au],False,novel,ok,True
+0,5,33,O=C([Au])NC(CN[Cu])C(=O)CCCC(F)(F)F,False,novel,ok,True
+0,5,33,CCC(CNC(=O)NC(C)(C)CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C[Si](C)N(C)C(=O)C(C)C(COC(=O)[Au])N[Cu],False,novel,ok,True
+0,5,33,COCC(CNC(C)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C#CCNC(=O)NCC(CN[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CNCCCC(CNC(C)COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COCCNC(=O)NC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,NC(=S)N(=O)C(N[Cu])C(COC(N)=O)[Au],False,novel,"Explicit valence for atom # 3 N, 4, is greater than permitted",True
+0,5,33,CC(C)O)CCC(CNC(=O)[Au])O[Cu],False,novel,"SMILES Parse Error: extra close parentheses while parsing: CC(C)O)CCC(CNC(=O)[Au])O[Cu]
+[16:53:42] SMILES Parse Error: Failed parsing SMILES 'CC(C)O)CCC(CNC(=O)[Au])O[Cu]' for input: 'CC(C)O)CCC(CNC(=O)[Au])O[Cu]'",True
+0,5,33,CC(CO[Cu])(OC(=O)[Au])C(=O)NCC(C)O,False,novel,ok,True
+0,5,33,N#CCN=NCCC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)OCC(CO[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CC(C)N(CCOC(=O)[Au])CC(N)C(C)O[Cu],False,novel,ok,True
+0,5,33,C=CC(C)NC(CCCO[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(C)C(=OSC(CF)COC(=O)[Au])O[Cu],False,novel,"Explicit valence for atom # 5 O, 3, is greater than permitted",True
+0,5,33,C=CCOC(CN[Cu])NCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,C=CCN(CCO[Cu])CCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCC=CC(O[Cu])C(=O)NCCNC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CNCN(COC(=O)[Au])CC(F)F)F[Cu],False,novel,"Explicit valence for atom # 15 F, 2, is greater than permitted",True
+0,5,33,CC(C)C(C)(N[Cu])C(=O)NCCOC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(OC(=O)[Au])C(=O)NCCCCO[Cu],False,novel,ok,True
+0,5,33,CN(CCO[Cu])C(C)C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCN(C)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CO[Cu])CN(C)C(C)CCC(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,C=CC(COC(N[Cu])C(=O)O)OCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCCC(C)NC(C)(CO[Cu])C(C)OC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCC(=O)NCC(C)(CO[Cu])C(C)NC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(CCC(=O)NCC(C)(CO[Cu])C(C)NC(=O)[Au]',True
+0,5,33,CCCOCC(CN[Cu])COC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CNCC(C)C)C(C)(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,COCCC(CNC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,CC(CC#N)C(=O)C(CC(C)OC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,O=C([Au])OCCCCCCCN[Cu],False,novel,ok,True
+0,5,33,C=CCC(C(=O)NC(COC(=O)[Au])C(C)O)O[Cu],False,novel,ok,True
+0,5,33,CN(CCO[Cu])CCCCCCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(O[Cu])C(C)NC(=O)COCCOC(=O)[Au],False,novel,ok,True
+0,5,33,CCC(CCOC(=O)[Au])N[Cu],False,In the original data set,ok,True
+0,5,33,C=C(C)C(=O)NCC(CCO[Cu])OC(=C)[Au],False,novel,ok,True
+0,5,33,CCC(C)CN(CCO[Cu])CCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CCCCCOCC(CNC(CN[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CCCCCOCC(CNC(CN[Cu])OC(=O)[Au]',True
+0,5,33,CCN(CCCO[Cu])C(=O)CCOC(=O)[Au],False,novel,ok,True
+0,5,33,COCC(C)(C)NC(COC(=O)[Au])CO[Cu],False,novel,ok,True
+0,5,33,CC(CCOC(=O)[Au])NC(=O)C(C)N[Cu],False,novel,ok,True
+0,5,33,CC(C)(C)C(=O)NCC(COC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C#CCCN(CCO[Cu])CCOC(=O)[Au],False,In the original data set,ok,True
+0,5,33,CC(C)C(CN(C)C(C)(CO[Cu])OC(=O)[Au],False,novel,SMILES Parse Error: extra open parentheses for input: 'CC(C)C(CN(C)C(C)(CO[Cu])OC(=O)[Au]',True
+0,5,33,CCC(CC)C(C)O[Cu],False,novel,More than two ends,False
+0,5,33,O=C([Au])NCC(F)NCC(CCO[Cu])C(=O)O,False,novel,ok,True
+0,5,33,O=C([Au])NCC(F)CO[Cu],False,In the original data set,ok,True
+0,5,33,C#CCCN(CC)CC(CO[Cu])OC(=O)[Au],False,novel,ok,True
+0,5,33,C#CCCC(CN(C)CCOC(=O)[Au])O[Cu],False,novel,ok,True
+0,5,33,C=CC(O[Cu])C(=O)NCC=CCOC(=O)[Au],False,novel,ok,True
+0,5,33,CC(CCN(C)CC(OC(=O)[Au])C(C)C)O[Cu],False,novel,ok,True
+0,5,33,CC(C)NC(=O)CNCC(COC(=O)[Au])O[Cu],False,In the original data set,ok,True
+0,5,33,CC(C)C(O[Cu])C(=O)OCCOC(=O)[Au],False,novel,ok,True
