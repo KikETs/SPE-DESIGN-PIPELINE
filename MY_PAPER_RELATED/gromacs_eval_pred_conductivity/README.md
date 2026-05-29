@@ -1,0 +1,34 @@
+# GROMACS Predicted-Conductivity Eval
+
+This folder uses the same batch-eval notebook structure as the existing-data workflow, but the reference CSV is built from:
+
+```text
+source/all_novel_smiles_condz_high_with_pred_conductivity.csv
+source/all_novel_smiles_condz_low_with_pred_conductivity.csv
+```
+
+Run notebook:
+
+```text
+gromacs_new_batch_eval_top_bottom_stratified.ipynb
+```
+
+Prediction-eval settings:
+
+```python
+selection_group_col = "design_condition"
+selection_groups = ["HIGH", "LOW"]
+top_k_per_group = 5
+bottom_k_per_group = 5
+stratified_n = 0
+production_replicas = 3
+start_phase = "pysoftk"
+```
+
+The GROMACS input table is:
+
+```text
+simulation-trajectory-aggregate.csv
+```
+
+Its `CONDUCTIVITY` column is the PolyBERT-predicted conductivity (`pred_cond`), not measured MD conductivity. The notebook samples 20 trajectories total: HIGH top 5, HIGH bottom 5, LOW top 5, and LOW bottom 5 by predicted conductivity. `Degree of Polymerization` is computed per molecule as `ceil(150 / repeat_heavy_atoms)`, where `repeat_heavy_atoms` excludes polymer dummy atoms (`[*]`). Molality and density are set from typical values in the existing dataset: molality 1.42 and density 1.30.

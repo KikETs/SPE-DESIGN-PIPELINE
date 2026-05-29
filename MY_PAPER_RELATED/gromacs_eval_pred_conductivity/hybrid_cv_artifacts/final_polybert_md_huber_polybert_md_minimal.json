@@ -1,0 +1,72 @@
+{
+  "artifact_version": 1,
+  "model_name": "polybert_md_huber",
+  "feature_set": "polybert_md_minimal",
+  "intended_use": "Reference-calibrated conductivity estimator using PolyBERT prior plus MD cNE/NE features.",
+  "target": "log10 reference conductivity in S/cm",
+  "prediction_unit": "S/cm",
+  "features": [
+    "log10_sigma_polybert",
+    "log10_sigma_NE",
+    "log10_sigma_cNE_tau0",
+    "log10_sigma_cNE_tau20"
+  ],
+  "standard_scaler_mean": [
+    -4.218596952932852,
+    -3.747486294903974,
+    -4.880507440076066,
+    -4.526489548965681
+  ],
+  "standard_scaler_scale": [
+    0.3328661782960079,
+    0.5541914221506642,
+    0.8334709074830582,
+    0.7383666081646862
+  ],
+  "feature_ranges": {
+    "log10_sigma_polybert": {
+      "min": -4.801924228668213,
+      "max": -3.0077433586120605
+    },
+    "log10_sigma_NE": {
+      "min": -4.64526787897076,
+      "max": -2.147126648419891
+    },
+    "log10_sigma_cNE_tau0": {
+      "min": -6.231317884991195,
+      "max": -2.193217691958844
+    },
+    "log10_sigma_cNE_tau20": {
+      "min": -5.29660714078007,
+      "max": -2.163289508617652
+    }
+  },
+  "intercept": -4.209933678508651,
+  "coef": [
+    0.3523694462798573,
+    -0.03552383093670743,
+    0.07818478691597663,
+    -0.00458418949418555
+  ],
+  "alpha": 0.1,
+  "training_rows": 108,
+  "training_source": "eval_top10_bottom10_stratified100/results/hybrid_correction_polymer_cv/model_dataset.csv",
+  "polybert_feature_source": "revised/polybert_weighted_evidence/source_data/polybert_run/oof_predictions.csv",
+  "polymer_groupkfold_metrics": {
+    "validation_scheme": "polymer_groupkfold",
+    "model": "huber",
+    "feature_set": "polybert_md_minimal",
+    "n": 108,
+    "MAlogE": 0.1795222586038361,
+    "median_abs_log_error": 0.1134244613662716,
+    "median_pred_ref": 1.0014184016275838,
+    "mean_pred_ref": 1.2774268965347064,
+    "spearman_r": 0.7447548866686042,
+    "pearson_r": 0.8446157117675567,
+    "R2": 0.7102421942951156
+  },
+  "notes": [
+    "Reference rows use PolyBERT out-of-fold predictions to avoid in-sample PolyBERT leakage.",
+    "Generated rows should use the same PolyBERT prediction column used for candidate selection."
+  ]
+}

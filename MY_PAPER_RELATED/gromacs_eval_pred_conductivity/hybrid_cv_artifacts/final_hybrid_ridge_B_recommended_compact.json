@@ -1,0 +1,60 @@
+{
+  "artifact_version": 1,
+  "model_name": "hybrid_ridge",
+  "feature_set": "B_recommended_compact",
+  "intended_use": "screening-level hybrid conductivity correction; not a universal transport model",
+  "target": "log10_sigma_ref",
+  "prediction_unit": "S/cm",
+  "features": [
+    "log10_sigma_NE",
+    "log10_sigma_cNE_tau0",
+    "log10_sigma_cNE_tau5",
+    "log10_sigma_cNE_tau20",
+    "log10_sigma_cNE_tau50"
+  ],
+  "standard_scaler_mean": [
+    -3.747486294903974,
+    -4.880507440076066,
+    -4.764282808746311,
+    -4.526489548965681,
+    -4.317367091979971
+  ],
+  "standard_scaler_scale": [
+    0.5541914221506642,
+    0.8334709074830582,
+    0.7973894383081364,
+    0.7383666081646862,
+    0.6949304979203844
+  ],
+  "intercept": -4.226568998179847,
+  "coef": [
+    0.07487782679489279,
+    1.3346494411027539,
+    -2.574015517015484,
+    3.3864700234697906,
+    -1.8350159109022048
+  ],
+  "alpha": 0.01,
+  "training_rows": 108,
+  "training_unique_polymers": 104,
+  "training_source": "eval_top10_bottom10_stratified100/results/hybrid_correction_polymer_cv/model_dataset.csv",
+  "polymer_cv_metrics": {
+    "n": 108,
+    "MAlogE": 0.2124222135432006,
+    "median_abs_log_error": 0.1581560098787071,
+    "median_pred_ref": 0.9102502271951828,
+    "mean_pred_ref": 1.3005556795905966,
+    "spearman_r": 0.5570811709438069,
+    "pearson_r": 0.8121130785294174,
+    "R2": 0.6593761106072465,
+    "validation_scheme": "polymer_groupkfold",
+    "model": "hybrid_ridge",
+    "feature_set": "B_recommended_compact"
+  },
+  "notes": [
+    "Features are log10 conductivities and are standardized before applying coefficients.",
+    "Do not use group labels or reference conductivity as input features.",
+    "A_minimal requires NE, static cNE tau0, and persistence cNE tau20.",
+    "B_recommended_compact additionally requires persistence cNE tau5 and tau50."
+  ]
+}
