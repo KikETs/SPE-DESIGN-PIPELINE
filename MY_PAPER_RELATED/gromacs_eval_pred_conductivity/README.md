@@ -25,6 +25,21 @@ production_replicas = 3
 start_phase = "pysoftk"
 ```
 
+For `production_replicas = 3`, the analysis phase evaluates all three production trajectories:
+
+```text
+md/production
+md/production_rep2
+md/production_rep3
+```
+
+Per-replica outputs are saved under `analysis/replica_1`, `analysis/replica_2`, and `analysis/replica_3`. The root `analysis/conductivity_summary_htpmd_ref.csv` contains the replica mean for the main conductivity fields plus `_std`, `_var`, `_min`, and `_max` columns. The full per-replica table and long-form statistics are also written to:
+
+```text
+analysis/conductivity_summary_htpmd_ref_replicas.csv
+analysis/conductivity_summary_htpmd_ref_replica_stats.csv
+```
+
 The GROMACS input table is:
 
 ```text

@@ -21,8 +21,214 @@ print("__STAGEV3__:analysis:entry", flush=True)
 
 
 # ---- phase prelude: analysis ----
-PROD_DIR = MD_DIR / "production"
-for _p in [PROD_DIR / "production.tpr", PROD_DIR / "production.xtc", PROD_DIR / "production.gro"]:
+_ANALYSIS_REPLICA_STAGE = os.environ.get("GROMACS_ANALYSIS_REPLICA_STAGE", "").strip()
+try:
+    _ANALYSIS_REPLICA_INDEX = int(os.environ.get("GROMACS_ANALYSIS_REPLICA_INDEX", "1") or "1")
+except Exception:
+    _ANALYSIS_REPLICA_INDEX = 1
+
+def _analysis_replica_count() -> int:
+    raw = os.environ.get("GROMACS_PRODUCTION_REPLICAS", "1")
+    try:
+        return max(1, int(raw))
+    except Exception:
+        return 1
+
+def _analysis_replica_entries():
+    count = _analysis_replica_count()
+    return [(1, "production", MD_DIR / "production")] + [
+        (idx, f"production_rep{idx}", MD_DIR / f"production_rep{idx}")
+        for idx in range(2, count + 1)
+    ]
+
+def _analysis_required_prod_files(stage: str, stage_dir: Path) -> list[Path]:
+    return [
+        stage_dir / f"{stage}.tpr",
+        stage_dir / f"{stage}.xtc",
+        stage_dir / f"{stage}.gro",
+    ]
+
+def _assert_analysis_replica_inputs() -> None:
+    missing = []
+    for _idx, stage, stage_dir in _analysis_replica_entries():
+        for path in _analysis_required_prod_files(stage, stage_dir):
+            if not path.exists():
+                missing.append(path)
+    if missing:
+        shown = "; ".join(str(path) for path in missing[:12])
+        if len(missing) > 12:
+            shown += f"; ... ({len(missing)} missing total)"
+        raise FileNotFoundError(f"[analysis phase] missing production replica outputs: {shown}")
+
+def _numeric_stats(series) -> Optional[dict]:
+    vals = pd.to_numeric(series, errors="coerce").dropna()
+    n = int(vals.shape[0])
+    if n == 0:
+        return None
+    return {
+        "n": n,
+        "mean": float(vals.mean()),
+        "std": float(vals.std(ddof=1)) if n > 1 else 0.0,
+        "var": float(vals.var(ddof=1)) if n > 1 else 0.0,
+        "min": float(vals.min()),
+        "max": float(vals.max()),
+    }
+
+def _numeric_stats_frame(df: pd.DataFrame, skip_cols: set[str]) -> pd.DataFrame:
+    rows = []
+    for col in df.columns:
+        if col in skip_cols:
+            continue
+        stats = _numeric_stats(df[col])
+        if stats is None:
+            continue
+        rows.append({"metric": col, **stats})
+    return pd.DataFrame(rows)
+
+def _mean_aggregate_row(df: pd.DataFrame, id_cols: set[str]) -> dict:
+    first = df.iloc[0]
+    out = {}
+    skip_cols = {"replica", "production_stage", "analysis_csv"}
+    for col in df.columns:
+        if col in skip_cols:
+            continue
+        if col in id_cols:
+            vals = [str(v) for v in df[col].dropna().unique()]
+            out[col] = vals[0] if len(vals) == 1 else "|".join(vals)
+            continue
+        stats = _numeric_stats(df[col])
+        if stats is None:
+            vals = [str(v) for v in df[col].dropna().unique()]
+            out[col] = vals[0] if vals else first.get(col, "")
+            continue
+        out[col] = stats["mean"]
+        for key in ("mean", "std", "var", "min", "max"):
+            out[f"{col}_{key}"] = stats[key]
+    out["replica_count"] = int(_analysis_replica_count())
+    out["replica_success_count"] = int(df["replica"].nunique()) if "replica" in df.columns else int(len(df))
+    if "production_stage" in df.columns:
+        out["production_stages"] = ",".join(str(v) for v in df["production_stage"].dropna().unique())
+    if "analysis_csv" in df.columns:
+        out["replica_source_csvs"] = "|".join(str(v) for v in df["analysis_csv"].dropna().unique())
+    return out
+
+def _read_replica_csvs(csv_name: str) -> pd.DataFrame:
+    frames = []
+    for idx, stage, _stage_dir in _analysis_replica_entries():
+        src = ROOT / "analysis" / f"replica_{idx}" / csv_name
+        if not src.exists():
+            raise FileNotFoundError(f"[analysis phase] missing replica analysis output: {src}")
+        df = pd.read_csv(src)
+        df["replica"] = idx
+        df["production_stage"] = stage
+        df["analysis_csv"] = str(src)
+        frames.append(df)
+    return pd.concat(frames, ignore_index=True)
+
+def _aggregate_wide_replica_csv(csv_name: str, id_cols: set[str]) -> None:
+    combined = _read_replica_csvs(csv_name)
+    stem = Path(csv_name).stem
+    root_analysis = ROOT / "analysis"
+    combined.to_csv(root_analysis / f"{stem}_replicas.csv", index=False)
+    stats = _numeric_stats_frame(
+        combined,
+        set(id_cols) | {"replica", "production_stage", "analysis_csv"},
+    )
+    stats.to_csv(root_analysis / f"{stem}_replica_stats.csv", index=False)
+    out = _mean_aggregate_row(combined, id_cols)
+    pd.DataFrame([out]).to_csv(root_analysis / csv_name, index=False)
+
+def _aggregate_metric_value_csv(csv_name: str) -> None:
+    combined = _read_replica_csvs(csv_name)
+    stem = Path(csv_name).stem
+    root_analysis = ROOT / "analysis"
+    combined.to_csv(root_analysis / f"{stem}_replicas.csv", index=False)
+    rows = []
+    for metric, grp in combined.groupby("metric", dropna=False):
+        stats = _numeric_stats(grp["value"])
+        if stats is None:
+            continue
+        rows.append({"metric": metric, "value": stats["mean"], **stats})
+    pd.DataFrame(rows).to_csv(root_analysis / f"{stem}_replica_stats.csv", index=False)
+    pd.DataFrame(rows).to_csv(root_analysis / csv_name, index=False)
+
+def _aggregate_compare_csv() -> None:
+    combined = _read_replica_csvs("aggregate_compare.csv")
+    root_analysis = ROOT / "analysis"
+    combined.to_csv(root_analysis / "aggregate_compare_replicas.csv", index=False)
+    rows = []
+    for metric, grp in combined.groupby("metric", dropna=False):
+        current_stats = _numeric_stats(grp["current"])
+        if current_stats is None:
+            continue
+        ref_vals = pd.to_numeric(grp["reference"], errors="coerce").dropna()
+        reference = float(ref_vals.iloc[0]) if not ref_vals.empty else float("nan")
+        abs_diff = current_stats["mean"] - reference if np.isfinite(reference) else float("nan")
+        pct_diff = abs_diff / reference * 100.0 if np.isfinite(abs_diff) and reference not in (0.0, 0) else float("nan")
+        rows.append({
+            "metric": metric,
+            "current": current_stats["mean"],
+            "reference": reference,
+            "abs_diff": abs_diff,
+            "pct_diff": pct_diff,
+            "current_mean": current_stats["mean"],
+            "current_std": current_stats["std"],
+            "current_var": current_stats["var"],
+            "current_min": current_stats["min"],
+            "current_max": current_stats["max"],
+            "n": current_stats["n"],
+        })
+    pd.DataFrame(rows).to_csv(root_analysis / "aggregate_compare.csv", index=False)
+
+def _run_replica_analyses_and_aggregate() -> None:
+    _assert_analysis_replica_inputs()
+    root_analysis = ROOT / "analysis"
+    root_analysis.mkdir(parents=True, exist_ok=True)
+    script_path = Path(__file__).resolve()
+    entries = _analysis_replica_entries()
+    for idx, stage, _stage_dir in entries:
+        print(f"[production-replicas] analysis replica {idx}/{len(entries)} stage={stage}", flush=True)
+        child_env = os.environ.copy()
+        child_env["GROMACS_ANALYSIS_REPLICA_STAGE"] = stage
+        child_env["GROMACS_ANALYSIS_REPLICA_INDEX"] = str(idx)
+        child_env["GROMACS_ANALYSIS_REPLICA_COUNT"] = str(len(entries))
+        child_env["GROMACS_MODULE_NAME"] = f"{os.environ.get('GROMACS_MODULE_NAME', 'gromacs_phase')}_rep{idx}"
+        res = subprocess.run(
+            [sys.executable, str(script_path)],
+            cwd=str(ROOT),
+            env=child_env,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        log_path = root_analysis / f"replica_{idx}_analysis.log"
+        log_path.write_text((res.stdout or "") + "\n--- STDERR ---\n" + (res.stderr or ""))
+        if res.returncode != 0:
+            tail = "\n".join(((res.stdout or "") + "\n" + (res.stderr or "")).splitlines()[-40:])
+            raise RuntimeError(f"[analysis phase] replica {idx} ({stage}) failed; see {log_path}\n{tail}")
+    _aggregate_metric_value_csv("conductivity_summary.csv")
+    _aggregate_wide_replica_csv("final_summary.csv", {"Trajectory ID", "PSMILES"})
+    _aggregate_compare_csv()
+    _aggregate_wide_replica_csv(
+        "conductivity_summary_htpmd_ref.csv",
+        {"Trajectory ID", "PSMILES", "sigma_eval_mode"},
+    )
+    print(f"[production-replicas] aggregated analysis for {len(entries)} replicas", flush=True)
+
+if not _ANALYSIS_REPLICA_STAGE and _analysis_replica_count() > 1:
+    _run_replica_analyses_and_aggregate()
+    print("__PHASE_DONE__:analysis", flush=True)
+    sys.exit(0)
+
+PROD_STAGE = _ANALYSIS_REPLICA_STAGE or "production"
+if _ANALYSIS_REPLICA_STAGE:
+    ANALYSIS_DIR = ROOT / "analysis" / f"replica_{_ANALYSIS_REPLICA_INDEX}"
+
+PROD_DIR = MD_DIR / PROD_STAGE
+TPR = PROD_DIR / f"{PROD_STAGE}.tpr"
+XTC = PROD_DIR / f"{PROD_STAGE}.xtc"
+GRO = PROD_DIR / f"{PROD_STAGE}.gro"
+for _p in [TPR, XTC, GRO]:
     if not _p.exists():
         raise FileNotFoundError(f"[analysis phase] missing prerequisite: {_p}")
 
@@ -150,37 +356,12 @@ def _sync_n_chains_from_topology_for_density() -> None:
 _sync_n_chains_from_topology_for_density()
 
 # ---- cNE analysis (GROMACS xtc/tpr required) ----
-# production.tpr/xtc는 stage_dir에 생성됨
-def _production_replica_count_for_analysis() -> int:
-    raw = os.environ.get("GROMACS_PRODUCTION_REPLICAS", "1")
-    try:
-        return max(1, int(raw))
-    except Exception:
-        return 1
-
-def _production_replica_stages_for_analysis():
-    count = _production_replica_count_for_analysis()
-    return [("production", MD_DIR / "production")] + [
-        (f"production_rep{i}", MD_DIR / f"production_rep{i}") for i in range(2, count + 1)
-    ]
-
-_missing_production_outputs = []
-for _stage, _stage_dir in _production_replica_stages_for_analysis():
-    for _ext in ("tpr", "xtc", "gro"):
-        _p = _stage_dir / f"{_stage}.{_ext}"
-        if not _p.exists():
-            _missing_production_outputs.append(_p)
-if _missing_production_outputs:
-    _shown = "; ".join(str(_p) for _p in _missing_production_outputs[:12])
-    if len(_missing_production_outputs) > 12:
-        _shown += f"; ... ({len(_missing_production_outputs)} missing total)"
-    raise FileNotFoundError(f"[analysis phase] missing production replica outputs: {_shown}")
-print(f"[production-replicas] analysis inputs present={len(_production_replica_stages_for_analysis())}", flush=True)
-
-PROD_DIR = MD_DIR / "production"
-TPR = PROD_DIR / "production.tpr"
-XTC = PROD_DIR / "production.xtc"
-GRO = PROD_DIR / "production.gro"
+_assert_analysis_replica_inputs()
+print(
+    f"[production-replicas] analysis stage={PROD_STAGE} "
+    f"replica_index={_ANALYSIS_REPLICA_INDEX} inputs_present={len(_analysis_replica_entries())}",
+    flush=True,
+)
 assert TPR.exists() and XTC.exists() and GRO.exists()
 
 # spec.analysis_begin_ns = 1.0
@@ -491,7 +672,7 @@ def density_from_gro(gro_path: Path, mass_kg: float) -> float:
     rho_kg_m3 = mass_kg / V_m3
     return rho_kg_m3 / 1000.0  # g/cm^3
 
-prod_gro = PROD_DIR / "production.gro"
+prod_gro = GRO
 
 mass_poly_g = polymer_mw_g_mol * spec.n_chains
 mass_salt_g = (li_mw_g_mol + tfsi_mw_g_mol) * spec.li_tfsi_pairs
@@ -704,7 +885,7 @@ block_rows = []
 for tid in traj_ids:
     traj = base / f'Traj_{tid}'
     md_dir = traj / 'md'
-    analysis_dir = traj / 'analysis'
+    analysis_dir = ANALYSIS_DIR if tid == current_tid else traj / 'analysis'
     row = {'Trajectory ID': tid}
 
     ndx_counts = _read_ndx_counts(md_dir / 'index.ndx')
@@ -806,9 +987,6 @@ import re
 import numpy as np
 import pandas as pd
 
-PROD_DIR = MD_DIR / "production"
-GRO = PROD_DIR / "production.gro"
-XTC = PROD_DIR / "production.xtc"
 if not GRO.exists():
     raise FileNotFoundError(f"Missing GRO: {GRO}")
 

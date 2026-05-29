@@ -640,6 +640,19 @@ def read_prediction_from_analysis(config: GromacsBatchConfig, traj_id: int) -> d
 
     row = pd.read_csv(src).iloc[0]
 
+    def _num(col: str, default: float = float('nan')) -> float:
+        val = pd.to_numeric(row.get(col, default), errors='coerce')
+        return float(val) if np.isfinite(val) else float('nan')
+
+    def _replica_stat_outputs(metric: str, prefix: str) -> dict[str, float]:
+        return {
+            f'{prefix}_mean_pred': _num(f'{metric}_mean'),
+            f'{prefix}_std_pred': _num(f'{metric}_std'),
+            f'{prefix}_var_pred': _num(f'{metric}_var'),
+            f'{prefix}_min_pred': _num(f'{metric}_min'),
+            f'{prefix}_max_pred': _num(f'{metric}_max'),
+        }
+
     sigma_cne = pd.to_numeric(row.get(config.sigma_pred_col, np.nan), errors='coerce')
     sigma_ne = pd.to_numeric(row.get('sigma_NE_htpmd_S_cm', np.nan), errors='coerce')
     c_tn = pd.to_numeric(row.get('c_tn_htpmd', np.nan), errors='coerce')
@@ -656,7 +669,7 @@ def read_prediction_from_analysis(config: GromacsBatchConfig, traj_id: int) -> d
     sigma_ne_pred = float(sigma_ne) if np.isfinite(sigma_ne) and sigma_ne > 0 else float('nan')
     sigma_eval_mode = str(row.get('sigma_eval_mode', 'pure_cNE')).strip() or 'pure_cNE'
 
-    return {
+    out = {
         'sigma_cNE_htpmd_S_cm_pred': sigma_cne_pred,
         'sigma_NE_htpmd_S_cm_pred': sigma_ne_pred,
         'used_sigma_ne_fallback': 0,
@@ -666,8 +679,17 @@ def read_prediction_from_analysis(config: GromacsBatchConfig, traj_id: int) -> d
         'D_an_cm2s_pred': d_an,
         'tplus_NE_pred': tplus_ne,
         'c_tn_htpmd_pred': float(c_tn) if np.isfinite(c_tn) else float('nan'),
+        'analysis_replica_count': _num('replica_count'),
+        'analysis_replica_success_count': _num('replica_success_count'),
+        'analysis_replicas_csv': str(row.get('replica_source_csvs', '')),
         'analysis_csv': str(src),
     }
+    out.update(_replica_stat_outputs(config.sigma_pred_col, 'sigma_cNE_htpmd_S_cm'))
+    out.update(_replica_stat_outputs('sigma_NE_htpmd_S_cm', 'sigma_NE_htpmd_S_cm'))
+    out.update(_replica_stat_outputs('D_Li_cm2s', 'D_Li_cm2s'))
+    out.update(_replica_stat_outputs('D_an_cm2s', 'D_an_cm2s'))
+    out.update(_replica_stat_outputs('c_tn_htpmd', 'c_tn_htpmd'))
+    return out
 
 
 def _extract_stage_marker(line: str):
@@ -1482,6 +1504,15 @@ def run_batch_pipeline(manifest_df: pd.DataFrame, *, config: GromacsBatchConfig)
             'analysis': _phase_launcher('analysis', analysis_prelude + cell5_plus),
         }
 
+        existing_analysis_path = phase_dir / 'gromacs_new_phase_analysis.py'
+        if existing_analysis_path.exists():
+            existing_analysis = existing_analysis_path.read_text()
+            if (
+                'GROMACS_ANALYSIS_REPLICA_STAGE' in existing_analysis
+                and 'replica_source_csvs' in existing_analysis
+            ):
+                scripts['analysis'] = existing_analysis
+
         out = {}
         common_path = phase_dir / 'gromacs_new_phase_common.py'
         compile(common_setup, str(common_path), 'exec')
@@ -2199,6 +2230,11 @@ def run_batch_pipeline(manifest_df: pd.DataFrame, *, config: GromacsBatchConfig)
             req = _production_required_files(run_dir) + [
                 run_dir / 'analysis' / 'conductivity_summary_htpmd_ref.csv',
             ]
+            if BATCH_PRODUCTION_REPLICAS > 1:
+                req.extend([
+                    run_dir / 'analysis' / 'conductivity_summary_htpmd_ref_replicas.csv',
+                    run_dir / 'analysis' / 'conductivity_summary_htpmd_ref_replica_stats.csv',
+                ])
         else:
             return False
 
