@@ -195,7 +195,7 @@ def _run_replica_analyses_and_aggregate() -> None:
         child_env["GROMACS_MODULE_NAME"] = f"{os.environ.get('GROMACS_MODULE_NAME', 'gromacs_phase')}_rep{idx}"
         res = subprocess.run(
             [sys.executable, str(script_path)],
-            cwd=str(ROOT),
+            cwd=str(_PHASE_DIR.parent),
             env=child_env,
             text=True,
             capture_output=True,
@@ -729,11 +729,20 @@ print("__STAGEV3__:conductivity-analysis:cell7", flush=True)
 # =========================
 import re
 
-AGG_PATH = ROOT.parent / "simulation-trajectory-aggregate.csv"
-if not AGG_PATH.exists():
-    raise FileNotFoundError(f"aggregate CSV not found: {AGG_PATH}")
-
-agg_df = pd.read_csv(AGG_PATH)
+_agg_candidates = [
+    ROOT.parent / "simulation-trajectory-aggregate.csv",
+    Path("simulation-trajectory-aggregate.csv"),
+    _PHASE_DIR.parent / "simulation-trajectory-aggregate.csv",
+]
+AGG_PATH = next((path for path in _agg_candidates if path.exists()), None)
+if AGG_PATH is None:
+    warnings.warn(
+        "[aggregate_compare] input candidate table not found; "
+        "writing current analysis values without comparison reference."
+    )
+    agg_df = pd.DataFrame(columns=["Trajectory ID"])
+else:
+    agg_df = pd.read_csv(AGG_PATH)
 
 m = re.search(r"\d+", spec.name)
 if not m:

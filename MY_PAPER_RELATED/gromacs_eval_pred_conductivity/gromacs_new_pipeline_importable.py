@@ -231,38 +231,78 @@ if _nvt1_split_vrescale_ps:
 _nvt1_split_nosehoover_ps = os.environ.get("GROMACS_NVT1_SPLIT_NOSEHOOVER_PS")
 if _nvt1_split_nosehoover_ps:
     spec.nvt1_split_nosehoover_ps = float(_nvt1_split_nosehoover_ps)
-# --- auto-update from reference CSV (toggle) ---
-USE_REF_CSV = True
-REF_CSV_PATH = Path("simulation-trajectory-aggregate.csv")
-if USE_REF_CSV:
-    ref_candidates = [REF_CSV_PATH]
-    ref_path = next((p for p in ref_candidates if p.is_file()), None)
-    if ref_path is None:
-        raise FileNotFoundError(
-            f"reference CSV not found. tried: {[str(p) for p in ref_candidates]}"
-        )
-    df_ref = pd.read_csv(ref_path)
-    if "Trajectory ID" not in df_ref.columns:
-        raise KeyError("reference CSV missing 'Trajectory ID' column")
+# --- optional input table update ---
+# This workflow may use simulation-trajectory-aggregate.csv as a candidate/input
+# table. It is not required reference data for analysis after MD has completed.
+INPUT_CSV_ENV = os.environ.get("GROMACS_INPUT_CSV", os.environ.get("GROMACS_REF_CSV", "")).strip()
+_input_csv_candidates = []
+if INPUT_CSV_ENV:
+    _input_csv_candidates.append(Path(INPUT_CSV_ENV).expanduser())
+_input_csv_candidates.append(Path("simulation-trajectory-aggregate.csv"))
+_traj_root_for_input = os.environ.get("GROMACS_TRAJ_ROOT", "").strip()
+if _traj_root_for_input:
+    _traj_root_path = Path(_traj_root_for_input).expanduser().resolve()
+    _input_csv_candidates.extend([
+        _traj_root_path.parent / "simulation-trajectory-aggregate.csv",
+        _traj_root_path.parent.parent / "simulation-trajectory-aggregate.csv",
+    ])
+_input_csv_candidates.append(_THIS_DIR.parent / "simulation-trajectory-aggregate.csv")
+
+_seen_input_csv = set()
+input_csv_candidates = []
+for _cand in _input_csv_candidates:
+    try:
+        _resolved = _cand.resolve()
+    except Exception:
+        _resolved = _cand
+    if _resolved in _seen_input_csv:
+        continue
+    _seen_input_csv.add(_resolved)
+    input_csv_candidates.append(_cand)
+
+_input_csv_loaded = False
+_input_csv_existing = [p for p in input_csv_candidates if p.is_file()]
+if not _input_csv_existing:
+    warnings.warn(
+        "[spec] input candidate CSV not found; continuing with environment/default spec values. "
+        f"tried: {[str(p) for p in input_csv_candidates]}"
+    )
+else:
     m = re.search(r"(\d+)", spec.name)
     if not m:
-        raise ValueError(f"cannot parse Trajectory ID from spec.name='{spec.name}'")
-    tid = m.group(1)
-    row = df_ref.loc[df_ref["Trajectory ID"].astype(str) == tid]
-    if row.empty:
-        raise KeyError(f"Trajectory ID {tid} not found in reference CSV")
-    spec.psmiles = str(row.iloc[0]["SMILES"])
-    spec.n_repeat = int(float(row.iloc[0]["Degree of Polymerization"]))
-    if "Molality" in row.columns and not pd.isna(row.iloc[0]["Molality"]):
-        spec.target_molality = float(row.iloc[0]["Molality"])
-    if "Density" in row.columns and not pd.isna(row.iloc[0]["Density"]):
-        spec.target_density_g_cm3 = float(row.iloc[0]["Density"])
-    log(
-        f"[spec] override from reference CSV: PSMILES={spec.psmiles}, "
-        f"n_repeat={spec.n_repeat}, target_molality={spec.target_molality}, "
-        f"target_density_g_cm3={spec.target_density_g_cm3}, "
-        f"molality_basis={getattr(spec, 'molality_basis', 'mixture')}"
-    )
+        warnings.warn(f"[spec] cannot parse Trajectory ID from spec.name='{spec.name}'")
+    else:
+        tid = m.group(1)
+        for input_csv_path in _input_csv_existing:
+            df_input = pd.read_csv(input_csv_path)
+            if "Trajectory ID" not in df_input.columns:
+                warnings.warn(f"[spec] input CSV missing 'Trajectory ID' column: {input_csv_path}")
+                continue
+            row = df_input.loc[df_input["Trajectory ID"].astype(str) == tid]
+            if row.empty:
+                continue
+            if "SMILES" in row.columns and not pd.isna(row.iloc[0]["SMILES"]):
+                spec.psmiles = str(row.iloc[0]["SMILES"])
+            if "Degree of Polymerization" in row.columns and not pd.isna(row.iloc[0]["Degree of Polymerization"]):
+                spec.n_repeat = int(float(row.iloc[0]["Degree of Polymerization"]))
+            if "Molality" in row.columns and not pd.isna(row.iloc[0]["Molality"]):
+                spec.target_molality = float(row.iloc[0]["Molality"])
+            if "Density" in row.columns and not pd.isna(row.iloc[0]["Density"]):
+                spec.target_density_g_cm3 = float(row.iloc[0]["Density"])
+            _input_csv_loaded = True
+            log(
+                f"[spec] loaded input CSV: {input_csv_path} "
+                f"PSMILES={spec.psmiles}, n_repeat={spec.n_repeat}, "
+                f"target_molality={spec.target_molality}, "
+                f"target_density_g_cm3={spec.target_density_g_cm3}, "
+                f"molality_basis={getattr(spec, 'molality_basis', 'mixture')}"
+            )
+            break
+        if not _input_csv_loaded:
+            warnings.warn(
+                f"[spec] Trajectory ID {tid} not found in input CSV candidates; "
+                "continuing with environment/default spec values."
+            )
 
 log(
     f"[spec-gk] output_enabled={spec.gk_output_enabled} "
@@ -3556,11 +3596,20 @@ print("__STAGEV3__:conductivity-analysis:cell7", flush=True)
 # =========================
 import re
 
-AGG_PATH = ROOT.parent / "simulation-trajectory-aggregate.csv"
-if not AGG_PATH.exists():
-    raise FileNotFoundError(f"aggregate CSV not found: {AGG_PATH}")
-
-agg_df = pd.read_csv(AGG_PATH)
+_agg_candidates = [
+    ROOT.parent / "simulation-trajectory-aggregate.csv",
+    Path("simulation-trajectory-aggregate.csv"),
+    _THIS_DIR.parent / "simulation-trajectory-aggregate.csv",
+]
+AGG_PATH = next((path for path in _agg_candidates if path.exists()), None)
+if AGG_PATH is None:
+    warnings.warn(
+        "[aggregate_compare] input candidate table not found; "
+        "writing current analysis values without comparison reference."
+    )
+    agg_df = pd.DataFrame(columns=["Trajectory ID"])
+else:
+    agg_df = pd.read_csv(AGG_PATH)
 
 m = re.search(r"\d+", spec.name)
 if not m:

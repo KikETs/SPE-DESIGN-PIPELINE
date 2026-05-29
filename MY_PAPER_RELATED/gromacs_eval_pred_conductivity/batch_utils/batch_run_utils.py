@@ -1515,6 +1515,13 @@ def run_batch_pipeline(manifest_df: pd.DataFrame, *, config: GromacsBatchConfig)
 
         out = {}
         common_path = phase_dir / 'gromacs_new_phase_common.py'
+        if common_path.exists():
+            existing_common = common_path.read_text()
+            if (
+                'GROMACS_INPUT_CSV' in existing_common
+                and 'input candidate CSV not found' in existing_common
+            ):
+                common_setup = existing_common
         compile(common_setup, str(common_path), 'exec')
         common_path.write_text(common_setup)
         for phase, body in scripts.items():

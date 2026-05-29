@@ -1,6 +1,6 @@
 # GROMACS Predicted-Conductivity Eval
 
-This folder uses the same batch-eval notebook structure as the existing-data workflow, but the reference CSV is built from:
+This folder uses the same batch-eval notebook structure as the existing-data workflow, but the input candidate CSV is built from:
 
 ```text
 source/all_novel_smiles_condz_high_with_pred_conductivity.csv
