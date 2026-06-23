@@ -9,7 +9,7 @@ the polymer generation and surrogate-screening results.
   notebooks, data, FCD outputs, and summary tables.
 - `MY_PAPER_RELATED/polybert_con`: PolyBERT conductivity screening code and
   generated-candidate summary outputs.
-- `MY_PAPER_RELATED/revised/polybert_weighted_evidence`: interval-weighted
+- `MY_PAPER_RELATED/polybert_weighted_evidence`: interval-weighted
   PolyBERT analysis scripts, figure data, and summary tables.
 - `MY_PAPER_RELATED/selfies-psmiles`: local package source used by the model
   notebooks.
@@ -37,6 +37,22 @@ Conda users can start from:
 conda env create -f environment.yml
 conda activate paper-repro
 ```
+
+## External Reference Data
+
+Reference CSV files matching `simulation*.csv` are intentionally excluded from
+Git. Download the reference data separately and place the files at the expected
+paths before running training, PolyBERT screening, MD reassessment, or full
+reproduction checks:
+
+```text
+MY_PAPER_RELATED/MODELS/data/simulation-trajectory-aggregate_aligned.csv
+MY_PAPER_RELATED/polybert_con/simulation-trajectory-aggregate.csv
+MY_PAPER_RELATED/gromacs_eval_pred_conductivity/simulation-trajectory-aggregate.csv
+MY_PAPER_RELATED/polybert_weighted_evidence/source_data/polybert_con/simulation-trajectory-aggregate.csv
+```
+
+These local files remain ignored by `.gitignore` after placement.
 
 ## Quick Validation
 
@@ -101,7 +117,7 @@ Large model checkpoints, cache tensors, and one oversized full OOF prediction
 CSV are not tracked. The excluded full OOF table can be regenerated from:
 
 ```bash
-python MY_PAPER_RELATED/revised/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py
+python MY_PAPER_RELATED/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py
 ```
 
 The current tracked tree is designed to stay below normal GitHub file-size

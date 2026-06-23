@@ -9,7 +9,7 @@ surrogate-screening workflow.
   data, and FCD summary outputs.
 - `polybert_con/`: PolyBERT conductivity predictor script and generated-candidate
   screening outputs.
-- `revised/polybert_weighted_evidence/`: weighted PolyBERT analysis scripts,
+- `polybert_weighted_evidence/`: weighted PolyBERT analysis scripts,
   figure data, and compact result tables.
 - `selfies-psmiles/`: local dependency used for endpoint-aware SELFIES/PSMILES
   handling.
@@ -18,6 +18,9 @@ surrogate-screening workflow.
 
 - Notebook outputs are stripped so results can be regenerated from code.
 - Large learned weights and cache tensors are excluded from Git tracking.
+- Reference CSV files matching `simulation*.csv` are excluded from Git; download
+  them separately and place them at the paths documented in the repository
+  root `README.md`.
 - `MODELS/FCD_runs/` keeps compact result CSV/Markdown/Tex outputs.
 - Training notebooks write new checkpoints into `MODELS/checkpoints/`.
 - The full weighted OOF prediction table is not tracked because it is larger

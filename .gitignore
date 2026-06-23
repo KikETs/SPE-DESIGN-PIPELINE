@@ -19,9 +19,11 @@ venv/
 MY_PAPER_RELATED/MODELS/checkpoints/**
 !MY_PAPER_RELATED/MODELS/checkpoints/.gitkeep
 MY_PAPER_RELATED/MODELS/data/gen_*.csv
+# External reference CSVs are downloaded manually; see README.md.
+simulation*.csv
 MY_PAPER_RELATED/polybert_con/runs/
 MY_PAPER_RELATED/polybert_con/torch/
-MY_PAPER_RELATED/revised/polybert_weighted_evidence/tables/weighted_oof_predictions_all.csv
+MY_PAPER_RELATED/polybert_weighted_evidence/tables/weighted_oof_predictions_all.csv
 
 *.pth
 *.pt
