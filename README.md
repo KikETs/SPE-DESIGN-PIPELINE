@@ -1,7 +1,8 @@
 # Paper Reproducibility Release
 
 This repository contains the curated `MY_PAPER_RELATED` release for reproducing
-the polymer generation and surrogate-screening results.
+the polymer generation, surrogate screening, and available molecular-dynamics
+reassessment workflow.
 
 ## What Is Included
 
@@ -13,11 +14,21 @@ the polymer generation and surrogate-screening results.
   PolyBERT analysis scripts, figure data, and summary tables.
 - `MY_PAPER_RELATED/selfies-psmiles`: local package source used by the model
   notebooks.
+- `MY_PAPER_RELATED/gromacs_eval_pred_conductivity`: generated-candidate MD
+  preparation/analysis workflow, representative inputs, and compact numerical
+  reassessment results.
+- `reproducibility/`: JCIM-oriented protocol, provenance, split, seed, data,
+  manuscript-source, and external-archive indexes.
 - `vendor/`: local `psmiles` packaging and its small canonicalization
   dependency.
 
-Unfinished atomistic-simulation batch pipelines and large model/cache artifacts
-are intentionally omitted from this release.
+The tracked MD release includes staged MDPs, representative GRO/TPR/TOP/ITP and
+Packmol inputs, construction/analysis code, 180 generated replica results, and
+the 120-selected/108-completed reference status/results. Large production
+trajectories, restart/checkpoint files, and model/cache artifacts remain outside
+Git. Two representative trajectories are being uploaded to Zenodo under the
+reserved DOI [`10.5281/zenodo.22043456`](https://doi.org/10.5281/zenodo.22043456).
+The DOI remains inactive until the unsubmitted Zenodo draft is published.
 
 ## Setup
 
@@ -68,6 +79,14 @@ After installing dependencies, include import checks:
 python scripts/repro_smoke.py --check-imports
 ```
 
+Validate the publication data denominators, grouped split, replica seeds, MDP
+parameter extraction, and manifest with:
+
+```bash
+python scripts/build_jcim_reproducibility_package.py
+python -m pytest tests/reproducibility -q
+```
+
 ## Optional Pretrained Checkpoints
 
 Pretrained model weights are distributed through the `v0.1.0` GitHub Release,
@@ -110,18 +129,48 @@ cache artifacts.
 Training notebooks write checkpoints under `MY_PAPER_RELATED/MODELS/checkpoints/`.
 That directory is intentionally ignored except for `.gitkeep`.
 
+## Machine-readable Data Index
+
+The [machine-readable data index](MY_PAPER_RELATED/machine_readable/README.md)
+maps the manuscript requirements and numerical figures to repository CSVs. It
+includes all 6,270 labeled structures with leakage-controlled,
+canonical-structure-grouped four-fold assignments, all 32,611 generated
+structures with prediction/exclusion status, the 60-candidate and
+180-replica generated-MD results, and the full 120-selected/108-completed
+reference reassessment status.
+
 ## Data And Artifacts
 
-Tracked outputs include compact CSV/Markdown summary tables and figure data.
-Large model checkpoints, cache tensors, and one oversized full OOF prediction
-CSV are not tracked. The excluded full OOF table can be regenerated from:
+Tracked outputs include compact CSV/Markdown summary tables, figure data, and
+the 6,270-row OOF prediction table. Large model checkpoints and cache tensors
+are not tracked. The canonical-group fold and OOF tables can be regenerated
+from cached PolyBERT embeddings with:
 
 ```bash
-python MY_PAPER_RELATED/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py
+python MY_PAPER_RELATED/polybert_con/train_polybert_conductivity_4fold.py \
+  --csv MY_PAPER_RELATED/polybert_con/fold_assignment.csv \
+  --outdir MY_PAPER_RELATED/polybert_con \
+  --embeddings_path MY_PAPER_RELATED/polybert_weighted_evidence/source_data/polybert_run/embeddings.npy
 ```
+
+The weighted sensitivity analysis can then be rerun with
+`MY_PAPER_RELATED/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py`.
+After OOF model selection, regenerate the 32,610 generated-candidate weighted
+predictions with
+`MY_PAPER_RELATED/polybert_weighted_evidence/scripts/predict_weighted_generated_candidates.py`.
 
 The current tracked tree is designed to stay below normal GitHub file-size
 limits without requiring Git LFS.
+
+## MD Archive Boundary
+
+The compact GitHub MD source is
+`MY_PAPER_RELATED/gromacs_eval_pred_conductivity/reproducibility/static_cne0_release/`.
+The representative trajectory archive, checksums, and unresolved
+reference redistribution check are documented in
+`reproducibility/zenodo/ZENODO_UPLOAD_MANIFEST.md`. Do not cite a moving branch
+as the final archive. The reserved DOI is `10.5281/zenodo.22043456`; cite it as
+the immutable release only after the Zenodo draft is published and resolves.
 
 ## Citation And License
 

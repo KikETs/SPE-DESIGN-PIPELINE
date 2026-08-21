@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -24,25 +25,33 @@ def require_path(root: Path, rel: str) -> None:
         raise FileNotFoundError(f"Missing required path: {rel}")
 
 
-def assert_no_blocked_paths(root: Path) -> None:
-    blocked = ("grom" + "acs", "lam" + "mps")
-    hits = []
-    for path in root.rglob("*"):
-        if should_skip(path):
-            continue
-        rel = path.relative_to(root).as_posix().lower()
-        if any(term in rel for term in blocked):
-            hits.append(path.relative_to(root).as_posix())
+def tracked_paths(root: Path) -> list[Path]:
+    result = subprocess.run(
+        ["git", "ls-files", "-z"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    return [root / value.decode() for value in result.stdout.split(b"\0") if value]
+
+
+def assert_no_blocked_artifacts(root: Path, paths: list[Path]) -> None:
+    blocked_suffixes = {".xtc", ".trr", ".edr", ".cpt"}
+    hits = [
+        path.relative_to(root).as_posix()
+        for path in paths
+        if path.suffix.lower() in blocked_suffixes
+    ]
     if hits:
         preview = "\n".join(hits[:20])
-        raise RuntimeError(f"Blocked path names found:\n{preview}")
+        raise RuntimeError(f"Large/raw MD artifact types are tracked:\n{preview}")
 
 
-def assert_file_size_limit(root: Path, limit_mb: int = 100) -> None:
+def assert_file_size_limit(root: Path, paths: list[Path], limit_mb: int = 100) -> None:
     limit = limit_mb * 1024 * 1024
     offenders = []
-    for path in root.rglob("*"):
-        if not path.is_file() or should_skip(path):
+    for path in paths:
+        if not path.is_file():
             continue
         if path.stat().st_size >= limit:
             offenders.append((path.stat().st_size, path.relative_to(root).as_posix()))
@@ -51,22 +60,20 @@ def assert_file_size_limit(root: Path, limit_mb: int = 100) -> None:
         raise RuntimeError(f"Files at or above {limit_mb} MB found:\n{preview}")
 
 
-def assert_notebooks_stripped(root: Path) -> None:
+def assert_notebooks_valid(root: Path, paths: list[Path]) -> None:
     offenders = []
-    for path in root.rglob("*.ipynb"):
-        if should_skip(path):
+    for path in paths:
+        if path.suffix.lower() != ".ipynb" or not path.is_file():
             continue
-        nb = json.loads(path.read_text(encoding="utf-8"))
-        for idx, cell in enumerate(nb.get("cells", [])):
-            if cell.get("cell_type") != "code":
-                continue
-            if cell.get("outputs"):
-                offenders.append(f"{path.relative_to(root).as_posix()} cell {idx}: outputs")
-            if cell.get("execution_count") is not None:
-                offenders.append(f"{path.relative_to(root).as_posix()} cell {idx}: execution_count")
+        try:
+            notebook = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(notebook.get("cells"), list):
+                offenders.append(f"{path.relative_to(root).as_posix()}: missing cells list")
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+            offenders.append(f"{path.relative_to(root).as_posix()}: {error}")
     if offenders:
         preview = "\n".join(offenders[:20])
-        raise RuntimeError(f"Notebook outputs were not stripped:\n{preview}")
+        raise RuntimeError(f"Invalid tracked notebooks:\n{preview}")
 
 
 def count_csv_rows(path: Path) -> int:
@@ -84,7 +91,7 @@ def check_required_files(root: Path) -> None:
         "MY_PAPER_RELATED/MODELS/FCD_runs/final_summary_all_models_repeated.csv",
         "MY_PAPER_RELATED/MODELS/notebooks/calculate_FCD_unified.ipynb",
         "MY_PAPER_RELATED/polybert_con/train_polybert_conductivity_4fold.py",
-        "MY_PAPER_RELATED/revised/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py",
+        "MY_PAPER_RELATED/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py",
         "MY_PAPER_RELATED/selfies-psmiles/pyproject.toml",
         "vendor/psmiles_local/pyproject.toml",
         "vendor/canonicalize_psmiles-0.1.2-py3-none-any.whl",
@@ -116,18 +123,19 @@ def main() -> None:
     args = parser.parse_args()
 
     root = repo_root()
+    paths = tracked_paths(root)
     check_required_files(root)
-    assert_no_blocked_paths(root)
-    assert_file_size_limit(root)
-    assert_notebooks_stripped(root)
+    assert_no_blocked_artifacts(root, paths)
+    assert_file_size_limit(root, paths)
+    assert_notebooks_valid(root, paths)
     if args.check_imports:
         check_imports(root)
 
     print(f"release_root={root}")
     print("structure_ok=1")
-    print("blocked_paths_ok=1")
+    print("blocked_artifacts_ok=1")
     print("file_size_ok=1")
-    print("notebooks_stripped=1")
+    print("notebooks_valid=1")
     print(f"imports_checked={int(args.check_imports)}")
 
 

@@ -1,0 +1,25 @@
+tolerance 3.5
+    seed 456789
+    maxit 40000
+    nloop 2000
+    movefrac 0.5
+    movebadrandom yes
+    filetype pdb
+    output Traj_13430_packmol_seed456789.pdb
+
+    structure ../structures/Traj_13430_chain_fix.pdb
+      number 11
+      inside box 0. 0. 0. 500.000 500.000 500.000
+    end structure
+
+    structure ../structures/li.pdb
+      number 100
+      inside box 0. 0. 0. 500.000 500.000 500.000
+    inside sphere 250.000 250.000 250.000 175.000
+    end structure
+
+    structure ../structures/tfsi.pdb
+      number 100
+      inside box 0. 0. 0. 500.000 500.000 500.000
+    outside sphere 250.000 250.000 250.000 225.000
+    end structure

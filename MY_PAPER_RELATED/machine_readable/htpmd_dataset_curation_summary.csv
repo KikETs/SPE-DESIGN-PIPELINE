@@ -1,0 +1,22 @@
+check,observed,interpretation
+source_rows,6270,All downloaded trajectory rows retained
+unique_trajectory_ids,6270,No duplicate trajectory IDs
+missing_required_values,0,No required source fields missing
+invalid_or_nonpositive_conductivity,0,All supervised labels usable after log10 transform
+rdkit_invalid_structures,0,All structure strings parse
+invalid_endpoint_count,0,Every structure has exactly two endpoints
+canonicalization_failures,0,All structures canonicalized
+unique_raw_structure_strings,6042,Raw-string identity
+unique_canonical_psmiles_groups,6026,Cross-validation group count
+canonical_duplicate_groups,133,Groups with more than one trajectory row
+rows_in_canonical_duplicate_groups,377,Retained and assigned as groups
+maximum_canonical_group_multiplicity,5,Largest retained group
+previous_split_groups_crossing_folds,119,Leakage found in prior row-level split
+previous_split_rows_in_crossing_groups,343,Rows affected by prior overlap
+canonical_split_groups_crossing_folds,0,No canonical group overlap
+fold_0_rows,1561,Canonical-group stratified split
+fold_1_rows,1559,Canonical-group stratified split
+fold_2_rows,1583,Canonical-group stratified split
+fold_3_rows,1567,Canonical-group stratified split
+stratification_bins,6,Quantile bins of log10 conductivity
+split_random_seed,42,Deterministic shuffle seed
