@@ -11,8 +11,8 @@ the repository root.
 - `ml/`: final canonical-grouped split and model-workflow entry points.
 - `data/`: deterministic consolidated generated/reference tables and their
   provenance.
-- `zenodo/`: immutable archive plan and private-draft status. Zenodo reserved
-  DOI `10.5281/zenodo.22043456`; it is inactive until publication.
+- `zenodo/`: immutable archive contents and publication status. The public
+  Zenodo DOI is `10.5281/zenodo.22043456`.
 - `MANIFEST.csv`: SHA256 and size index for package files and key source files.
 
 The canonical compact MD source is
@@ -35,6 +35,5 @@ directory. It verifies the generated candidate aggregation against the existing
 
 Small code, inputs, structures, and numerical tables belong in GitHub. The two
 designated representative trajectories and an immutable publication snapshot
-belong in a DOI-providing repository. Zenodo has reserved DOI
-`10.5281/zenodo.22043456`, but the trajectory deposit is not public until the
-draft is published. See `zenodo/ZENODO_UPLOAD_MANIFEST.md`.
+belong in a DOI-providing repository. They are publicly archived at Zenodo DOI
+`10.5281/zenodo.22043456`. See `zenodo/ZENODO_UPLOAD_MANIFEST.md`.

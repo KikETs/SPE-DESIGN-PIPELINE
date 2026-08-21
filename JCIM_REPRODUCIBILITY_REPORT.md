@@ -5,8 +5,8 @@ Assessment date: 2026-08-21
 Targets: JCIM method/data/software reproducibility policy
 (`https://doi.org/10.1021/acs.jcim.0c01389`) and MD reporting guideline
 (`https://doi.org/10.1021/acs.jcim.3c00599`). This is a repository-preparation
-report. Zenodo has reserved DOI `10.5281/zenodo.22043456`, but its unsubmitted
-draft is not yet a public deposit.
+report. The source snapshot and two representative trajectory bundles were
+published at Zenodo DOI `10.5281/zenodo.22043456` on 2026-08-21.
 
 ## A. Fully addressed
 
@@ -58,10 +58,8 @@ draft is not yet a public deposit.
 
 - The concrete RNG value selected during initial equilibration from
   `gen-seed = -1` was not recovered.
-- Large production trajectories and restart/checkpoint files are not publicly
-  available through a DOI-bearing repository.
-- Reserved DOI `10.5281/zenodo.22043456` is not active because the Zenodo draft
-  has not been published.
+- The complete production trajectory and restart/checkpoint set is not publicly
+  archived. The Zenodo record contains two representative 50 ns trajectories.
 - A specific upstream parameter-file citation for the local Li fallback values
   was not archived.
 - New experimental validation and additional reference replicas were not
@@ -73,18 +71,18 @@ draft is not yet a public deposit.
    `KikET` was used in preliminary release metadata.
 2. Confirm redistribution rights for reference `Traj_13430` and topology.
 3. Review and authorize tag `v1.0.0-jcim-submission`.
-4. Publish the GitHub release and the planned Zenodo representative trajectory
-   bundle; verify every SHA256 and activate reserved DOI
+4. Create the GitHub tag/release if required. The Zenodo source snapshot and
+   representative trajectory bundle are published at
    `10.5281/zenodo.22043456`.
-5. Insert the final immutable release citation/DOI into the manuscript Data and
+5. Insert the immutable Zenodo citation/DOI into the manuscript Data and
    Software Availability section.
 6. Decide whether to freeze additional table-specific exports for the partial
    SI mappings and whether to archive more raw trajectories externally.
 
 ## E. Recommended manuscript changes
 
-- Replace moving-branch references with the final immutable GitHub release and
-  DOI after publication.
+- Replace moving-branch references with the immutable Zenodo record and DOI
+  `10.5281/zenodo.22043456`.
 - State the topology route as GAFF2 via ACPYPE 2023.10.27's default, with
   AmberTools 23.3 package/Antechamber 22.0 banner provenance, unless a historical
   explicit command provides stronger evidence.

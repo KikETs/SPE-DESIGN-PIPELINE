@@ -26,9 +26,9 @@ The tracked MD release includes staged MDPs, representative GRO/TPR/TOP/ITP and
 Packmol inputs, construction/analysis code, 180 generated replica results, and
 the 120-selected/108-completed reference status/results. Large production
 trajectories, restart/checkpoint files, and model/cache artifacts remain outside
-Git. Two representative trajectories are being uploaded to Zenodo under the
-reserved DOI [`10.5281/zenodo.22043456`](https://doi.org/10.5281/zenodo.22043456).
-The DOI remains inactive until the unsubmitted Zenodo draft is published.
+Git. Two representative trajectories and the frozen Git-tracked source snapshot
+are publicly archived at Zenodo DOI
+[`10.5281/zenodo.22043456`](https://doi.org/10.5281/zenodo.22043456).
 
 ## Setup
 
@@ -169,8 +169,8 @@ The compact GitHub MD source is
 The representative trajectory archive, checksums, and unresolved
 reference redistribution check are documented in
 `reproducibility/zenodo/ZENODO_UPLOAD_MANIFEST.md`. Do not cite a moving branch
-as the final archive. The reserved DOI is `10.5281/zenodo.22043456`; cite it as
-the immutable release only after the Zenodo draft is published and resolves.
+as the final archive; cite the published immutable record at
+`10.5281/zenodo.22043456`.
 
 ## Citation And License
 

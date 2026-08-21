@@ -9,9 +9,9 @@ vendored PySoftK source as commit
 upstream BSD-3-Clause license is now retained in the vendored directory. This
 recovery supersedes the initial local-only provenance assessment.
 
-Post-audit archive update: Zenodo draft `22043456` reserved DOI
-`10.5281/zenodo.22043456`. The draft remains unsubmitted, so the DOI is not yet
-an active public archive record.
+Post-audit archive update: Zenodo record `22043456` was published on 2026-08-21
+at DOI `10.5281/zenodo.22043456`. It contains the frozen Git-tracked source
+snapshot and two representative 50 ns GROMACS trajectory bundles.
 
 Scope: repository state on branch `codex/gromacs-conductivity-results`. This
 audit treats archived inputs and numerical outputs as evidence. Manuscript/SI
@@ -142,9 +142,9 @@ The compliance targets are the JCIM method/data/software reproducibility policy
   does not provide six separate full input bundles, one for every generated
   selection group.
 - **Large MD output availability:** representative trajectory checksums and an
-  upload plan exist, local run storage contains large trajectory files, and an
-  upload to Zenodo draft `22043456` is in progress. They are intentionally not
-  tracked in Git and have not yet been published in a DOI-bearing archive.
+  upload plan exist, local run storage contains large trajectory files, and two
+  representative trajectories are published in Zenodo record `22043456`. The
+  complete production trajectory and restart/checkpoint set is not archived.
 - **Source dataset accession:** the public HTP-MD URL and platform-paper DOI are
   documented, but the precise downloaded object/accession and download date
   cannot be recovered from the local CSV metadata.
@@ -161,8 +161,9 @@ The compliance targets are the JCIM method/data/software reproducibility policy
   exact automatically generated random seed used by the initial equilibration
   stage (`gen-seed = -1`).
 - `MISSING — could not be recovered from repository or archived outputs`:
-  publicly archived large production trajectories and restart/checkpoint files.
-  Git deliberately excludes these files; an external deposit remains required.
+  the complete publicly archived production trajectory and restart/checkpoint
+  set. Git deliberately excludes these files; the Zenodo record contains two
+  representative trajectories instead.
 - `MISSING — could not be recovered from repository or archived outputs`:
   an archived generated-system command log that explicitly prints
   `ACPYPE ... -a gaff2`. The force-field identity can only be resolved from the
@@ -201,5 +202,5 @@ The repository already contains a substantial compact MD release and complete
 machine-readable generated/reference result denominators. The remaining work is
 an additive index and documentation layer, deterministic consolidated tables,
 validation tests, and archive metadata. It must preserve the timestep/output
-discrepancies above and must distinguish the reserved DOI from a public
-trajectory deposit until Zenodo publication occurs.
+discrepancies above and distinguish the public representative subset from the
+unarchived complete trajectory set.
