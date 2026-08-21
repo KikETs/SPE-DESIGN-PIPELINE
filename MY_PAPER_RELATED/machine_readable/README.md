@@ -11,6 +11,7 @@ and long execution logs are not included.
 |---|---|---:|
 | Training labels, structures, and canonical-group four-fold assignments | `../polybert_con/fold_assignment.csv` | 6,270 trajectories / 6,026 canonical groups |
 | Out-of-fold surrogate predictions | `../polybert_con/oof_predictions.csv` | 6,270 trajectories |
+| Canonical-grouped baseline/weighted OOF predictions | `../polybert_weighted_evidence/tables/grouped_oof_predictions_selected.csv` | 6,270 trajectories |
 | Generated structures and baseline/weighted surrogate predictions | `generated_surrogate_predictions_32611.csv` | 32,611 structures |
 | Final LOW/HIGH generated baseline/weighted predictions | `../polybert_weighted_evidence/tables/weighted_generated_condition_predictions_47125.csv` | 47,125 structures |
 | Weighted predictions for final MD selections | `../polybert_weighted_evidence/tables/weighted_generated_md_selection_60.csv` | 60 candidates |
@@ -20,13 +21,14 @@ and long execution logs are not included.
 | Reference reassessment selections | `reference_selection_manifest_120.csv` | 120 trajectories |
 | Reference reassessment execution status | `reference_run_status_120.csv` | 120 trajectories |
 | Completed reference static cNE0 results | `../gromacs_eval_pred_conductivity/reproducibility/static_cne0_release/data/reference/reference_static_cNE0_reassessment_108.csv` | 108 trajectories |
-| Manuscript figure source map | `figure_source_manifest.csv` | 12 figure-source relations |
+| Manuscript figure source map | `figure_source_manifest.csv` | 13 figure-source relations |
 
 `generated_surrogate_predictions_32611.csv` preserves the complete generated
 pool order. Baseline and interval-weighted surrogate predictions are available
 for 32,610 structures. The weighted model is the OOF-selected smooth-sigmoid
-tail scheme with alpha 6, temperature 0.05, and Ridge alpha 100, refit on all
-6,270 labeled rows for deployment. The one
+tail scheme with alpha 6, temperature 0.05, and Ridge alpha 100. Model
+selection used canonical-structure-grouped four-fold OOF predictions; the
+selected model was then refit on all 6,270 labeled rows for deployment. The one
 remaining structure, `[*][*]`, is explicitly marked `excluded` because the
 existing screening code classifies it as an endpoint artifact; no value was
 imputed.

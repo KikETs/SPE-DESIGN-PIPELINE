@@ -13,6 +13,12 @@ Tracked content:
 - `source_data/`: compact source CSV files and cached embeddings used by the
   weighted-analysis script.
 
+Model selection uses four-fold OOF predictions grouped by
+`canonical_psmiles` (6,026 groups across 6,270 rows). No canonical structure
+group is allowed to cross folds. The compact baseline/selected-weighted OOF
+release is `tables/grouped_oof_predictions_selected.csv`; split and model IDs
+are recorded in `analysis_notes/canonical_grouped_cv_provenance.json`.
+
 Not tracked:
 
 - `tables/weighted_oof_predictions_all.csv`, because it exceeds normal GitHub
@@ -34,6 +40,8 @@ python MY_PAPER_RELATED/polybert_weighted_evidence/scripts/predict_weighted_gene
 The generated embedding cache is intentionally excluded from Git. The
 candidate-level weighted predictions, summary statistics, provenance hashes,
 and manuscript-ready Supplementary Table S9 are tracked.
+The selected weighted model is refit on all 6,270 labeled rows before
+generated-candidate inference; generated predictions are not OOF values.
 
 The same command also scores the final target-conditioned generated pool
 (44,999 LOW and 2,126 HIGH candidates) and joins all 60 MD-selected candidates.

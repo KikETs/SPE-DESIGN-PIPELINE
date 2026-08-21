@@ -1,0 +1,16 @@
+{
+  "split_method": "StratifiedGroupKFold",
+  "group_key": "canonical_psmiles",
+  "n_rows": 6270,
+  "n_canonical_groups": 6026,
+  "fold_sizes": {
+    "0": 1561,
+    "1": 1559,
+    "2": 1583,
+    "3": 1567
+  },
+  "canonical_groups_crossing_folds": 0,
+  "baseline_model_id": "baseline_unweighted__ridge_alpha_1",
+  "selected_weighted_model_id": "smooth_sigmoid_tail_a6_t0p05__ridge_alpha_100",
+  "model_selection_scope": "canonical-structure-grouped OOF only"
+}

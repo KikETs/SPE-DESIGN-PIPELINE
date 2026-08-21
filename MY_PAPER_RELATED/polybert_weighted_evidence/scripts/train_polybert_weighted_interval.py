@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import math
 from dataclasses import dataclass
 from pathlib import Path
@@ -18,6 +19,11 @@ FIGURES = ROOT / "figures_data"
 NOTES = ROOT / "analysis_notes"
 SRC_RUN = ROOT / "source_data" / "polybert_run"
 SRC_CON = ROOT / "source_data" / "polybert_con"
+GROUPED_OOF_PATH = TABLES / "grouped_oof_predictions_selected.csv"
+GROUPED_PROVENANCE_PATH = NOTES / "canonical_grouped_cv_provenance.json"
+CANONICAL_SELECTION_RELEASE = (
+    ROOT.parent / "polybert_con" / "weighted_model_selection_canonical_group.csv"
+)
 
 for directory in [TABLES, FIGURES, NOTES]:
     directory.mkdir(parents=True, exist_ok=True)
@@ -288,7 +294,6 @@ def markdown_table(df: pd.DataFrame, path: Path, title: str, max_rows: int | Non
 
 
 def write_inventory(oof: pd.DataFrame, embeddings: np.ndarray) -> None:
-    generated_embedding_cache = SRC_RUN / "generated_candidate_embeddings_32610.npy"
     generated_predictions = TABLES / "weighted_generated_candidate_predictions.csv"
     generated_predictions_available = False
     if generated_predictions.exists():
@@ -299,7 +304,7 @@ def write_inventory(oof: pd.DataFrame, embeddings: np.ndarray) -> None:
         }.issubset(generated_columns)
     source_files = []
     for p in sorted((ROOT / "source_data").rglob("*")):
-        if p.is_file():
+        if p.is_file() and not p.name.startswith("generated_"):
             source_files.append({"path": str(p.relative_to(ROOT)), "bytes": p.stat().st_size})
     lines = [
         "# Weighted Predictor File Inventory",
@@ -314,7 +319,9 @@ def write_inventory(oof: pd.DataFrame, embeddings: np.ndarray) -> None:
             "",
             "## Fold Assignments",
             "",
-            f"- Existing fold column detected in `polybert_run/oof_predictions.csv`: yes",
+            "- Authoritative split: `source_data/polybert_con/fold_assignment.csv`.",
+            f"- Canonical structure groups: {oof['canonical_psmiles'].nunique()}",
+            f"- Canonical groups crossing folds: {oof.groupby('canonical_psmiles')['fold'].nunique().gt(1).sum()}",
             f"- Number of folds: {sorted(oof['fold'].dropna().unique().tolist())}",
             f"- Samples per fold: {oof['fold'].value_counts().sort_index().to_dict()}",
             "",
@@ -322,18 +329,17 @@ def write_inventory(oof: pd.DataFrame, embeddings: np.ndarray) -> None:
             "",
             f"- Cached PolyBERT training embeddings available: yes",
             f"- Embedding shape: {tuple(embeddings.shape)}",
-            f"- Generated-candidate PolyBERT embedding cache available locally: {'yes' if generated_embedding_cache.exists() else 'no; regenerate with predict_weighted_generated_candidates.py'}.",
-            "- The generated embedding cache is excluded from Git because it is a large reproducible intermediate.",
+            "- Generated embedding caches are reproducible intermediates and are excluded from Git.",
             f"- Candidate-level weighted predictions available: {'yes' if generated_predictions_available else 'no'}.",
             "",
             "## Existing OOF Predictions",
             "",
-            "- Existing unweighted OOF predictions available: yes (`polybert_run/oof_predictions.csv`).",
-            "- This script regenerates Ridge OOF predictions from cached embeddings and the same fold assignments for baseline and interval-weighted schemes.",
+            "- This script regenerates baseline and interval-weighted Ridge OOF predictions using canonical-structure-grouped folds.",
+            "- Selected baseline/weighted OOF predictions are exported to `tables/grouped_oof_predictions_selected.csv`.",
             "",
             "## Baseline Reproduction Command",
             "",
-            "```powershell",
+            "```bash",
             "python polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py",
             "```",
         ]
@@ -342,18 +348,45 @@ def write_inventory(oof: pd.DataFrame, embeddings: np.ndarray) -> None:
 
 
 def load_inputs() -> tuple[pd.DataFrame, np.ndarray]:
-    oof_path = SRC_RUN / "oof_predictions.csv"
+    oof_path = SRC_CON / "fold_assignment.csv"
+    alignment_path = SRC_RUN / "oof_predictions.csv"
     emb_path = SRC_RUN / "embeddings.npy"
     if not oof_path.exists():
         raise FileNotFoundError(oof_path)
     if not emb_path.exists():
         raise FileNotFoundError(emb_path)
     oof = pd.read_csv(oof_path)
+    alignment = pd.read_csv(alignment_path)
     embeddings = np.load(emb_path)
     if len(oof) != embeddings.shape[0]:
         raise ValueError(f"OOF rows ({len(oof)}) do not match embeddings ({embeddings.shape[0]}).")
-    if "log10_cond" not in oof.columns or "fold" not in oof.columns:
-        raise ValueError("OOF file must contain `log10_cond` and `fold` columns.")
+    required = {"Trajectory ID", "PSMILES", "canonical_psmiles", "log10_cond", "fold"}
+    missing = required.difference(oof.columns)
+    if missing:
+        raise ValueError(f"Canonical fold assignment is missing columns: {sorted(missing)}")
+    if not oof["Trajectory ID"].is_unique:
+        raise ValueError("Canonical fold assignment contains duplicate trajectory IDs")
+    if set(oof["fold"]) != {0, 1, 2, 3}:
+        raise ValueError(f"Unexpected fold values: {sorted(oof['fold'].unique().tolist())}")
+    expected_fold_sizes = {0: 1561, 1: 1559, 2: 1583, 3: 1567}
+    observed_fold_sizes = oof["fold"].value_counts().sort_index().to_dict()
+    if observed_fold_sizes != expected_fold_sizes:
+        raise ValueError(f"Unexpected canonical fold sizes: {observed_fold_sizes}")
+    if oof["canonical_psmiles"].nunique() != 6026:
+        raise ValueError("Expected 6,026 canonical structure groups")
+    crossing = oof.groupby("canonical_psmiles")["fold"].nunique().gt(1)
+    if crossing.any():
+        raise ValueError(f"Canonical leakage detected for {int(crossing.sum())} groups")
+    if len(alignment) != len(oof):
+        raise ValueError("Embedding alignment manifest row count does not match canonical folds")
+    if not np.array_equal(
+        alignment["Trajectory ID"].to_numpy(), oof["Trajectory ID"].to_numpy()
+    ):
+        raise ValueError("Training embedding trajectory order does not match canonical folds")
+    if not np.array_equal(
+        alignment["PSMILES"].astype(str).to_numpy(), oof["PSMILES"].astype(str).to_numpy()
+    ):
+        raise ValueError("Training embedding PSMILES order does not match canonical folds")
     return oof, embeddings.astype(np.float64, copy=False)
 
 
@@ -464,6 +497,98 @@ def run_weighted_oof(oof: pd.DataFrame, X: np.ndarray) -> tuple[pd.DataFrame, pd
     decile_df = pd.DataFrame(decile_all)
     oof_all_df = pd.concat(oof_rows, ignore_index=True)
     return global_df, threshold_df, topk_df, fold_df, tail_df, decile_df, oof_all_df
+
+
+def write_grouped_selected_oof(
+    oof: pd.DataFrame,
+    oof_all: pd.DataFrame,
+    selection: pd.DataFrame,
+) -> None:
+    baseline_id = str(selection.iloc[0]["baseline_model_id"])
+    best = selection.loc[
+        selection["recommended_role"].eq("best weighted screening candidate")
+    ]
+    if len(best) != 1:
+        raise ValueError(f"Expected one selected weighted model, found {len(best)}")
+    weighted_id = str(best.iloc[0]["model_id"])
+
+    selected = oof_all.loc[oof_all["model_id"].isin([baseline_id, weighted_id])].copy()
+    if len(selected) != 2 * len(oof):
+        raise ValueError("Selected grouped OOF predictions are incomplete")
+    pivot = selected.pivot(
+        index="sample_id",
+        columns="model_id",
+        values="y_pred_log10_conductivity",
+    )
+    result = oof[
+        [
+            "Trajectory ID",
+            "SMILES",
+            "PSMILES",
+            "canonical_psmiles",
+            "CONDUCTIVITY",
+            "log10_cond",
+            "fold",
+        ]
+    ].copy()
+    result["baseline_model_id"] = baseline_id
+    result["weighted_model_id"] = weighted_id
+    result["baseline_oof_pred_log10_conductivity"] = result["Trajectory ID"].map(
+        pivot[baseline_id]
+    )
+    result["weighted_oof_pred_log10_conductivity"] = result["Trajectory ID"].map(
+        pivot[weighted_id]
+    )
+    prediction_columns = [
+        "baseline_oof_pred_log10_conductivity",
+        "weighted_oof_pred_log10_conductivity",
+    ]
+    if result[prediction_columns].isna().any().any():
+        raise ValueError("Failed to align grouped OOF predictions by trajectory ID")
+    result["baseline_oof_residual_log10"] = (
+        result["baseline_oof_pred_log10_conductivity"] - result["log10_cond"]
+    )
+    result["weighted_oof_residual_log10"] = (
+        result["weighted_oof_pred_log10_conductivity"] - result["log10_cond"]
+    )
+    result.to_csv(GROUPED_OOF_PATH, index=False)
+
+    compact_baseline = result[
+        [
+            "Trajectory ID",
+            "SMILES",
+            "PSMILES",
+            "canonical_psmiles",
+            "CONDUCTIVITY",
+            "log10_cond",
+            "fold",
+        ]
+    ].copy()
+    compact_baseline["pred_log10_cond"] = result[
+        "baseline_oof_pred_log10_conductivity"
+    ]
+    compact_baseline.to_csv(SRC_RUN / "oof_predictions.csv", index=False)
+    oof.to_csv(SRC_RUN / "fold_assignment.csv", index=False)
+
+    provenance = {
+        "split_method": "StratifiedGroupKFold",
+        "group_key": "canonical_psmiles",
+        "n_rows": len(oof),
+        "n_canonical_groups": int(oof["canonical_psmiles"].nunique()),
+        "fold_sizes": {
+            str(k): int(v)
+            for k, v in oof["fold"].value_counts().sort_index().items()
+        },
+        "canonical_groups_crossing_folds": int(
+            oof.groupby("canonical_psmiles")["fold"].nunique().gt(1).sum()
+        ),
+        "baseline_model_id": baseline_id,
+        "selected_weighted_model_id": weighted_id,
+        "model_selection_scope": "canonical-structure-grouped OOF only",
+    }
+    GROUPED_PROVENANCE_PATH.write_text(
+        json.dumps(provenance, indent=2) + "\n", encoding="utf-8"
+    )
 
 
 def add_selection_scores(global_df: pd.DataFrame, threshold_df: pd.DataFrame, topk_df: pd.DataFrame, tail_df: pd.DataFrame) -> pd.DataFrame:
@@ -730,6 +855,7 @@ def write_interpretation_reports(selection: pd.DataFrame, threshold_df: pd.DataF
     lines = [
         "# Weighted Model Selection Interpretation",
         "",
+        "- Cross-validation: canonical-structure-grouped four-fold OOF (6,270 rows; 6,026 groups; zero groups crossing folds).",
         f"- Baseline reference: `{baseline_id}`.",
         f"- Best CEJ screening candidate: `{best['model_id']}`.",
         f"- Baseline 1e-4 precision/recall/F1: {baseline['precision_at_1e4']:.3f} / {baseline['recall_at_1e4']:.3f} / {baseline['f1_at_1e4']:.3f}.",
@@ -791,6 +917,7 @@ def write_interpretation_reports(selection: pd.DataFrame, threshold_df: pd.DataF
         "",
         "# CEJ-Safe Interpretation",
         "",
+        "- All baseline and weighted model-selection metrics use the same canonical-structure-grouped four-fold OOF assignment.",
         "- The weighted experiment tests whether conductivity-interval sample weights improve surrogate screening behavior in the high-conductivity tail.",
         "- The selected weighted Ridge model is used as a generated-pool sensitivity analysis; baseline ranking remains the primary MD-selection route.",
         "- The current weighted results are OOF diagnostics on labeled MD-derived training data; they do not validate generated candidates.",
@@ -806,7 +933,7 @@ def write_interpretation_reports(selection: pd.DataFrame, threshold_df: pd.DataF
         "",
         "# Recommended Manuscript Changes",
         "",
-        "- Methods: describe interval-weighted Ridge as a sensitivity experiment using training-fold-only target-derived weights.",
+        "- Methods: describe interval-weighted Ridge as a sensitivity experiment using canonical-structure-grouped four-fold CV and training-fold-only target-derived weights.",
         "- Results: report OOF threshold, top-k, and high-tail diagnostics against the unweighted baseline.",
         generated_recommendation,
         "- Supplementary: place the full weighting grid, fold-wise metrics, calibration deciles, and threshold sensitivity tables.",
@@ -818,7 +945,9 @@ def write_interpretation_reports(selection: pd.DataFrame, threshold_df: pd.DataF
         "- `polybert_weighted_evidence/tables/weighted_oof_metrics_all.csv`",
         "- `polybert_weighted_evidence/tables/weighted_threshold_metrics_all.csv`",
         "- `polybert_weighted_evidence/tables/weighted_topk_metrics_all.csv`",
+        "- `polybert_weighted_evidence/tables/grouped_oof_predictions_selected.csv`",
         "- `polybert_weighted_evidence/tables/weighted_model_selection.csv`",
+        "- `polybert_weighted_evidence/analysis_notes/canonical_grouped_cv_provenance.json`",
         "- `polybert_weighted_evidence/tables/weighted_generated_candidate_predictions.csv`",
         "- `polybert_weighted_evidence/figures_data/*.csv`",
     ]
@@ -840,6 +969,8 @@ def main() -> None:
 
     selection = add_selection_scores(global_df, threshold_df, topk_df, tail_df)
     selection.to_csv(TABLES / "weighted_model_selection.csv", index=False)
+    selection.to_csv(CANONICAL_SELECTION_RELEASE, index=False)
+    write_grouped_selected_oof(oof, oof_all_df, selection)
     display_cols = [
         "model_id",
         "scheme_name",
@@ -869,9 +1000,11 @@ def main() -> None:
         TABLES / "weighted_oof_metrics_all.csv",
         TABLES / "weighted_threshold_metrics_all.csv",
         TABLES / "weighted_topk_metrics_all.csv",
+        GROUPED_OOF_PATH,
         TABLES / "table_weighted_model_selection.md",
         FIGURES / "figure_weighted_threshold_recall_precision.csv",
         FIGURES / "figure_weighted_topk_enrichment.csv",
+        GROUPED_PROVENANCE_PATH,
         ROOT / "WEIGHTED_POLYBERT_REPORT.md",
     ]
     status_lines = ["# Weighted PolyBERT Final Self-Check", ""]

@@ -14,10 +14,11 @@ from sklearn.preprocessing import StandardScaler
 ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = ROOT.parents[1]
 SRC_RUN = ROOT / "source_data" / "polybert_run"
+SRC_CON = ROOT / "source_data" / "polybert_con"
 TABLES = ROOT / "tables"
 NOTES = ROOT / "analysis_notes"
 
-OOF_PATH = SRC_RUN / "oof_predictions.csv"
+OOF_PATH = SRC_CON / "fold_assignment.csv"
 TRAIN_EMBEDDINGS_PATH = SRC_RUN / "embeddings.npy"
 GENERATED_PATH = SRC_RUN / "all_novel_smiles_with_pred_conductivity.csv"
 GENERATED_EMBEDDINGS_PATH = SRC_RUN / "generated_candidate_embeddings_32610.npy"
@@ -75,6 +76,26 @@ def load_inputs() -> tuple[pd.DataFrame, np.ndarray, pd.DataFrame, float]:
 
     if len(train) != EXPECTED_TRAIN_ROWS:
         raise ValueError(f"Expected {EXPECTED_TRAIN_ROWS} training rows, found {len(train)}")
+    required_train = {
+        "Trajectory ID",
+        "PSMILES",
+        "canonical_psmiles",
+        "log10_cond",
+        "fold",
+    }
+    missing_train = required_train.difference(train.columns)
+    if missing_train:
+        raise ValueError(f"Training assignment is missing columns: {sorted(missing_train)}")
+    if not train["Trajectory ID"].is_unique:
+        raise ValueError("Training trajectory IDs must be unique")
+    fold_sizes = train["fold"].value_counts().sort_index().to_dict()
+    if fold_sizes != {0: 1561, 1: 1559, 2: 1583, 3: 1567}:
+        raise ValueError(f"Unexpected canonical-grouped fold sizes: {fold_sizes}")
+    if train["canonical_psmiles"].nunique() != 6026:
+        raise ValueError("Expected 6,026 canonical structure groups")
+    crossing = train.groupby("canonical_psmiles")["fold"].nunique().gt(1).sum()
+    if crossing:
+        raise ValueError(f"Canonical structures cross folds: {crossing}")
     if train_embeddings.shape != (EXPECTED_TRAIN_ROWS, EXPECTED_DIMENSION):
         raise ValueError(f"Unexpected training embedding shape: {train_embeddings.shape}")
     if len(generated) != EXPECTED_CANDIDATE_ROWS:
@@ -330,7 +351,7 @@ def write_s9(summary: pd.DataFrame) -> None:
         f"| Hit fraction | {baseline['hit_fraction_ge_1e4_s_cm']:.3f} | {weighted['hit_fraction_ge_1e4_s_cm']:.3f} |",
         f"| Rank Spearman vs baseline | 1.000 | {weighted['baseline_weighted_rank_spearman']:.3f} |",
         "",
-        "The selected weighted model used smooth sigmoid tail weights centered at log10 conductivity = -4 (alpha = 6; temperature = 0.05) and Ridge alpha = 100. Both deployment models were refit on all 6,270 labeled rows after OOF model selection. The table reports the current deduplicated 32,610-candidate pool.",
+        "The selected weighted model used smooth sigmoid tail weights centered at log10 conductivity = -4 (alpha = 6; temperature = 0.05) and Ridge alpha = 100. Both deployment models were refit on all 6,270 labeled rows after canonical-structure-grouped four-fold OOF model selection. The table reports the current deduplicated 32,610-candidate pool.",
     ]
     S9_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -410,6 +431,7 @@ def write_supporting_outputs(predictions: pd.DataFrame, summary: pd.DataFrame) -
 Weighted generated-candidate prediction is complete for all 32,610 unique candidates.
 
 Method:
+- Model selection CV: canonical-structure-grouped four-fold OOF (6,026 groups; zero groups crossing folds).
 - Encoder: `{EMBEDDING_MODEL}` revision `{EMBEDDING_MODEL_REVISION}` with 600-dimensional, unnormalized embeddings.
 - Encoder identity was checked against cached training embeddings before candidate encoding.
 - Baseline deployment model: unweighted Ridge alpha = 1, refit on all 6,270 labeled rows.
@@ -569,6 +591,15 @@ def main() -> None:
         "md_selection_rows_with_weighted_predictions": 60,
         "selected_weighted_scheme": SELECTED_SCHEME,
         "selected_weighted_ridge_alpha": weighted_alpha,
+        "model_selection_cv": "canonical-structure-grouped four-fold OOF",
+        "canonical_structure_groups": int(train["canonical_psmiles"].nunique()),
+        "canonical_groups_crossing_folds": int(
+            train.groupby("canonical_psmiles")["fold"].nunique().gt(1).sum()
+        ),
+        "canonical_grouped_fold_sizes": {
+            str(k): int(v)
+            for k, v in train["fold"].value_counts().sort_index().items()
+        },
         "deployment_fit": "full_6270_row_refit",
         **encoder_check,
         **baseline_check,

@@ -36,6 +36,10 @@ OOF_PREDICTIONS = Path("MY_PAPER_RELATED/polybert_con/oof_predictions.csv")
 WEIGHTED_SELECTION = Path(
     "MY_PAPER_RELATED/polybert_con/weighted_model_selection_canonical_group.csv"
 )
+GROUPED_WEIGHTED_OOF = Path(
+    "MY_PAPER_RELATED/polybert_weighted_evidence/tables/"
+    "grouped_oof_predictions_selected.csv"
+)
 MD_SELECTION = Path(
     "MY_PAPER_RELATED/gromacs_eval_pred_conductivity/github_results/"
     "latest_notebook_manifest_60/sample_manifest.csv"
@@ -383,6 +387,16 @@ def build_figure_manifest(output_dir: Path, fig8_rows: int) -> pd.DataFrame:
             "notes": "Global and tail model-selection diagnostics.",
         },
         {
+            "figure": "Fig7",
+            "panel": "A-C",
+            "source_role": "canonical-grouped baseline and selected-weighted OOF predictions",
+            "source_file": GROUPED_WEIGHTED_OOF.as_posix(),
+            "plotting_code": "scripts/figures/make_fig7_surrogate_reliability.py",
+            "row_count": 6270,
+            "data_status": "available",
+            "notes": "Paired OOF predictions using canonical-structure-grouped folds.",
+        },
+        {
             "figure": "Fig8",
             "panel": "A-C",
             "source_role": "reference static cNE0 reassessment",
@@ -443,6 +457,7 @@ def build_inventory(
             ["training labels and structures", "complete", 6270, "trajectory", "Trajectory ID", TRAINING_FOLDS.as_posix(), "Includes conductivity labels and structure strings."],
             ["four-fold assignments", "complete", 6270, "trajectory", "Trajectory ID", TRAINING_FOLDS.as_posix(), "Fold values 0-3 are assigned by canonical structure; no canonical group crosses folds."],
             ["out-of-fold surrogate predictions", "complete", 6270, "trajectory", "Trajectory ID", OOF_PREDICTIONS.as_posix(), "One OOF prediction per labeled trajectory."],
+            ["canonical-grouped baseline and selected-weighted OOF predictions", "complete", 6270, "trajectory", "Trajectory ID", GROUPED_WEIGHTED_OOF.as_posix(), "Paired baseline and selected weighted predictions from the same grouped folds."],
             ["generated structures and surrogate predictions", "complete_with_documented_exclusion", len(generated_predictions), "generated structure", "generated_pool_index", "MY_PAPER_RELATED/machine_readable/generated_surrogate_predictions_32611.csv", "32,610 baseline and weighted predictions; [*][*] excluded as an endpoint artifact."],
             ["target-conditioned generated baseline and weighted predictions", "complete", 47125, "generated structure", "condition + condition_row_index", "MY_PAPER_RELATED/polybert_weighted_evidence/tables/weighted_generated_condition_predictions_47125.csv", "44,999 LOW and 2,126 HIGH candidates; exact PolyBERT encoding for all rows."],
             ["weighted predictions for generated MD selections", "complete", 60, "candidate", "Trajectory ID", "MY_PAPER_RELATED/polybert_weighted_evidence/tables/weighted_generated_md_selection_60.csv", "All final MD-selected candidates matched to exact baseline-refit and weighted predictions."],
@@ -469,6 +484,7 @@ def build_quality_report(
 ) -> None:
     training = read_repo_csv(TRAINING_FOLDS)
     oof = read_repo_csv(OOF_PREDICTIONS)
+    grouped_weighted_oof = read_repo_csv(GROUPED_WEIGHTED_OOF)
     md_selection = read_repo_csv(MD_SELECTION)
     md_replicas = read_repo_csv(MD_REPLICA_RESULTS)
     weighted_conditions = read_repo_csv(WEIGHTED_CONDITION_PREDICTIONS)
@@ -487,6 +503,19 @@ def build_quality_report(
         {"Trajectory ID", "canonical_psmiles", "fold", "pred_log10_cond"},
         "OOF predictions",
     )
+    require_columns(
+        grouped_weighted_oof,
+        {
+            "Trajectory ID",
+            "canonical_psmiles",
+            "fold",
+            "baseline_oof_pred_log10_conductivity",
+            "weighted_oof_pred_log10_conductivity",
+            "baseline_model_id",
+            "weighted_model_id",
+        },
+        "grouped baseline/weighted OOF predictions",
+    )
     canonical_fold_counts = training.groupby("canonical_psmiles")["fold"].nunique()
     fold_sizes = training.groupby("fold").size().sort_index().tolist()
     checks = [
@@ -501,6 +530,11 @@ def build_quality_report(
         ("oof_unique_ids", oof["Trajectory ID"].is_unique, oof["Trajectory ID"].nunique(), 6270),
         ("oof_predictions_complete", not oof["pred_log10_cond"].isna().any(), int(oof["pred_log10_cond"].isna().sum()), 0),
         ("oof_ids_match_training", set(oof["Trajectory ID"]) == set(training["Trajectory ID"]), len(set(oof["Trajectory ID"]).symmetric_difference(set(training["Trajectory ID"]))), 0),
+        ("grouped_weighted_oof_rows", len(grouped_weighted_oof) == 6270, len(grouped_weighted_oof), 6270),
+        ("grouped_weighted_oof_unique_ids", grouped_weighted_oof["Trajectory ID"].is_unique, grouped_weighted_oof["Trajectory ID"].nunique(), 6270),
+        ("grouped_weighted_oof_ids_match_training", set(grouped_weighted_oof["Trajectory ID"]) == set(training["Trajectory ID"]), len(set(grouped_weighted_oof["Trajectory ID"]).symmetric_difference(set(training["Trajectory ID"]))), 0),
+        ("grouped_weighted_oof_folds_match_training", grouped_weighted_oof[["Trajectory ID", "fold"]].sort_values("Trajectory ID").reset_index(drop=True).equals(training[["Trajectory ID", "fold"]].sort_values("Trajectory ID").reset_index(drop=True)), "exact comparison", "exact match"),
+        ("grouped_weighted_oof_predictions_complete", not grouped_weighted_oof[["baseline_oof_pred_log10_conductivity", "weighted_oof_pred_log10_conductivity"]].isna().any().any(), int(grouped_weighted_oof[["baseline_oof_pred_log10_conductivity", "weighted_oof_pred_log10_conductivity"]].isna().sum().sum()), 0),
         ("generated_pool_rows", len(generated_predictions) == 32611, len(generated_predictions), 32611),
         ("generated_prediction_ok_rows", generated_predictions["prediction_status"].eq("ok").sum() == 32610, int(generated_predictions["prediction_status"].eq("ok").sum()), 32610),
         ("generated_ok_predictions_complete", not generated_predictions.loc[generated_predictions["prediction_status"].eq("ok"), ["pred_log10_cond", "pred_cond", "conductivity_for_summary"]].isna().any().any(), int(generated_predictions.loc[generated_predictions["prediction_status"].eq("ok"), ["pred_log10_cond", "pred_cond", "conductivity_for_summary"]].isna().sum().sum()), 0),

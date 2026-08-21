@@ -11,4 +11,4 @@ Baseline and interval-weighted generated-candidate score comparison.
 | Hit fraction | 0.524 | 0.646 |
 | Rank Spearman vs baseline | 1.000 | 0.943 |
 
-The selected weighted model used smooth sigmoid tail weights centered at log10 conductivity = -4 (alpha = 6; temperature = 0.05) and Ridge alpha = 100. Both deployment models were refit on all 6,270 labeled rows after OOF model selection. The table reports the current deduplicated 32,610-candidate pool.
+The selected weighted model used smooth sigmoid tail weights centered at log10 conductivity = -4 (alpha = 6; temperature = 0.05) and Ridge alpha = 100. Both deployment models were refit on all 6,270 labeled rows after canonical-structure-grouped four-fold OOF model selection. The table reports the current deduplicated 32,610-candidate pool.

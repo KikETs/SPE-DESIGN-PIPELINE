@@ -3,6 +3,7 @@
 Weighted generated-candidate prediction is complete for all 32,610 unique candidates.
 
 Method:
+- Model selection CV: canonical-structure-grouped four-fold OOF (6,026 groups; zero groups crossing folds).
 - Encoder: `xushijie/polyBERT` revision `e7dce434fb3eff37905dc114008660e5479ca9a8` with 600-dimensional, unnormalized embeddings.
 - Encoder identity was checked against cached training embeddings before candidate encoding.
 - Baseline deployment model: unweighted Ridge alpha = 1, refit on all 6,270 labeled rows.
