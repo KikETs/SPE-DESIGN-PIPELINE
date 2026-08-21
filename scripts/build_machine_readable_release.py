@@ -29,8 +29,8 @@ MD_SELECTION = Path(
     "latest_notebook_manifest_60/sample_manifest.csv"
 )
 MD_CANDIDATE_RESULTS = Path(
-    "MY_PAPER_RELATED/gromacs_eval_pred_conductivity/github_results/"
-    "latest_notebook_manifest_60/run_results.csv"
+    "MY_PAPER_RELATED/gromacs_eval_pred_conductivity/reproducibility/"
+    "static_cne0_release/data/generated/generated_md_results_60.csv"
 )
 MD_REPLICA_RESULTS = Path(
     "MY_PAPER_RELATED/gromacs_eval_pred_conductivity/reproducibility/"
@@ -221,26 +221,28 @@ def build_reference_tables(reference_root: Path, output_dir: Path) -> tuple[pd.D
 
 
 def build_fig8_source(reference_root: Path, output_dir: Path) -> pd.DataFrame:
-    source_path = (
-        reference_root
-        / "results"
-        / "cne0_correction_method_sweep_ref"
-        / "cne0_correction_per_sample.csv"
-    )
-    data = pd.read_csv(source_path)
+    data = read_repo_csv(REFERENCE_RESULTS)
     require_columns(
         data,
-        {"group", "cutoff_source", "method_id", "method", "traj_id"},
+        {
+            "trajectory_id",
+            "sample_group",
+            "protocol",
+            "cutoff_source",
+            "association_filter",
+            "sigma_static_cNE0_S_cm",
+            "selection_reference_conductivity_S_cm",
+        },
         "Fig. 8 source",
     )
     filtered = data[
-        data["group"].isin(["bottom", "middle_stratified", "top"])
-        & data["cutoff_source"].eq("rdf_min")
-        & data["method_id"].eq(4)
-        & data["method"].eq("coordination_state_filter")
+        data["sample_group"].isin(["bottom", "middle_stratified", "top"])
+        & data["protocol"].eq("manuscript_static_cNE0")
+        & data["cutoff_source"].eq("Li_TFSI_O_RDF_first_minimum")
+        & data["association_filter"].eq("Li_TFSI_O_contacts_ge_2")
     ].copy()
-    filtered["traj_id"] = as_integer_ids(filtered["traj_id"])
-    if len(filtered) != 108 or not filtered["traj_id"].is_unique:
+    filtered["trajectory_id"] = as_integer_ids(filtered["trajectory_id"])
+    if len(filtered) != 108 or not filtered["trajectory_id"].is_unique:
         raise ValueError("Expected 108 unique filtered Fig. 8 rows")
     figure_dir = output_dir / "figure_data"
     figure_dir.mkdir(parents=True, exist_ok=True)
@@ -341,7 +343,7 @@ def build_figure_manifest(output_dir: Path, fig8_rows: int) -> pd.DataFrame:
             "plotting_code": "scripts/figures/make_fig8_reference_stratified_static_cne0.py",
             "row_count": fig8_rows,
             "data_status": "available",
-            "notes": "rdf_min, method_id 4, coordination_state_filter rows.",
+            "notes": "Manuscript protocol: RDF first minimum and Li-TFSI O contacts >= 2.",
         },
         {
             "figure": "Fig8",
@@ -358,7 +360,7 @@ def build_figure_manifest(output_dir: Path, fig8_rows: int) -> pd.DataFrame:
             "panel": "",
             "source_role": "generated-candidate means",
             "source_file": MD_CANDIDATE_RESULTS.as_posix(),
-            "plotting_code": "plot.ipynb cell 6",
+            "plotting_code": "scripts/figures/make_fig9_generated_static_cne0.py",
             "row_count": 60,
             "data_status": "available",
             "notes": "One summary row per selected generated candidate.",
@@ -368,7 +370,7 @@ def build_figure_manifest(output_dir: Path, fig8_rows: int) -> pd.DataFrame:
             "panel": "",
             "source_role": "generated replica-level static cNE0",
             "source_file": MD_REPLICA_RESULTS.as_posix(),
-            "plotting_code": "plot.ipynb cell 6",
+            "plotting_code": "scripts/figures/make_fig9_generated_static_cne0.py",
             "row_count": 180,
             "data_status": "available",
             "notes": "Three production replicas per generated candidate.",
@@ -393,11 +395,11 @@ def build_inventory(
             ["out-of-fold surrogate predictions", "complete", 6270, "trajectory", "Trajectory ID", OOF_PREDICTIONS.as_posix(), "One OOF prediction per labeled trajectory."],
             ["generated structures and surrogate predictions", "complete_with_documented_exclusion", len(generated_predictions), "generated structure", "generated_pool_index", "MY_PAPER_RELATED/machine_readable/generated_surrogate_predictions_32611.csv", "32,610 predictions; [*][*] excluded as an endpoint artifact."],
             ["generated MD candidate selection", "complete", 60, "candidate", "Trajectory ID", MD_SELECTION.as_posix(), "Includes group, structure, DP, rank, and surrogate score."],
-            ["generated MD candidate results", "complete", 60, "candidate", "Trajectory ID", MD_CANDIDATE_RESULTS.as_posix(), "Candidate-level summaries for the expanded reassessment."],
-            ["generated MD replica results", "complete", 180, "candidate replica", "trajectory_id + replica", MD_REPLICA_RESULTS.as_posix(), "Three production replicas per candidate."],
+            ["generated MD candidate results", "complete", 60, "candidate", "trajectory_id", MD_CANDIDATE_RESULTS.as_posix(), "Candidate-level manuscript static cNE0 summaries for the expanded reassessment."],
+            ["generated MD replica results", "complete", 180, "candidate replica", "trajectory_id + replica", MD_REPLICA_RESULTS.as_posix(), "Three production replicas per candidate; RDF first minimum and Li-TFSI O contacts >= 2."],
             ["reference reassessment selection", "complete", len(reference_selection), "trajectory", "trajectory_id", "MY_PAPER_RELATED/machine_readable/reference_selection_manifest_120.csv", "All stratified selections before execution."],
             ["reference reassessment run status", "complete", len(reference_status), "trajectory", "trajectory_id", "MY_PAPER_RELATED/machine_readable/reference_run_status_120.csv", "108 completed and 12 failed; no local paths or long error logs."],
-            ["reference reassessment completed results", "complete", 108, "trajectory", "trajectory_id", REFERENCE_RESULTS.as_posix(), "Completed 353 K static cNE0 reassessments."],
+            ["reference reassessment completed results", "complete", 108, "trajectory", "trajectory_id", REFERENCE_RESULTS.as_posix(), "Completed 353 K manuscript static cNE0 reassessments."],
             ["figure source map", "complete", len(figure_manifest), "figure-source relation", "figure + source_role", "MY_PAPER_RELATED/machine_readable/figure_source_manifest.csv", "Maps numerical sources to manuscript figures."],
         ],
         columns=["requirement", "status", "row_count", "grain", "primary_key", "path", "notes"],
@@ -458,7 +460,7 @@ def build_quality_report(
         ("reference_completed_rows", reference_status["has_completed_static_cNE0"].sum() == 108, int(reference_status["has_completed_static_cNE0"].sum()), 108),
         ("reference_failed_rows", reference_status["run_status"].eq("failed").sum() == 12, int(reference_status["run_status"].eq("failed").sum()), 12),
         ("fig8_rows", len(fig8) == 108, len(fig8), 108),
-        ("fig8_ids_match_completed_reference", set(fig8["traj_id"]) == set(reference_status.loc[reference_status["has_completed_static_cNE0"], "trajectory_id"]), len(set(fig8["traj_id"]).symmetric_difference(set(reference_status.loc[reference_status["has_completed_static_cNE0"], "trajectory_id"]))), 0),
+        ("fig8_ids_match_completed_reference", set(fig8["trajectory_id"]) == set(reference_status.loc[reference_status["has_completed_static_cNE0"], "trajectory_id"]), len(set(fig8["trajectory_id"]).symmetric_difference(set(reference_status.loc[reference_status["has_completed_static_cNE0"], "trajectory_id"]))), 0),
     ]
     report = pd.DataFrame(checks, columns=["check", "passed", "observed", "expected"])
     report.to_csv(output_dir / "data_quality_report.csv", index=False)

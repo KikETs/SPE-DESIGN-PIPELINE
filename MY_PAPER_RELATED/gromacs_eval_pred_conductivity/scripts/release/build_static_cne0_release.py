@@ -70,60 +70,34 @@ def normalize_gromacs_text(release_root: Path) -> None:
 
 def build_generated_data(base: Path, release_root: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     result_root = base / "github_results" / "latest_notebook_manifest_60"
-    cne_root = base / "results" / "rdf_cutoff_latest60_6groups"
+    cne_root = base / "results" / "manuscript_static_cne0_generated_180"
     manifest = pd.read_csv(result_root / "sample_manifest.csv")
     run_results = pd.read_csv(result_root / "run_results.csv")
     topology = pd.read_csv(result_root / "s12a_construction_summary" / "s12a_topology_charge_per_candidate.csv")
-    replicas = pd.read_csv(cne_root / "rdf_peak_tau0_per_replica.csv")
+    replicas = pd.read_csv(cne_root / "replica_results.csv")
+    agg = pd.read_csv(cne_root / "candidate_means.csv")
 
     require_grain(manifest, ["Trajectory ID"], 60, "generated candidate manifest")
-    require_grain(replicas, ["traj_id", "replica"], 180, "generated static cNE0 replicas")
+    require_grain(replicas, ["trajectory_id", "replica"], 180, "generated static cNE0 replicas")
     if set(replicas["replica"].astype(int)) != {1, 2, 3}:
         raise RuntimeError("generated static cNE0 replicas must contain replica IDs 1, 2, and 3")
-    counts = replicas.groupby("traj_id")["replica"].nunique()
+    counts = replicas.groupby("trajectory_id")["replica"].nunique()
     if not counts.eq(3).all() or len(counts) != 60:
         raise RuntimeError("generated static cNE0 must contain exactly three replicas for each of 60 candidates")
-    if not pd.to_numeric(replicas["sigma_cNE_tau"], errors="coerce").notna().all():
+    if not pd.to_numeric(replicas["sigma_static_cNE0_S_cm"], errors="coerce").notna().all():
         raise RuntimeError("generated static cNE0 contains missing conductivity values")
-
-    replica_columns = [
-        "traj_id", "replica", "replica_id", "stage", "group", "cutoff_variant", "cutoff_nm",
-        "persistence_threshold_ps", "tau_ps", "temperature_K", "n_frames", "sigma_cNE_tau", "sigma_NE", "sigma_ref",
-        "D_Li_cm2s", "D_an_cm2s", "V_nm3", "N_LI", "N_AN", "neutral_pop", "charged_pop",
-        "free_cation_fraction", "free_anion_fraction", "largest_cluster_size", "alpha_Li_sum", "alpha_AN_sum",
-    ]
-    generated_replica = replicas[replica_columns].copy().rename(
-        columns={
-            "traj_id": "trajectory_id",
-            "group": "sample_group",
-            "sigma_cNE_tau": "sigma_static_cNE0_S_cm",
-            "sigma_NE": "sigma_NE_S_cm",
-            "sigma_ref": "selection_reference_conductivity_S_cm",
-            "D_an_cm2s": "D_TFSI_cm2s",
-        }
+    expected_protocol = (
+        replicas["protocol"].eq("manuscript_static_cNE0")
+        & replicas["cutoff_source"].eq("Li_TFSI_O_RDF_first_minimum")
+        & replicas["association_filter"].eq("Li_TFSI_O_contacts_ge_2")
+        & replicas["temperature_K"].eq(353.0)
+        & replicas["analysis_frame_spacing_ps"].eq(1.0)
+        & replicas["n_frames"].eq(50001)
     )
-    generated_replica.insert(0, "dataset", "generated")
-
-    agg = (
-        generated_replica.groupby(["trajectory_id", "sample_group"], as_index=False)
-        .agg(
-            production_replicas=("replica", "nunique"),
-            temperature_K=("temperature_K", "first"),
-            sigma_static_cNE0_mean_S_cm=("sigma_static_cNE0_S_cm", "mean"),
-            sigma_static_cNE0_std_S_cm=("sigma_static_cNE0_S_cm", "std"),
-            sigma_static_cNE0_min_S_cm=("sigma_static_cNE0_S_cm", "min"),
-            sigma_static_cNE0_max_S_cm=("sigma_static_cNE0_S_cm", "max"),
-            sigma_NE_mean_S_cm=("sigma_NE_S_cm", "mean"),
-            sigma_NE_std_S_cm=("sigma_NE_S_cm", "std"),
-            D_Li_mean_cm2s=("D_Li_cm2s", "mean"),
-            D_Li_std_cm2s=("D_Li_cm2s", "std"),
-            D_TFSI_mean_cm2s=("D_TFSI_cm2s", "mean"),
-            D_TFSI_std_cm2s=("D_TFSI_cm2s", "std"),
-            RDF_peak_cutoff_mean_nm=("cutoff_nm", "mean"),
-            RDF_peak_cutoff_min_nm=("cutoff_nm", "min"),
-            RDF_peak_cutoff_max_nm=("cutoff_nm", "max"),
-        )
-    )
+    if not expected_protocol.all():
+        raise RuntimeError("generated rows contain results outside the manuscript protocol")
+    generated_replica = replicas.copy()
+    require_grain(agg, ["trajectory_id"], 60, "generated candidate means")
     manifest = manifest.rename(columns={"Trajectory ID": "trajectory_id", "sample_group": "sample_group"})
     topology = topology.rename(columns={"Trajectory ID": "trajectory_id"})
     results = manifest.merge(agg, on=["trajectory_id", "sample_group"], validate="one_to_one")
@@ -149,6 +123,8 @@ def build_generated_data(base: Path, release_root: Path) -> tuple[pd.DataFrame, 
     results.to_csv(out / "generated_md_results_60.csv", index=False)
     generated_replica.to_csv(out / "generated_static_cNE0_replica_180.csv", index=False)
     agg.to_csv(out / "generated_static_cNE0_candidate_mean_60.csv", index=False)
+    shutil.copy2(cne_root / "group_summary_candidate_level.csv", out / "generated_group_summary_candidate_level.csv")
+    shutil.copy2(cne_root / "pairwise_group_tests_candidate_level.csv", out / "generated_pairwise_group_tests.csv")
 
     for filename in [
         "msd_fit_r2_per_replica.csv",
@@ -175,47 +151,56 @@ def build_reference_data(reference_base: Path, release_root: Path) -> pd.DataFra
     result_root = reference_base / "results"
     manifest = pd.read_csv(result_root / "sample_manifest.csv")
     run_results = pd.read_csv(result_root / "run_results.csv")
-    cne = pd.read_csv(result_root / "cne_lifetime0_rdf_peak_firstmin" / "cne_lifetime20_rdf_cutoff_per_traj.csv")
+    cne = pd.read_csv(result_root / "manuscript_static_cne0_reference_108" / "replica_results.csv")
     completed_ids = set(run_results.loc[run_results["status"].eq("ok") & run_results["analysis_status"].eq("ok"), "Trajectory ID"].astype(int))
-    selected = cne[
-        cne["Trajectory ID"].astype(int).isin(completed_ids)
-        & cne["cutoff_variant"].eq("rdf_peak")
-        & pd.to_numeric(cne["persistence_threshold_ps"], errors="coerce").eq(0.0)
-    ].copy()
-    require_grain(selected, ["Trajectory ID"], 108, "reference static cNE0")
-    reference = manifest[manifest["Trajectory ID"].astype(int).isin(completed_ids)].merge(
-        selected,
-        on="Trajectory ID",
-        suffixes=("_manifest", "_cne"),
-        validate="one_to_one",
+    selected = cne[cne["trajectory_id"].astype(int).isin(completed_ids)].copy()
+    require_grain(selected, ["trajectory_id"], 108, "reference static cNE0")
+    expected_protocol = (
+        selected["protocol"].eq("manuscript_static_cNE0")
+        & selected["cutoff_source"].eq("Li_TFSI_O_RDF_first_minimum")
+        & selected["association_filter"].eq("Li_TFSI_O_contacts_ge_2")
+        & selected["temperature_K"].eq(353.0)
+        & selected["analysis_frame_spacing_ps"].eq(1.0)
+        & selected["n_frames"].eq(50001)
     )
-    require_grain(reference, ["Trajectory ID"], 108, "reference reassessment")
-    keep = [
-        "Trajectory ID", "sample_group_manifest", "SMILES", "Degree of Polymerization", "Density", "Molality",
-        "CONDUCTIVITY", "Transference Number", "Li Diffusivity", "TFSI Diffusivity", "cutoff_variant", "cutoff_nm",
-        "persistence_threshold_ps", "n_frames", "sigma_cNE_tau", "sigma_NE", "D_Li_cm2s", "D_an_cm2s", "V_nm3",
-        "N_LI", "N_AN", "neutral_pop", "charged_pop", "free_cation_fraction", "free_anion_fraction",
-        "largest_cluster_size", "alpha_Li_sum", "alpha_AN_sum",
-    ]
-    reference = reference[keep].rename(
+    if not expected_protocol.all():
+        raise RuntimeError("reference rows contain results outside the manuscript protocol")
+    manifest_public = manifest[manifest["Trajectory ID"].astype(int).isin(completed_ids)].rename(
         columns={
             "Trajectory ID": "trajectory_id",
-            "sample_group_manifest": "sample_group",
-            "CONDUCTIVITY": "reference_conductivity_S_cm",
+            "sample_group": "manifest_sample_group",
+            "CONDUCTIVITY": "manifest_reference_conductivity_S_cm",
             "Transference Number": "reference_transference_number",
             "Li Diffusivity": "reference_D_Li_cm2s",
             "TFSI Diffusivity": "reference_D_TFSI_cm2s",
-            "sigma_cNE_tau": "sigma_static_cNE0_S_cm",
-            "sigma_NE": "sigma_NE_S_cm",
-            "D_an_cm2s": "D_TFSI_cm2s",
         }
     )
-    reference.insert(0, "dataset", "reference_reassessment")
-    reference.insert(12, "temperature_K", 353.0)
+    reference = selected.merge(
+        manifest_public,
+        on="trajectory_id",
+        suffixes=("", "_manifest"),
+        validate="one_to_one",
+    )
+    require_grain(reference, ["trajectory_id"], 108, "reference reassessment")
+    if not reference["sample_group"].eq(reference["manifest_sample_group"]).all():
+        raise RuntimeError("reference group labels differ between calculation and manifest")
+    if not np.allclose(
+        reference["selection_reference_conductivity_S_cm"],
+        reference["manifest_reference_conductivity_S_cm"],
+        rtol=0,
+        atol=0,
+    ):
+        raise RuntimeError("reference conductivity labels differ between calculation and manifest")
+    reference = reference.drop(
+        columns=["manifest_sample_group", "manifest_reference_conductivity_S_cm"]
+    )
     out = release_root / "data" / "reference"
     out.mkdir(parents=True, exist_ok=True)
     reference.to_csv(out / "reference_static_cNE0_reassessment_108.csv", index=False)
     manifest[manifest["Trajectory ID"].astype(int).isin(completed_ids)].to_csv(out / "reference_completed_manifest_108.csv", index=False)
+    summary_root = result_root / "manuscript_static_cne0_reference_108"
+    shutil.copy2(summary_root / "group_summary_trajectory_level.csv", out / "reference_group_summary_trajectory_level.csv")
+    shutil.copy2(summary_root / "overall_statistics.csv", out / "reference_overall_statistics.csv")
     return reference
 
 
@@ -257,12 +242,23 @@ def build_example(source_base: Path, traj_id: int, destination: Path, stage: str
         ],
         destination / "representative_structure",
     )
-    analysis_csv = (
-        run / "analysis" / f"replica_{GENERATED_REPLICA}" / "conductivity_summary_htpmd_ref.csv"
-        if source_base == BASE
-        else run / "analysis" / "conductivity_summary_htpmd_ref.csv"
-    )
-    copy_files([analysis_csv], destination / "analysis")
+    analysis_out = destination / "analysis"
+    analysis_out.mkdir(parents=True, exist_ok=True)
+    legacy_summary = analysis_out / "conductivity_summary_htpmd_ref.csv"
+    legacy_summary.unlink(missing_ok=True)
+    if source_base == BASE:
+        result_path = source_base / "results" / "manuscript_static_cne0_generated_180" / "replica_results.csv"
+        result = pd.read_csv(result_path)
+        result = result[
+            result["trajectory_id"].eq(traj_id)
+            & result["replica"].eq(GENERATED_REPLICA)
+        ]
+    else:
+        result_path = source_base / "results" / "manuscript_static_cne0_reference_108" / "replica_results.csv"
+        result = pd.read_csv(result_path)
+        result = result[result["trajectory_id"].eq(traj_id)]
+    require_grain(result, ["trajectory_id", "replica"], 1, "representative manuscript static cNE0 result")
+    result.to_csv(analysis_out / "manuscript_static_cne0_result.csv", index=False)
 
 
 def build_special_examples(base: Path, release_root: Path) -> None:
@@ -362,6 +358,7 @@ def write_support_files(base: Path, release_root: Path) -> None:
     copy_files(
         [
             base / "scripts" / "analysis" / "rdf_peak_tau0_replica_eval.py",
+            base / "scripts" / "analysis" / "manuscript_static_cne0.py",
             base / "scripts" / "analysis" / "persistence_sweep_and_hybrid.py",
             base / "scripts" / "analysis" / "msd_fit_r2_expanded.py",
             base / "scripts" / "analysis" / "msd_beta_windows.py",
@@ -400,6 +397,14 @@ def write_quality_report(release_root: Path, generated_results: pd.DataFrame, ge
         ("missing_reference_static_cNE0", int(reference["sigma_static_cNE0_S_cm"].isna().sum()), 0),
         ("generated_temperature_not_353K", int((generated_replicas["temperature_K"] != 353.0).sum()), 0),
         ("reference_temperature_not_353K", int((reference["temperature_K"] != 353.0).sum()), 0),
+        ("generated_non_manuscript_protocol", int((generated_replicas["protocol"] != "manuscript_static_cNE0").sum()), 0),
+        ("reference_non_manuscript_protocol", int((reference["protocol"] != "manuscript_static_cNE0").sum()), 0),
+        ("generated_non_first_minimum_cutoff", int((generated_replicas["cutoff_source"] != "Li_TFSI_O_RDF_first_minimum").sum()), 0),
+        ("reference_non_first_minimum_cutoff", int((reference["cutoff_source"] != "Li_TFSI_O_RDF_first_minimum").sum()), 0),
+        ("generated_wrong_association_filter", int((generated_replicas["association_filter"] != "Li_TFSI_O_contacts_ge_2").sum()), 0),
+        ("reference_wrong_association_filter", int((reference["association_filter"] != "Li_TFSI_O_contacts_ge_2").sum()), 0),
+        ("generated_wrong_analysis_frame_count", int((generated_replicas["n_frames"] != 50001).sum()), 0),
+        ("reference_wrong_analysis_frame_count", int((reference["n_frames"] != 50001).sum()), 0),
         ("forbidden_raw_trajectory_files", len(forbidden_files), 0),
         ("files_with_private_absolute_paths", len(private_path_files), 0),
     ]
@@ -408,6 +413,181 @@ def write_quality_report(release_root: Path, generated_results: pd.DataFrame, ge
     report.to_csv(release_root / "data_quality_report.csv", index=False)
     if not report["status"].eq("PASS").all():
         raise RuntimeError("Release data-quality checks failed")
+
+
+def write_manuscript_update(release_root: Path, generated_results: pd.DataFrame) -> None:
+    generated = pd.read_csv(
+        release_root / "data" / "generated" / "generated_group_summary_candidate_level.csv"
+    )
+    pairwise = pd.read_csv(
+        release_root / "data" / "generated" / "generated_pairwise_group_tests.csv"
+    )
+    reference = pd.read_csv(
+        release_root / "data" / "reference" / "reference_group_summary_trajectory_level.csv"
+    )
+    reference_stats = pd.read_csv(
+        release_root / "data" / "reference" / "reference_overall_statistics.csv"
+    ).iloc[0]
+
+    lines = [
+        "# Manuscript and SI static cNE0 replacement values",
+        "",
+        "These values supersede the RDF-peak/zero-persistence release and the generated "
+        "363 K method-sweep values. They use the manuscript/SI protocol: Li-TFSI oxygen "
+        "RDF first minimum, at least two oxygen contacts per retained Li-TFSI pair, "
+        "353 K, 0-50 ns at 1 ps spacing, 50,001 frames, static clusters, maximum cluster "
+        "size 101, and formal cluster charge z_ij = i - j.",
+        "",
+        "Generated candidate values are arithmetic means of three replica-level linear "
+        "conductivities. Group statistics use the 10 candidate-level values in each group.",
+        "",
+        "## Main-text reference reassessment table",
+        "",
+        "| Metric | Value |",
+        "|---|---:|",
+        "| Completed static cNE0 analyses | 108 / 120 |",
+        "| Group coverage | 8 bottom, 91 middle, 9 top |",
+        "| Simulation length | 50 ns |",
+        "| Primary reassessment protocol | RDF first minimum + Li-TFSI O contacts >= 2 + static cNE0 |",
+    ]
+    reference_by_label = reference.set_index("manuscript_group")
+    overall = reference_by_label.loc["Overall"]
+    lines.extend(
+        [
+            f"| Overall MALogE (log10 scale) | {overall['mean_abs_delta_log10']:.3f} |",
+            f"| Overall median static cNE0/reference-label ratio | {overall['median_static_cNE0_over_reference']:.2f} |",
+        ]
+    )
+    for label in ["Bottom", "Middle-stratified", "Top"]:
+        row = reference_by_label.loc[label]
+        lines.append(
+            f"| {label} MALogE / median ratio | {row['mean_abs_delta_log10']:.3f} / "
+            f"{row['median_static_cNE0_over_reference']:.3g} |"
+        )
+    lines.extend(
+        [
+            "| Median RDF first-minimum cutoff | "
+            f"{overall['median_RDF_first_minimum_nm']:.3f} nm overall; "
+            f"{reference_by_label.loc['Bottom', 'median_RDF_first_minimum_nm']:.3f} nm bottom; "
+            f"{reference_by_label.loc['Middle-stratified', 'median_RDF_first_minimum_nm']:.3f} nm middle; "
+            f"{reference_by_label.loc['Top', 'median_RDF_first_minimum_nm']:.3f} nm top |",
+            f"| Top-bottom median shift (log10 scale) | {reference_stats['top_bottom_median_shift_log10']:.4f} |",
+            f"| Spearman rho vs reference labels | {reference_stats['spearman_rho']:.4f} |",
+            f"| Kendall tau vs reference labels | {reference_stats['kendall_tau']:.4f} |",
+            f"| Mann-Whitney U and exact p-value | {reference_stats['top_bottom_mann_whitney_U']:.1f}; p = {reference_stats['top_bottom_exact_two_sided_p']:.4g} |",
+            "",
+            "## Main-text generated-candidate table",
+            "",
+            "| Group | n candidates / replicas | Mean abs delta log10 | Median PolyBERT/static cNE0 | RDF cutoff / nm |",
+            "|---|---:|---:|---:|---:|",
+        ]
+    )
+    generated_order = ["TT-top", "TT-middle", "TT-bottom", "LT-top", "LT-middle", "LT-bottom", "Overall"]
+    generated_by_label = generated.set_index("manuscript_group")
+    for label in generated_order:
+        row = generated_by_label.loc[label]
+        lines.append(
+            f"| {label} | {int(row['candidates_or_trajectories'])} / {int(row['production_replicas'])} | "
+            f"{row['mean_abs_delta_log10']:.3f} | {row['median_reference_over_static_cNE0']:.3f} | "
+            f"{row['median_RDF_first_minimum_nm']:.3f} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "## SI generated-candidate diagnostics",
+            "",
+            "| Group | n | Mean abs delta log10 | Median abs delta log10 | Median PolyBERT/static cNE0 | Median cNE0/NE |",
+            "|---|---:|---:|---:|---:|---:|",
+        ]
+    )
+    for label in generated_order:
+        row = generated_by_label.loc[label]
+        lines.append(
+            f"| {label} | {int(row['candidates_or_trajectories'])} | "
+            f"{row['mean_abs_delta_log10']:.3f} | {row['median_abs_delta_log10']:.3f} | "
+            f"{row['median_reference_over_static_cNE0']:.3f} | {row['median_static_cNE0_over_NE']:.3f} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "## SI generated-candidate log10 static cNE0",
+            "",
+            "Percentile bootstrap intervals use 5000 candidate-level resamples. The seed is recorded in the CSV.",
+            "",
+            "| Group | n | Mean log10 static cNE0 | Mean 95% CI | Median log10 static cNE0 | Median 95% CI |",
+            "|---|---:|---:|---:|---:|---:|",
+        ]
+    )
+    for label in generated_order[:-1]:
+        row = generated_by_label.loc[label]
+        lines.append(
+            f"| {label} | {int(row['candidates_or_trajectories'])} | {row['mean_log10_static_cNE0']:.3f} | "
+            f"{row['bootstrap_mean_log10_95CI_low']:.3f} to {row['bootstrap_mean_log10_95CI_high']:.3f} | "
+            f"{row['median_log10_static_cNE0']:.3f} | "
+            f"{row['bootstrap_median_log10_95CI_low']:.3f} to {row['bootstrap_median_log10_95CI_high']:.3f} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "## SI pairwise generated-group tests",
+            "",
+            "| Comparison | Median delta log10 | Fold difference | Cliff's delta | Exact p |",
+            "|---|---:|---:|---:|---:|",
+        ]
+    )
+    for _, row in pairwise.iterrows():
+        lines.append(
+            f"| {row['comparison']} | {row['median_delta_log10_static_cNE0']:.3f} | "
+            f"{row['fold_difference']:.3g} | {row['cliffs_delta']:.3f} | {row['exact_two_sided_p']:.3g} |"
+        )
+
+    top = generated_results.nlargest(5, "sigma_static_cNE0_mean_S_cm")
+    label_map = {
+        "HIGH_top": "TT-top",
+        "HIGH_middle_stratified": "TT-middle",
+        "HIGH_bottom": "TT-bottom",
+        "LOW_top": "LT-top",
+        "LOW_middle_stratified": "LT-middle",
+        "LOW_bottom": "LT-bottom",
+    }
+    lines.extend(
+        [
+            "",
+            "## SI top five generated candidates by corrected static cNE0",
+            "",
+            "| ID | Group | Repeat-unit string | Rank | PolyBERT / S cm-1 | Static cNE0 / S cm-1 |",
+            "|---:|---|---|---:|---:|---:|",
+        ]
+    )
+    for _, row in top.iterrows():
+        lines.append(
+            f"| {int(row['trajectory_id'])} | {label_map[row['sample_group']]} | {row['PSMILES']} | "
+            f"{int(row['candidate_rank_by_pred_cond'])} | {row['CONDUCTIVITY']:.3e} | "
+            f"{row['sigma_static_cNE0_mean_S_cm']:.3e} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "## Source files",
+            "",
+            "- `data/generated/generated_static_cNE0_replica_180.csv`",
+            "- `data/generated/generated_static_cNE0_candidate_mean_60.csv`",
+            "- `data/generated/generated_group_summary_candidate_level.csv`",
+            "- `data/generated/generated_pairwise_group_tests.csv`",
+            "- `data/reference/reference_static_cNE0_reassessment_108.csv`",
+            "- `data/reference/reference_group_summary_trajectory_level.csv`",
+            "- `data/reference/reference_overall_statistics.csv`",
+            "- `analysis/manuscript_static_cne0.py`",
+            "",
+        ]
+    )
+    (release_root / "MANUSCRIPT_STATIC_CNE0_UPDATE.md").write_text(
+        "\n".join(lines), encoding="utf-8"
+    )
 
 
 def main() -> None:
@@ -430,6 +610,7 @@ def main() -> None:
     write_support_files(base, release_root)
     external = build_external_manifest(base, reference_base, release_root, args.hash_trajectories)
     normalize_gromacs_text(release_root)
+    write_manuscript_update(release_root, generated_results)
     write_quality_report(release_root, generated_results, generated_replicas, reference, external)
     print(f"[done] release root: {release_root}")
 

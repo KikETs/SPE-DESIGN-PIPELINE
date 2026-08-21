@@ -107,27 +107,43 @@ def load_data() -> tuple[pd.DataFrame, int]:
 
     data = pd.read_csv(CNE0_SOURCE_CSV)
     expected_filter = (
-        data["group"].isin(GROUP_ORDER)
-        & data["cutoff_source"].eq("rdf_min")
-        & data["method_id"].eq(4)
-        & data["method"].eq("coordination_state_filter")
+        data["sample_group"].isin(GROUP_ORDER)
+        & data["protocol"].eq("manuscript_static_cNE0")
+        & data["cutoff_source"].eq("Li_TFSI_O_RDF_first_minimum")
+        & data["association_filter"].eq("Li_TFSI_O_contacts_ge_2")
     )
     if not expected_filter.all():
         raise ValueError("Published Fig. 8 source contains rows outside the documented filter")
 
-    numeric_cols = ["sigma_cNE0_corrected_S_cm", "sigma_ref_S_cm", "sigma_NE_S_cm"]
+    numeric_cols = [
+        "sigma_static_cNE0_S_cm",
+        "selection_reference_conductivity_S_cm",
+        "sigma_NE_S_cm",
+    ]
     for col in numeric_cols:
         data[col] = pd.to_numeric(data[col], errors="coerce")
-    data = data.dropna(subset=["sigma_cNE0_corrected_S_cm", "sigma_ref_S_cm"])
-    data = data[data["sigma_cNE0_corrected_S_cm"].gt(0) & data["sigma_ref_S_cm"].gt(0)].copy()
+    data = data.dropna(
+        subset=["sigma_static_cNE0_S_cm", "selection_reference_conductivity_S_cm"]
+    )
+    data = data[
+        data["sigma_static_cNE0_S_cm"].gt(0)
+        & data["selection_reference_conductivity_S_cm"].gt(0)
+    ].copy()
 
-    data["log10_reference"] = np.log10(data["sigma_ref_S_cm"])
-    data["log10_static_cne0"] = np.log10(data["sigma_cNE0_corrected_S_cm"])
+    data["log10_reference"] = np.log10(
+        data["selection_reference_conductivity_S_cm"]
+    )
+    data["log10_static_cne0"] = np.log10(data["sigma_static_cNE0_S_cm"])
     data["log10_ratio"] = data["log10_static_cne0"] - data["log10_reference"]
-    data["ratio"] = data["sigma_cNE0_corrected_S_cm"] / data["sigma_ref_S_cm"]
+    data["ratio"] = (
+        data["sigma_static_cNE0_S_cm"]
+        / data["selection_reference_conductivity_S_cm"]
+    )
     data["abs_log_error"] = data["log10_ratio"].abs()
-    data["group"] = pd.Categorical(data["group"], categories=GROUP_ORDER, ordered=True)
-    return data.sort_values(["group", "traj_id"]), total_selected
+    data["group"] = pd.Categorical(
+        data["sample_group"], categories=GROUP_ORDER, ordered=True
+    )
+    return data.sort_values(["group", "trajectory_id"]), total_selected
 
 
 def draw_group_box(ax, data: pd.DataFrame, value_col: str, ylabel: str, rng: np.random.Generator) -> None:
@@ -314,7 +330,7 @@ def main() -> int:
     print(
         "Source:",
         CNE0_SOURCE_CSV,
-        "validated_filter=cutoff_source:rdf_min,method_id:4,method:coordination_state_filter",
+        "validated_filter=cutoff_source:Li_TFSI_O_RDF_first_minimum,association_filter:Li_TFSI_O_contacts_ge_2",
     )
     print(
         "Stats:",
