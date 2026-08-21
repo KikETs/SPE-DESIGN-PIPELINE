@@ -13,9 +13,9 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[2]
 FIGURES_DIR = ROOT / "figures"
 
-WEIGHTED_DIR = ROOT / "MY_PAPER_RELATED" / "revised" / "polybert_weighted_evidence"
-OOF_CSV = WEIGHTED_DIR / "source_data" / "polybert_run" / "oof_predictions.csv"
-MODEL_SELECTION_CSV = WEIGHTED_DIR / "tables" / "weighted_model_selection.csv"
+POLYBERT_DIR = ROOT / "MY_PAPER_RELATED" / "polybert_con"
+OOF_CSV = POLYBERT_DIR / "oof_predictions.csv"
+MODEL_SELECTION_CSV = POLYBERT_DIR / "weighted_model_selection_canonical_group.csv"
 CONDUCTIVITY_SUMMARY_CSV = (
     ROOT
     / "MY_PAPER_RELATED"
@@ -67,6 +67,7 @@ def setup_matplotlib() -> None:
             "legend.fontsize": 6.8,
             "axes.linewidth": 0.9,
             "svg.fonttype": "path",
+            "svg.hashsalt": "SPE-DESIGN-PIPELINE-Fig7",
         }
     )
 
@@ -102,6 +103,11 @@ def save_tif_600dpi(fig, tif_path: Path) -> None:
             image = image.convert("RGB")
         image.save(tif_path, format="TIFF", dpi=(600, 600), compression="tiff_lzw")
     tmp_png.unlink(missing_ok=True)
+
+
+def strip_svg_trailing_whitespace(svg_path: Path) -> None:
+    lines = svg_path.read_text(encoding="utf-8").splitlines()
+    svg_path.write_text("\n".join(line.rstrip() for line in lines) + "\n", encoding="utf-8")
 
 
 def load_proposed_histogram_predictions() -> pd.DataFrame:
@@ -338,7 +344,13 @@ def main() -> int:
 
     svg_path = FIGURES_DIR / "Fig7.svg"
     tif_path = FIGURES_DIR / "Fig7.tif"
-    fig.savefig(svg_path, bbox_inches="tight", facecolor="white")
+    fig.savefig(
+        svg_path,
+        bbox_inches="tight",
+        facecolor="white",
+        metadata={"Date": None},
+    )
+    strip_svg_trailing_whitespace(svg_path)
     save_tif_600dpi(fig, tif_path)
     plt.close(fig)
 

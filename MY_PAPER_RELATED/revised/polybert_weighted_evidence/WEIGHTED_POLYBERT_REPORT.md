@@ -10,17 +10,17 @@ WEIGHTED MODEL IMPROVES SCREENING
 
 | metric | baseline | best weighted | delta |
 | --- | ---: | ---: | ---: |
-| MAE log10 | 0.136053 | 0.138399 | 0.002346 |
-| RMSE log10 | 0.176553 | 0.181957 | 0.005405 |
-| R2 | 0.466742 | 0.433594 | -0.033148 |
-| Spearman | 0.642409 | 0.652364 | 0.009955 |
-| precision at 1e-4 | 0.667364 | 0.586721 | -0.080643 |
-| recall at 1e-4 | 0.455064 | 0.617689 | 0.162625 |
-| F1 at 1e-4 | 0.541137 | 0.601807 | 0.060670 |
-| threshold enrichment at 1e-4 | 5.969147 | 5.247846 | -0.721302 |
+| MAE log10 | 0.137052 | 0.139319 | 0.002267 |
+| RMSE log10 | 0.178186 | 0.183801 | 0.005615 |
+| R2 | 0.456832 | 0.422057 | -0.034775 |
+| Spearman | 0.639149 | 0.649013 | 0.009864 |
+| precision at 1e-4 | 0.665263 | 0.588710 | -0.076553 |
+| recall at 1e-4 | 0.450785 | 0.624822 | 0.174037 |
+| F1 at 1e-4 | 0.537415 | 0.606228 | 0.068813 |
+| threshold enrichment at 1e-4 | 5.950357 | 5.265634 | -0.684722 |
 | top-100 enrichment | 8.407703 | 8.586591 | 0.178887 |
-| high-tail MAE true >=1e-4 | 0.170468 | 0.126244 | -0.044224 |
-| high-tail RMSE true >=1e-4 | 0.208820 | 0.161771 | -0.047049 |
+| high-tail MAE true >=1e-4 | 0.170562 | 0.128247 | -0.042315 |
+| high-tail RMSE true >=1e-4 | 0.211366 | 0.168942 | -0.042423 |
 
 # CEJ-Safe Interpretation
 
@@ -34,7 +34,6 @@ WEIGHTED MODEL IMPROVES SCREENING
 
 - False positives can increase when recall-focused weighting shifts predictions upward near the high-conductivity threshold.
 - Calibration may degrade even when recall improves.
-- Existing applicability-domain analysis shows many generated candidates are outside the training distribution.
 - Weighted rankings for generated candidates remain unavailable until embeddings are generated.
 - The model remains a surrogate prescreener and not a physical conductivity validator.
 
@@ -42,14 +41,14 @@ WEIGHTED MODEL IMPROVES SCREENING
 
 - Methods: describe interval-weighted Ridge as a sensitivity experiment using training-fold-only target-derived weights.
 - Results: report OOF threshold, top-k, and high-tail diagnostics against the unweighted baseline.
-- Limitations: state that weighted generated-candidate prediction requires candidate embeddings and that OOD sensitivity remains unresolved.
+- Limitations: state that weighted generated-candidate prediction requires candidate embeddings.
 - Supplementary: place the full weighting grid, fold-wise metrics, calibration deciles, and threshold sensitivity tables.
 
 # Release Checklist
 
-- `revised/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py`
-- `revised/polybert_weighted_evidence/tables/weighted_oof_metrics_all.csv`
-- `revised/polybert_weighted_evidence/tables/weighted_threshold_metrics_all.csv`
-- `revised/polybert_weighted_evidence/tables/weighted_topk_metrics_all.csv`
-- `revised/polybert_weighted_evidence/tables/weighted_model_selection.csv`
-- `revised/polybert_weighted_evidence/figures_data/*.csv`
+- `polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py`
+- `polybert_weighted_evidence/tables/weighted_oof_metrics_all.csv`
+- `polybert_weighted_evidence/tables/weighted_threshold_metrics_all.csv`
+- `polybert_weighted_evidence/tables/weighted_topk_metrics_all.csv`
+- `polybert_weighted_evidence/tables/weighted_model_selection.csv`
+- `polybert_weighted_evidence/figures_data/*.csv`

@@ -114,8 +114,9 @@ That directory is intentionally ignored except for `.gitkeep`.
 
 The [machine-readable data index](MY_PAPER_RELATED/machine_readable/README.md)
 maps the manuscript requirements and numerical figures to repository CSVs. It
-includes all 6,270 labeled structures with four-fold assignments, all 32,611
-generated structures with prediction/exclusion status, the 60-candidate and
+includes all 6,270 labeled structures with leakage-controlled,
+canonical-structure-grouped four-fold assignments, all 32,611 generated
+structures with prediction/exclusion status, the 60-candidate and
 180-replica generated-MD results, and the full 120-selected/108-completed
 reference reassessment status.
 
@@ -123,11 +124,18 @@ reference reassessment status.
 
 Tracked outputs include compact CSV/Markdown summary tables, figure data, and
 the 6,270-row OOF prediction table. Large model checkpoints and cache tensors
-are not tracked. The OOF table can be regenerated from:
+are not tracked. The canonical-group fold and OOF tables can be regenerated
+from cached PolyBERT embeddings with:
 
 ```bash
-python MY_PAPER_RELATED/revised/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py
+python MY_PAPER_RELATED/polybert_con/train_polybert_conductivity_4fold.py \
+  --csv MY_PAPER_RELATED/polybert_con/fold_assignment.csv \
+  --outdir MY_PAPER_RELATED/polybert_con \
+  --embeddings_path MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/polybert_run/embeddings.npy
 ```
+
+The weighted sensitivity analysis can then be rerun with
+`MY_PAPER_RELATED/revised/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py`.
 
 The current tracked tree is designed to stay below normal GitHub file-size
 limits without requiring Git LFS.

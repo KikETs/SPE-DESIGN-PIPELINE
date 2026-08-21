@@ -19,17 +19,10 @@ GENERATED_PREDICTIONS = Path(
     "MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/"
     "polybert_run/all_novel_smiles_with_pred_conductivity.csv"
 )
-TRAINING_FOLDS = Path(
-    "MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/"
-    "polybert_run/fold_assignment.csv"
-)
-OOF_PREDICTIONS = Path(
-    "MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/"
-    "polybert_run/oof_predictions.csv"
-)
+TRAINING_FOLDS = Path("MY_PAPER_RELATED/polybert_con/fold_assignment.csv")
+OOF_PREDICTIONS = Path("MY_PAPER_RELATED/polybert_con/oof_predictions.csv")
 WEIGHTED_SELECTION = Path(
-    "MY_PAPER_RELATED/revised/polybert_weighted_evidence/tables/"
-    "weighted_model_selection.csv"
+    "MY_PAPER_RELATED/polybert_con/weighted_model_selection_canonical_group.csv"
 )
 MD_SELECTION = Path(
     "MY_PAPER_RELATED/gromacs_eval_pred_conductivity/github_results/"
@@ -265,7 +258,7 @@ def build_figure_manifest(output_dir: Path, fig8_rows: int) -> pd.DataFrame:
             "plotting_code": "plot.ipynb cell 8",
             "row_count": 6270,
             "data_status": "available",
-            "notes": "Full label table with deterministic four-fold assignments.",
+            "notes": "Full label table with canonical-structure-grouped four-fold assignments.",
         },
         {
             "figure": "Fig1B",
@@ -396,7 +389,7 @@ def build_inventory(
     inventory = pd.DataFrame(
         [
             ["training labels and structures", "complete", 6270, "trajectory", "Trajectory ID", TRAINING_FOLDS.as_posix(), "Includes conductivity labels and structure strings."],
-            ["four-fold assignments", "complete", 6270, "trajectory", "Trajectory ID", TRAINING_FOLDS.as_posix(), "Fold values 0-3 are included in the full label table."],
+            ["four-fold assignments", "complete", 6270, "trajectory", "Trajectory ID", TRAINING_FOLDS.as_posix(), "Fold values 0-3 are assigned by canonical structure; no canonical group crosses folds."],
             ["out-of-fold surrogate predictions", "complete", 6270, "trajectory", "Trajectory ID", OOF_PREDICTIONS.as_posix(), "One OOF prediction per labeled trajectory."],
             ["generated structures and surrogate predictions", "complete_with_documented_exclusion", len(generated_predictions), "generated structure", "generated_pool_index", "MY_PAPER_RELATED/machine_readable/generated_surrogate_predictions_32611.csv", "32,610 predictions; [*][*] excluded as an endpoint artifact."],
             ["generated MD candidate selection", "complete", 60, "candidate", "Trajectory ID", MD_SELECTION.as_posix(), "Includes group, structure, DP, rank, and surrogate score."],
@@ -424,12 +417,34 @@ def build_quality_report(
     oof = read_repo_csv(OOF_PREDICTIONS)
     md_selection = read_repo_csv(MD_SELECTION)
     md_replicas = read_repo_csv(MD_REPLICA_RESULTS)
+    training_columns = [
+        "Trajectory ID",
+        "SMILES",
+        "PSMILES",
+        "canonical_psmiles",
+        "CONDUCTIVITY",
+        "fold",
+    ]
+    require_columns(training, set(training_columns), "training folds")
+    require_columns(
+        oof,
+        {"Trajectory ID", "canonical_psmiles", "fold", "pred_log10_cond"},
+        "OOF predictions",
+    )
+    canonical_fold_counts = training.groupby("canonical_psmiles")["fold"].nunique()
+    fold_sizes = training.groupby("fold").size().sort_index().tolist()
     checks = [
         ("training_rows", len(training) == 6270, len(training), 6270),
         ("training_unique_ids", training["Trajectory ID"].is_unique, training["Trajectory ID"].nunique(), 6270),
-        ("training_required_values_complete", not training[["Trajectory ID", "SMILES", "PSMILES", "CONDUCTIVITY", "fold"]].isna().any().any(), int(training[["Trajectory ID", "SMILES", "PSMILES", "CONDUCTIVITY", "fold"]].isna().sum().sum()), 0),
+        ("training_required_values_complete", not training[training_columns].isna().any().any(), int(training[training_columns].isna().sum().sum()), 0),
         ("fold_values", set(training["fold"]) == {0, 1, 2, 3}, "[0,1,2,3]", "[0,1,2,3]"),
+        ("canonical_structure_groups", training["canonical_psmiles"].nunique() == 6026, training["canonical_psmiles"].nunique(), 6026),
+        ("canonical_groups_crossing_folds", canonical_fold_counts.gt(1).sum() == 0, int(canonical_fold_counts.gt(1).sum()), 0),
+        ("canonical_group_fold_sizes", fold_sizes == [1561, 1559, 1583, 1567], str(fold_sizes), "[1561, 1559, 1583, 1567]"),
         ("oof_rows", len(oof) == 6270, len(oof), 6270),
+        ("oof_unique_ids", oof["Trajectory ID"].is_unique, oof["Trajectory ID"].nunique(), 6270),
+        ("oof_predictions_complete", not oof["pred_log10_cond"].isna().any(), int(oof["pred_log10_cond"].isna().sum()), 0),
+        ("oof_ids_match_training", set(oof["Trajectory ID"]) == set(training["Trajectory ID"]), len(set(oof["Trajectory ID"]).symmetric_difference(set(training["Trajectory ID"]))), 0),
         ("generated_pool_rows", len(generated_predictions) == 32611, len(generated_predictions), 32611),
         ("generated_prediction_ok_rows", generated_predictions["prediction_status"].eq("ok").sum() == 32610, int(generated_predictions["prediction_status"].eq("ok").sum()), 32610),
         ("generated_ok_predictions_complete", not generated_predictions.loc[generated_predictions["prediction_status"].eq("ok"), ["pred_log10_cond", "pred_cond", "conductivity_for_summary"]].isna().any().any(), int(generated_predictions.loc[generated_predictions["prediction_status"].eq("ok"), ["pred_log10_cond", "pred_cond", "conductivity_for_summary"]].isna().sum().sum()), 0),
@@ -479,7 +494,8 @@ def main() -> int:
     )
 
     print(f"Wrote machine-readable release to {output_dir}")
-    print("Validated: 6,270 labels; 32,611 generated; 60 candidates; 180 replicas")
+    print("Validated: 6,270 labels in 6,026 canonical groups; no fold overlap")
+    print("Validated: 32,611 generated; 60 candidates; 180 replicas")
     print("Validated: 120 reference selections; 108 completed; 12 failed")
     return 0
 

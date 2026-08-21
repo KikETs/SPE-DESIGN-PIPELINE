@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 polyBERT (HF) + Regression head for ionic conductivity (log10 scale)
-- 4-fold CV with enforced distribution of top-10 highest-conductivity samples across folds
+- Canonical-structure-grouped 4-fold CV with log-conductivity stratification
 - Input: PSMILES-like strings (we convert "*" -> "[*]" by default)
 
 Data expected (CSV):
@@ -28,16 +28,26 @@ Notes:
   If you want end-to-end fine-tuning, see the TODO section at the bottom.
 """
 from __future__ import annotations
-import argparse, math, os
+import argparse, math, os, sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from sklearn.model_selection import StratifiedGroupKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Ridge
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
+try:
+    from psmiles import PolymerSmiles as PS
+except ModuleNotFoundError:
+    vendor_root = Path(__file__).resolve().parents[2] / "vendor"
+    sys.path.insert(
+        0, str(vendor_root / "canonicalize_psmiles-0.1.2-py3-none-any.whl")
+    )
+    sys.path.insert(0, str(vendor_root / "psmiles_local"))
+    from psmiles import PolymerSmiles as PS
 
 def to_psmiles(s: str) -> str:
     if not isinstance(s, str):
@@ -47,20 +57,38 @@ def to_psmiles(s: str) -> str:
     tmp = tmp.replace("__STAR__", "[*]")
     return tmp
 
-def make_folds(df: pd.DataFrame, k: int = 4, top_n: int = 10, seed: int = 42) -> np.ndarray:
-    """Assign each row to a fold id in [0..k-1], ensuring top_n (by CONDUCTIVITY) are evenly distributed."""
-    n = len(df)
-    fold = np.full(n, -1, dtype=int)
-    top_idx = df["CONDUCTIVITY"].nlargest(top_n).index.to_numpy()
-    for i, idx in enumerate(top_idx):
-        fold[idx] = i % k
+def canonicalize_psmiles(s: str) -> str:
+    psmiles = to_psmiles(s)
+    canonical = PS(psmiles).canonicalize.psmiles
+    if canonical.count("[*]") != 2:
+        raise ValueError(f"Expected exactly two [*] endpoints: {s}")
+    return canonical
 
-    remaining = np.where(fold < 0)[0]
-    rng = np.random.default_rng(seed)
-    rng.shuffle(remaining)
-    chunks = np.array_split(remaining, k)
-    for i in range(k):
-        fold[chunks[i]] = i
+
+def make_folds(
+    df: pd.DataFrame,
+    k: int = 4,
+    strat_bins: int = 6,
+    seed: int = 42,
+) -> np.ndarray:
+    """Assign canonical structures to stratified folds without group overlap."""
+    y_bins = pd.qcut(df["log10_cond"], q=strat_bins, labels=False, duplicates="drop")
+    y_bins = np.asarray(y_bins, dtype=int)
+    groups = df["canonical_psmiles"].astype(str).to_numpy()
+    cv = StratifiedGroupKFold(n_splits=k, shuffle=True, random_state=seed)
+    fold = np.full(len(df), -1, dtype=int)
+    for fold_id, (_, holdout_idx) in enumerate(cv.split(df, y_bins, groups=groups)):
+        fold[holdout_idx] = fold_id
+
+    if np.any(fold < 0):
+        raise RuntimeError("StratifiedGroupKFold did not assign every row")
+    group_fold_counts = (
+        pd.DataFrame({"group": groups, "fold": fold})
+        .groupby("group")["fold"]
+        .nunique()
+    )
+    if group_fold_counts.gt(1).any():
+        raise RuntimeError("Canonical-structure leakage detected across folds")
     return fold
 
 def rmse(y_true, y_pred) -> float:
@@ -87,6 +115,7 @@ def main():
     ap.add_argument("--outdir", default="polybert_cv_out", help="Output directory")
     ap.add_argument("--kfold", type=int, default=4)
     ap.add_argument("--top_n", type=int, default=10)
+    ap.add_argument("--strat_bins", type=int, default=6)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--batch_size", type=int, default=64)
     ap.add_argument("--device", default=None, help="e.g., 'cuda' or 'cpu' (SentenceTransformers device)")
@@ -95,6 +124,11 @@ def main():
     ap.add_argument("--mlp_hidden", type=int, default=256)
     ap.add_argument("--mlp_max_iter", type=int, default=500)
     ap.add_argument("--cache_embeddings", action="store_true", help="Cache embeddings to outdir/embeddings.npy")
+    ap.add_argument(
+        "--embeddings_path",
+        default=None,
+        help="Optional precomputed embedding .npy aligned row-for-row with the input CSV",
+    )
     args = ap.parse_args()
 
     outdir = Path(args.outdir)
@@ -106,13 +140,19 @@ def main():
 
     df = df.copy()
     df["PSMILES"] = df["SMILES"].map(to_psmiles)
+    df["canonical_psmiles"] = df["SMILES"].map(canonicalize_psmiles)
     df["log10_cond"] = np.log10(df["CONDUCTIVITY"].astype(float))
 
     # Fold assignment
-    df["fold"] = make_folds(df, k=args.kfold, top_n=args.top_n, seed=args.seed)
+    df["fold"] = make_folds(
+        df,
+        k=args.kfold,
+        strat_bins=args.strat_bins,
+        seed=args.seed,
+    )
     df.to_csv(outdir / "fold_assignment.csv", index=False)
 
-    # Report top-N distribution
+    # Report fold balance and top-N distribution.
     top_idx = df["CONDUCTIVITY"].nlargest(args.top_n).index.to_numpy()
     top_counts = df.loc[top_idx, "fold"].value_counts().sort_index()
     with open(outdir / "topN_distribution.txt", "w", encoding="utf-8") as f:
@@ -120,14 +160,34 @@ def main():
         for k in range(args.kfold):
             f.write(f"  fold {k}: {int(top_counts.get(k,0))}\n")
 
+    split_rows = []
+    for fold_id in range(args.kfold):
+        subset = df[df["fold"].eq(fold_id)]
+        split_rows.append(
+            {
+                "fold": fold_id,
+                "n_rows": int(len(subset)),
+                "n_canonical_groups": int(subset["canonical_psmiles"].nunique()),
+                "n_top10": int(top_counts.get(fold_id, 0)),
+                "log10_cond_min": float(subset["log10_cond"].min()),
+                "log10_cond_median": float(subset["log10_cond"].median()),
+                "log10_cond_max": float(subset["log10_cond"].max()),
+            }
+        )
+    pd.DataFrame(split_rows).to_csv(outdir / "split_diagnostics.csv", index=False)
+
     # Compute embeddings (cache optional)
     emb_path = outdir / "embeddings.npy"
-    if args.cache_embeddings and emb_path.exists():
+    if args.embeddings_path:
+        X = np.load(args.embeddings_path)
+    elif args.cache_embeddings and emb_path.exists():
         X = np.load(emb_path)
     else:
         X = compute_polybert_embeddings(df["PSMILES"].tolist(), batch_size=args.batch_size, device=args.device)
         if args.cache_embeddings:
             np.save(emb_path, X)
+    if len(X) != len(df):
+        raise ValueError(f"Embedding rows ({len(X)}) do not match input rows ({len(df)})")
 
     y = df["log10_cond"].to_numpy().astype(np.float32)
 
@@ -184,7 +244,17 @@ def main():
         f.write(f"OOF RMSE (log10): {oof_rmse:.6f} (~x{10**oof_rmse:.2f})\n")
 
     # Save per-sample predictions
-    out = df[["Trajectory ID","SMILES","PSMILES","CONDUCTIVITY","log10_cond","fold"]].copy()
+    out = df[
+        [
+            "Trajectory ID",
+            "SMILES",
+            "PSMILES",
+            "canonical_psmiles",
+            "CONDUCTIVITY",
+            "log10_cond",
+            "fold",
+        ]
+    ].copy()
     out["pred_log10_cond"] = preds_all
     out.to_csv(outdir / "oof_predictions.csv", index=False)
 

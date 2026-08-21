@@ -1,7 +1,7 @@
 requirement,status,row_count,grain,primary_key,path,notes
-training labels and structures,complete,6270,trajectory,Trajectory ID,MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/polybert_run/fold_assignment.csv,Includes conductivity labels and structure strings.
-four-fold assignments,complete,6270,trajectory,Trajectory ID,MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/polybert_run/fold_assignment.csv,Fold values 0-3 are included in the full label table.
-out-of-fold surrogate predictions,complete,6270,trajectory,Trajectory ID,MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/polybert_run/oof_predictions.csv,One OOF prediction per labeled trajectory.
+training labels and structures,complete,6270,trajectory,Trajectory ID,MY_PAPER_RELATED/polybert_con/fold_assignment.csv,Includes conductivity labels and structure strings.
+four-fold assignments,complete,6270,trajectory,Trajectory ID,MY_PAPER_RELATED/polybert_con/fold_assignment.csv,Fold values 0-3 are assigned by canonical structure; no canonical group crosses folds.
+out-of-fold surrogate predictions,complete,6270,trajectory,Trajectory ID,MY_PAPER_RELATED/polybert_con/oof_predictions.csv,One OOF prediction per labeled trajectory.
 generated structures and surrogate predictions,complete_with_documented_exclusion,32611,generated structure,generated_pool_index,MY_PAPER_RELATED/machine_readable/generated_surrogate_predictions_32611.csv,"32,610 predictions; [*][*] excluded as an endpoint artifact."
 generated MD candidate selection,complete,60,candidate,Trajectory ID,MY_PAPER_RELATED/gromacs_eval_pred_conductivity/github_results/latest_notebook_manifest_60/sample_manifest.csv,"Includes group, structure, DP, rank, and surrogate score."
 generated MD candidate results,complete,60,candidate,Trajectory ID,MY_PAPER_RELATED/gromacs_eval_pred_conductivity/github_results/latest_notebook_manifest_60/run_results.csv,Candidate-level summaries for the expanded reassessment.
