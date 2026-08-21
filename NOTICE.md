@@ -8,6 +8,7 @@ Third-party and vendored components keep their own license terms:
 - `MY_PAPER_RELATED/selfies-psmiles/LICENSE`
 - `vendor/psmiles_local/LICENSE`
 - `vendor/canonicalize_psmiles-0.1.2-py3-none-any.whl`
+- `MY_PAPER_RELATED/gromacs_eval_pred_conductivity/pysoftk/LICENSE.md`
 
 Model weights, generated tables, and other research artifacts are included or
 linked to support reproduction of the accompanying workflow. Before reusing

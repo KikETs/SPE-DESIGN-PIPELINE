@@ -1,7 +1,8 @@
 # Paper Reproducibility Release
 
 This repository contains the curated `MY_PAPER_RELATED` release for reproducing
-the polymer generation and surrogate-screening results.
+the polymer generation, surrogate screening, and available molecular-dynamics
+reassessment workflow.
 
 ## What Is Included
 
@@ -13,11 +14,21 @@ the polymer generation and surrogate-screening results.
   PolyBERT analysis scripts, figure data, and summary tables.
 - `MY_PAPER_RELATED/selfies-psmiles`: local package source used by the model
   notebooks.
+- `MY_PAPER_RELATED/gromacs_eval_pred_conductivity`: generated-candidate MD
+  preparation/analysis workflow, representative inputs, and compact numerical
+  reassessment results.
+- `reproducibility/`: JCIM-oriented protocol, provenance, split, seed, data,
+  manuscript-source, and external-archive indexes.
 - `vendor/`: local `psmiles` packaging and its small canonicalization
   dependency.
 
-Unfinished atomistic-simulation batch pipelines and large model/cache artifacts
-are intentionally omitted from this release.
+The tracked MD release includes staged MDPs, representative GRO/TPR/TOP/ITP and
+Packmol inputs, construction/analysis code, 180 generated replica results, and
+the 120-selected/108-completed reference status/results. Large production
+trajectories, restart/checkpoint files, and model/cache artifacts remain outside
+Git. Two representative trajectories are being uploaded to Zenodo under the
+reserved DOI [`10.5281/zenodo.22043456`](https://doi.org/10.5281/zenodo.22043456).
+The DOI remains inactive until the unsubmitted Zenodo draft is published.
 
 ## Setup
 
@@ -66,6 +77,14 @@ After installing dependencies, include import checks:
 
 ```bash
 python scripts/repro_smoke.py --check-imports
+```
+
+Validate the publication data denominators, grouped split, replica seeds, MDP
+parameter extraction, and manifest with:
+
+```bash
+python scripts/build_jcim_reproducibility_package.py
+python -m pytest tests/reproducibility -q
 ```
 
 ## Optional Pretrained Checkpoints
@@ -142,6 +161,16 @@ predictions with
 
 The current tracked tree is designed to stay below normal GitHub file-size
 limits without requiring Git LFS.
+
+## MD Archive Boundary
+
+The compact GitHub MD source is
+`MY_PAPER_RELATED/gromacs_eval_pred_conductivity/reproducibility/static_cne0_release/`.
+The representative trajectory archive, checksums, and unresolved
+reference redistribution check are documented in
+`reproducibility/zenodo/ZENODO_UPLOAD_MANIFEST.md`. Do not cite a moving branch
+as the final archive. The reserved DOI is `10.5281/zenodo.22043456`; cite it as
+the immutable release only after the Zenodo draft is published and resolves.
 
 ## Citation And License
 
