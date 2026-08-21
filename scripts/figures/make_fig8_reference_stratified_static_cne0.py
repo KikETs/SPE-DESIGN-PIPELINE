@@ -14,13 +14,15 @@ from scipy.stats import kendalltau, mannwhitneyu, spearmanr
 ROOT = Path(__file__).resolve().parents[2]
 FIGURES_DIR = ROOT / "figures"
 
-SOURCE_ROOT = Path("/home/user/바탕화면/DL/gromacs/eval_top10_bottom10_stratified100")
-RUN_RESULTS_CSV = SOURCE_ROOT / "results" / "run_results.csv"
+RUN_RESULTS_CSV = (
+    ROOT / "MY_PAPER_RELATED" / "machine_readable" / "reference_run_status_120.csv"
+)
 CNE0_SOURCE_CSV = (
-    SOURCE_ROOT
-    / "results"
-    / "cne0_correction_method_sweep_ref"
-    / "cne0_correction_per_sample.csv"
+    ROOT
+    / "MY_PAPER_RELATED"
+    / "machine_readable"
+    / "figure_data"
+    / "fig8_reference_stratified_static_cne0.csv"
 )
 
 GROUP_ORDER = ["bottom", "middle_stratified", "top"]
@@ -104,12 +106,14 @@ def load_data() -> tuple[pd.DataFrame, int]:
     total_selected = int(run["sample_group"].isin(GROUP_ORDER).sum())
 
     data = pd.read_csv(CNE0_SOURCE_CSV)
-    data = data[
+    expected_filter = (
         data["group"].isin(GROUP_ORDER)
         & data["cutoff_source"].eq("rdf_min")
         & data["method_id"].eq(4)
         & data["method"].eq("coordination_state_filter")
-    ].copy()
+    )
+    if not expected_filter.all():
+        raise ValueError("Published Fig. 8 source contains rows outside the documented filter")
 
     numeric_cols = ["sigma_cNE0_corrected_S_cm", "sigma_ref_S_cm", "sigma_NE_S_cm"]
     for col in numeric_cols:
@@ -310,7 +314,7 @@ def main() -> int:
     print(
         "Source:",
         CNE0_SOURCE_CSV,
-        "filter=cutoff_source:rdf_min,method_id:4,method:coordination_state_filter",
+        "validated_filter=cutoff_source:rdf_min,method_id:4,method:coordination_state_filter",
     )
     print(
         "Stats:",

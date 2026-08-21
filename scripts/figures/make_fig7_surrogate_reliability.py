@@ -13,7 +13,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[2]
 FIGURES_DIR = ROOT / "figures"
 
-WEIGHTED_DIR = ROOT / "MY_PAPER_RELATED" / "polybert_weighted_evidence"
+WEIGHTED_DIR = ROOT / "MY_PAPER_RELATED" / "revised" / "polybert_weighted_evidence"
 OOF_CSV = WEIGHTED_DIR / "source_data" / "polybert_run" / "oof_predictions.csv"
 MODEL_SELECTION_CSV = WEIGHTED_DIR / "tables" / "weighted_model_selection.csv"
 CONDUCTIVITY_SUMMARY_CSV = (

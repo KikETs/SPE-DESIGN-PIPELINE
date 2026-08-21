@@ -9,7 +9,7 @@ the polymer generation and surrogate-screening results.
   notebooks, data, FCD outputs, and summary tables.
 - `MY_PAPER_RELATED/polybert_con`: PolyBERT conductivity screening code and
   generated-candidate summary outputs.
-- `MY_PAPER_RELATED/polybert_weighted_evidence`: interval-weighted
+- `MY_PAPER_RELATED/revised/polybert_weighted_evidence`: interval-weighted
   PolyBERT analysis scripts, figure data, and summary tables.
 - `MY_PAPER_RELATED/selfies-psmiles`: local package source used by the model
   notebooks.
@@ -49,7 +49,7 @@ reproduction checks:
 MY_PAPER_RELATED/MODELS/data/simulation-trajectory-aggregate_aligned.csv
 MY_PAPER_RELATED/polybert_con/simulation-trajectory-aggregate.csv
 MY_PAPER_RELATED/gromacs_eval_pred_conductivity/simulation-trajectory-aggregate.csv
-MY_PAPER_RELATED/polybert_weighted_evidence/source_data/polybert_con/simulation-trajectory-aggregate.csv
+MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/polybert_con/simulation-trajectory-aggregate.csv
 ```
 
 These local files remain ignored by `.gitignore` after placement.
@@ -110,14 +110,23 @@ cache artifacts.
 Training notebooks write checkpoints under `MY_PAPER_RELATED/MODELS/checkpoints/`.
 That directory is intentionally ignored except for `.gitkeep`.
 
+## Machine-readable Data Index
+
+The [machine-readable data index](MY_PAPER_RELATED/machine_readable/README.md)
+maps the manuscript requirements and numerical figures to repository CSVs. It
+includes all 6,270 labeled structures with four-fold assignments, all 32,611
+generated structures with prediction/exclusion status, the 60-candidate and
+180-replica generated-MD results, and the full 120-selected/108-completed
+reference reassessment status.
+
 ## Data And Artifacts
 
-Tracked outputs include compact CSV/Markdown summary tables and figure data.
-Large model checkpoints, cache tensors, and one oversized full OOF prediction
-CSV are not tracked. The excluded full OOF table can be regenerated from:
+Tracked outputs include compact CSV/Markdown summary tables, figure data, and
+the 6,270-row OOF prediction table. Large model checkpoints and cache tensors
+are not tracked. The OOF table can be regenerated from:
 
 ```bash
-python MY_PAPER_RELATED/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py
+python MY_PAPER_RELATED/revised/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py
 ```
 
 The current tracked tree is designed to stay below normal GitHub file-size
