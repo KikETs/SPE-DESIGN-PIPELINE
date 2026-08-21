@@ -1,8 +1,8 @@
 # Proposed v1.0.0-jcim-submission release notes
 
-Status: prepared locally; no tag or GitHub release has been created. Zenodo
-draft `22043456` has reserved DOI `10.5281/zenodo.22043456`, which remains
-inactive until the unsubmitted draft is published.
+Status: no tag or GitHub release has been created. The immutable source snapshot
+and representative trajectory bundle were published in Zenodo record `22043456`
+on 2026-08-21 at DOI `10.5281/zenodo.22043456`.
 
 ## Frozen scope
 
@@ -33,11 +33,10 @@ against the archived candidate-level result.
 ## External archive boundary
 
 Large XTC, checkpoint, restart, energy, and complete raw run directories are
-not placed in Git. The proposed DOI deposit contains the frozen repository and
+not placed in Git. The published DOI deposit contains the frozen repository and
 the two representative trajectory bundles listed in
 `reproducibility/zenodo/ZENODO_UPLOAD_MANIFEST.md`, subject to reference-data
-redistribution approval. Reserved DOI: `10.5281/zenodo.22043456`; publication is
-pending.
+redistribution documentation. DOI: `10.5281/zenodo.22043456`.
 
 ## Known gaps at release-preparation time
 

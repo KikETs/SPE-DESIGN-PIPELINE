@@ -15,8 +15,8 @@ Status date: 2026-08-21
 | Production replica seeds | Partially available | Replica 1 is a continuation; replicas 2/3 use 730002/730003; initial equilibration used unrecoverable `gen-seed=-1` |
 | Force-field route | Supported with provenance limitation | ACPYPE 2023.10.27 command omitted `-a`; versioned CLI default is GAFF2 |
 | Historical software versions | Available with evidence grades | `SOFTWARE_VERSIONS.md`; exact PySoftK upstream commit and local patch recovered |
-| Raw trajectories | Private upload in progress | Two representative trajectories are designated for Zenodo draft 22043456 |
-| Immutable publication DOI | Reserved, not active | `10.5281/zenodo.22043456`; Zenodo publication action required |
+| Raw trajectories | Representative subset publicly archived | Two 50 ns trajectories and matching inputs are in Zenodo record 22043456; the full trajectory set is not archived |
+| Immutable publication DOI | Published | `10.5281/zenodo.22043456` |
 | Full MD environment lockfile | Not recovered | Version evidence exists; historical Python 3.9.25 environment export does not |
 
 Detailed gaps and source paths are in `../REPRODUCIBILITY_AUDIT.md` and
