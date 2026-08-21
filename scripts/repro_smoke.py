@@ -84,7 +84,7 @@ def check_required_files(root: Path) -> None:
         "MY_PAPER_RELATED/MODELS/FCD_runs/final_summary_all_models_repeated.csv",
         "MY_PAPER_RELATED/MODELS/notebooks/calculate_FCD_unified.ipynb",
         "MY_PAPER_RELATED/polybert_con/train_polybert_conductivity_4fold.py",
-        "MY_PAPER_RELATED/revised/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py",
+        "MY_PAPER_RELATED/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py",
         "MY_PAPER_RELATED/selfies-psmiles/pyproject.toml",
         "vendor/psmiles_local/pyproject.toml",
         "vendor/canonicalize_psmiles-0.1.2-py3-none-any.whl",

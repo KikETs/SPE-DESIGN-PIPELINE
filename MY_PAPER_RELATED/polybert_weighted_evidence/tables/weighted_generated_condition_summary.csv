@@ -1,0 +1,7 @@
+condition,model,generated_candidates,mean_log10_predicted_conductivity,median_log10_predicted_conductivity,count_ge_1e4_s_cm,hit_fraction_ge_1e4_s_cm,baseline_weighted_rank_spearman_all,weighted_model,deployment_fit
+LOW,Baseline PolyBERT-Ridge,44999,-4.551874195771533,-4.56045771223805,438,0.00973354963443632,0.9158284230801979,smooth_sigmoid_tail_a6_t0p05__ridge_alpha_100,full_6270_row_refit
+LOW,Interval-weighted Ridge,44999,-4.464114506150676,-4.47806695733224,656,0.014578101735594125,0.9158284230801979,smooth_sigmoid_tail_a6_t0p05__ridge_alpha_100,full_6270_row_refit
+HIGH,Baseline PolyBERT-Ridge,2126,-3.1061129784391426,-3.106302952556308,2126,1.0,0.9158284230801979,smooth_sigmoid_tail_a6_t0p05__ridge_alpha_100,full_6270_row_refit
+HIGH,Interval-weighted Ridge,2126,-3.0461673772625724,-3.0423847784364835,2126,1.0,0.9158284230801979,smooth_sigmoid_tail_a6_t0p05__ridge_alpha_100,full_6270_row_refit
+ALL,Baseline PolyBERT-Ridge,47125,-4.486650039844771,-4.5491758379159055,2564,0.05440848806366048,0.9158284230801979,smooth_sigmoid_tail_a6_t0p05__ridge_alpha_100,full_6270_row_refit
+ALL,Interval-weighted Ridge,47125,-4.400145156633093,-4.466730898851918,2782,0.059034482758620686,0.9158284230801979,smooth_sigmoid_tail_a6_t0p05__ridge_alpha_100,full_6270_row_refit

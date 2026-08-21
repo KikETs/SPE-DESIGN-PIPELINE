@@ -16,8 +16,20 @@ DEFAULT_OUTPUT = ROOT / "MY_PAPER_RELATED" / "machine_readable"
 
 GENERATED_POOL = Path("MY_PAPER_RELATED/polybert_con/all_novel_smiles.csv")
 GENERATED_PREDICTIONS = Path(
-    "MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/"
+    "MY_PAPER_RELATED/polybert_weighted_evidence/source_data/"
     "polybert_run/all_novel_smiles_with_pred_conductivity.csv"
+)
+WEIGHTED_GENERATED_PREDICTIONS = Path(
+    "MY_PAPER_RELATED/polybert_weighted_evidence/tables/"
+    "weighted_generated_candidate_predictions.csv"
+)
+WEIGHTED_CONDITION_PREDICTIONS = Path(
+    "MY_PAPER_RELATED/polybert_weighted_evidence/tables/"
+    "weighted_generated_condition_predictions_47125.csv"
+)
+WEIGHTED_MD_SELECTION = Path(
+    "MY_PAPER_RELATED/polybert_weighted_evidence/tables/"
+    "weighted_generated_md_selection_60.csv"
 )
 TRAINING_FOLDS = Path("MY_PAPER_RELATED/polybert_con/fold_assignment.csv")
 OOF_PREDICTIONS = Path("MY_PAPER_RELATED/polybert_con/oof_predictions.csv")
@@ -100,6 +112,7 @@ def as_integer_ids(series: pd.Series) -> pd.Series:
 def build_generated_predictions(output_dir: Path) -> pd.DataFrame:
     pool = read_repo_csv(GENERATED_POOL)
     predictions = read_repo_csv(GENERATED_PREDICTIONS)
+    weighted_predictions = read_repo_csv(WEIGHTED_GENERATED_PREDICTIONS)
     require_columns(pool, {"smiles"}, "generated pool")
     require_columns(
         predictions,
@@ -110,6 +123,32 @@ def build_generated_predictions(output_dir: Path) -> pd.DataFrame:
         raise ValueError("Expected 32,611 unique generated structures")
     if len(predictions) != 32610 or not predictions["smiles"].is_unique:
         raise ValueError("Expected 32,610 unique generated predictions")
+    weighted_columns = {
+        "smiles",
+        "baseline_pred_log10_conductivity_refit",
+        "weighted_pred_log10_conductivity",
+        "weighted_pred_conductivity_s_cm",
+        "baseline_rank",
+        "weighted_rank",
+        "rank_change_toward_top",
+        "baseline_hit_ge_1e4",
+        "weighted_hit_ge_1e4",
+        "selected_weighted_model",
+        "deployment_fit",
+        "embedding_model",
+    }
+    require_columns(weighted_predictions, weighted_columns, "weighted generated predictions")
+    if len(weighted_predictions) != 32610 or not weighted_predictions["smiles"].is_unique:
+        raise ValueError("Expected 32,610 unique weighted generated predictions")
+
+    predictions = predictions.merge(
+        weighted_predictions[list(weighted_columns)],
+        on="smiles",
+        how="left",
+        validate="one_to_one",
+    )
+    if predictions["weighted_pred_log10_conductivity"].isna().any():
+        raise ValueError("Weighted generated predictions do not cover the baseline candidate pool")
 
     merged = pool.reset_index(names="generated_pool_index").merge(
         predictions,
@@ -141,6 +180,17 @@ def build_generated_predictions(output_dir: Path) -> pd.DataFrame:
         "pred_log10_cond",
         "pred_cond",
         "conductivity_for_summary",
+        "baseline_pred_log10_conductivity_refit",
+        "weighted_pred_log10_conductivity",
+        "weighted_pred_conductivity_s_cm",
+        "baseline_rank",
+        "weighted_rank",
+        "rank_change_toward_top",
+        "baseline_hit_ge_1e4",
+        "weighted_hit_ge_1e4",
+        "selected_weighted_model",
+        "deployment_fit",
+        "embedding_model",
         "exclusion_reason",
     ]
     result = merged[columns]
@@ -393,7 +443,9 @@ def build_inventory(
             ["training labels and structures", "complete", 6270, "trajectory", "Trajectory ID", TRAINING_FOLDS.as_posix(), "Includes conductivity labels and structure strings."],
             ["four-fold assignments", "complete", 6270, "trajectory", "Trajectory ID", TRAINING_FOLDS.as_posix(), "Fold values 0-3 are assigned by canonical structure; no canonical group crosses folds."],
             ["out-of-fold surrogate predictions", "complete", 6270, "trajectory", "Trajectory ID", OOF_PREDICTIONS.as_posix(), "One OOF prediction per labeled trajectory."],
-            ["generated structures and surrogate predictions", "complete_with_documented_exclusion", len(generated_predictions), "generated structure", "generated_pool_index", "MY_PAPER_RELATED/machine_readable/generated_surrogate_predictions_32611.csv", "32,610 predictions; [*][*] excluded as an endpoint artifact."],
+            ["generated structures and surrogate predictions", "complete_with_documented_exclusion", len(generated_predictions), "generated structure", "generated_pool_index", "MY_PAPER_RELATED/machine_readable/generated_surrogate_predictions_32611.csv", "32,610 baseline and weighted predictions; [*][*] excluded as an endpoint artifact."],
+            ["target-conditioned generated baseline and weighted predictions", "complete", 47125, "generated structure", "condition + condition_row_index", "MY_PAPER_RELATED/polybert_weighted_evidence/tables/weighted_generated_condition_predictions_47125.csv", "44,999 LOW and 2,126 HIGH candidates; exact PolyBERT encoding for all rows."],
+            ["weighted predictions for generated MD selections", "complete", 60, "candidate", "Trajectory ID", "MY_PAPER_RELATED/polybert_weighted_evidence/tables/weighted_generated_md_selection_60.csv", "All final MD-selected candidates matched to exact baseline-refit and weighted predictions."],
             ["generated MD candidate selection", "complete", 60, "candidate", "Trajectory ID", MD_SELECTION.as_posix(), "Includes group, structure, DP, rank, and surrogate score."],
             ["generated MD candidate results", "complete", 60, "candidate", "trajectory_id", MD_CANDIDATE_RESULTS.as_posix(), "Candidate-level manuscript static cNE0 summaries for the expanded reassessment."],
             ["generated MD replica results", "complete", 180, "candidate replica", "trajectory_id + replica", MD_REPLICA_RESULTS.as_posix(), "Three production replicas per candidate; RDF first minimum and Li-TFSI O contacts >= 2."],
@@ -419,6 +471,8 @@ def build_quality_report(
     oof = read_repo_csv(OOF_PREDICTIONS)
     md_selection = read_repo_csv(MD_SELECTION)
     md_replicas = read_repo_csv(MD_REPLICA_RESULTS)
+    weighted_conditions = read_repo_csv(WEIGHTED_CONDITION_PREDICTIONS)
+    weighted_md_selection = read_repo_csv(WEIGHTED_MD_SELECTION)
     training_columns = [
         "Trajectory ID",
         "SMILES",
@@ -450,7 +504,14 @@ def build_quality_report(
         ("generated_pool_rows", len(generated_predictions) == 32611, len(generated_predictions), 32611),
         ("generated_prediction_ok_rows", generated_predictions["prediction_status"].eq("ok").sum() == 32610, int(generated_predictions["prediction_status"].eq("ok").sum()), 32610),
         ("generated_ok_predictions_complete", not generated_predictions.loc[generated_predictions["prediction_status"].eq("ok"), ["pred_log10_cond", "pred_cond", "conductivity_for_summary"]].isna().any().any(), int(generated_predictions.loc[generated_predictions["prediction_status"].eq("ok"), ["pred_log10_cond", "pred_cond", "conductivity_for_summary"]].isna().sum().sum()), 0),
+        ("generated_weighted_predictions_complete", not generated_predictions.loc[generated_predictions["prediction_status"].eq("ok"), ["weighted_pred_log10_conductivity", "weighted_pred_conductivity_s_cm", "weighted_rank"]].isna().any().any(), int(generated_predictions.loc[generated_predictions["prediction_status"].eq("ok"), ["weighted_pred_log10_conductivity", "weighted_pred_conductivity_s_cm", "weighted_rank"]].isna().sum().sum()), 0),
         ("generated_documented_exclusions", generated_predictions["prediction_status"].eq("excluded").sum() == 1, int(generated_predictions["prediction_status"].eq("excluded").sum()), 1),
+        ("weighted_condition_rows", len(weighted_conditions) == 47125, len(weighted_conditions), 47125),
+        ("weighted_condition_key_unique", not weighted_conditions.duplicated(["condition", "condition_row_index"]).any(), int(weighted_conditions.duplicated(["condition", "condition_row_index"]).sum()), 0),
+        ("weighted_condition_counts", weighted_conditions["condition"].value_counts().to_dict() == {"LOW": 44999, "HIGH": 2126}, str(weighted_conditions["condition"].value_counts().to_dict()), "{'LOW': 44999, 'HIGH': 2126}"),
+        ("weighted_condition_predictions_complete", not weighted_conditions[["baseline_pred_log10_conductivity_refit", "weighted_pred_log10_conductivity", "baseline_rank", "weighted_rank"]].isna().any().any(), int(weighted_conditions[["baseline_pred_log10_conductivity_refit", "weighted_pred_log10_conductivity", "baseline_rank", "weighted_rank"]].isna().sum().sum()), 0),
+        ("weighted_md_selection_rows", len(weighted_md_selection) == 60, len(weighted_md_selection), 60),
+        ("weighted_md_selection_unique_ids", weighted_md_selection["Trajectory ID"].is_unique, weighted_md_selection["Trajectory ID"].nunique(), 60),
         ("md_candidate_rows", len(md_selection) == 60, len(md_selection), 60),
         ("md_replica_rows", len(md_replicas) == 180, len(md_replicas), 180),
         ("md_replica_key_unique", not md_replicas.duplicated(["trajectory_id", "replica"]).any(), int(md_replicas.duplicated(["trajectory_id", "replica"]).sum()), 0),

@@ -9,7 +9,7 @@ the polymer generation and surrogate-screening results.
   notebooks, data, FCD outputs, and summary tables.
 - `MY_PAPER_RELATED/polybert_con`: PolyBERT conductivity screening code and
   generated-candidate summary outputs.
-- `MY_PAPER_RELATED/revised/polybert_weighted_evidence`: interval-weighted
+- `MY_PAPER_RELATED/polybert_weighted_evidence`: interval-weighted
   PolyBERT analysis scripts, figure data, and summary tables.
 - `MY_PAPER_RELATED/selfies-psmiles`: local package source used by the model
   notebooks.
@@ -49,7 +49,7 @@ reproduction checks:
 MY_PAPER_RELATED/MODELS/data/simulation-trajectory-aggregate_aligned.csv
 MY_PAPER_RELATED/polybert_con/simulation-trajectory-aggregate.csv
 MY_PAPER_RELATED/gromacs_eval_pred_conductivity/simulation-trajectory-aggregate.csv
-MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/polybert_con/simulation-trajectory-aggregate.csv
+MY_PAPER_RELATED/polybert_weighted_evidence/source_data/polybert_con/simulation-trajectory-aggregate.csv
 ```
 
 These local files remain ignored by `.gitignore` after placement.
@@ -131,11 +131,14 @@ from cached PolyBERT embeddings with:
 python MY_PAPER_RELATED/polybert_con/train_polybert_conductivity_4fold.py \
   --csv MY_PAPER_RELATED/polybert_con/fold_assignment.csv \
   --outdir MY_PAPER_RELATED/polybert_con \
-  --embeddings_path MY_PAPER_RELATED/revised/polybert_weighted_evidence/source_data/polybert_run/embeddings.npy
+  --embeddings_path MY_PAPER_RELATED/polybert_weighted_evidence/source_data/polybert_run/embeddings.npy
 ```
 
 The weighted sensitivity analysis can then be rerun with
-`MY_PAPER_RELATED/revised/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py`.
+`MY_PAPER_RELATED/polybert_weighted_evidence/scripts/train_polybert_weighted_interval.py`.
+After OOF model selection, regenerate the 32,610 generated-candidate weighted
+predictions with
+`MY_PAPER_RELATED/polybert_weighted_evidence/scripts/predict_weighted_generated_candidates.py`.
 
 The current tracked tree is designed to stay below normal GitHub file-size
 limits without requiring Git LFS.

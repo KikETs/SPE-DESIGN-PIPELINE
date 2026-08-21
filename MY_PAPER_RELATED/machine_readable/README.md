@@ -11,7 +11,9 @@ and long execution logs are not included.
 |---|---|---:|
 | Training labels, structures, and canonical-group four-fold assignments | `../polybert_con/fold_assignment.csv` | 6,270 trajectories / 6,026 canonical groups |
 | Out-of-fold surrogate predictions | `../polybert_con/oof_predictions.csv` | 6,270 trajectories |
-| Generated structures and surrogate predictions | `generated_surrogate_predictions_32611.csv` | 32,611 structures |
+| Generated structures and baseline/weighted surrogate predictions | `generated_surrogate_predictions_32611.csv` | 32,611 structures |
+| Final LOW/HIGH generated baseline/weighted predictions | `../polybert_weighted_evidence/tables/weighted_generated_condition_predictions_47125.csv` | 47,125 structures |
+| Weighted predictions for final MD selections | `../polybert_weighted_evidence/tables/weighted_generated_md_selection_60.csv` | 60 candidates |
 | Generated MD selections | `../gromacs_eval_pred_conductivity/github_results/latest_notebook_manifest_60/sample_manifest.csv` | 60 candidates |
 | Generated candidate-level MD results | `../gromacs_eval_pred_conductivity/github_results/latest_notebook_manifest_60/run_results.csv` | 60 candidates |
 | Generated replica-level static cNE0 results | `../gromacs_eval_pred_conductivity/reproducibility/static_cne0_release/data/generated/generated_static_cNE0_replica_180.csv` | 180 replicas |
@@ -21,7 +23,10 @@ and long execution logs are not included.
 | Manuscript figure source map | `figure_source_manifest.csv` | 12 figure-source relations |
 
 `generated_surrogate_predictions_32611.csv` preserves the complete generated
-pool order. Surrogate predictions are available for 32,610 structures. The one
+pool order. Baseline and interval-weighted surrogate predictions are available
+for 32,610 structures. The weighted model is the OOF-selected smooth-sigmoid
+tail scheme with alpha 6, temperature 0.05, and Ridge alpha 100, refit on all
+6,270 labeled rows for deployment. The one
 remaining structure, `[*][*]`, is explicitly marked `excluded` because the
 existing screening code classifies it as an endpoint artifact; no value was
 imputed.
@@ -42,8 +47,17 @@ audit.
 
 ## Rebuild
 
-The generated tables can be rebuilt from a checkout plus the reference
-reassessment output directory:
+Regenerate the weighted generated-candidate predictions first. The large
+32,610 x 600 candidate embedding cache is created locally and remains ignored:
+
+```bash
+python MY_PAPER_RELATED/polybert_weighted_evidence/scripts/predict_weighted_generated_candidates.py \
+  --device cuda \
+  --batch-size 256
+```
+
+The complete generated tables can then be rebuilt from a checkout plus the
+reference reassessment output directory:
 
 ```bash
 python scripts/build_machine_readable_release.py \
