@@ -1,0 +1,20 @@
+[ defaults ]
+; nbfunc  comb-rule  gen-pairs  fudgeLJ  fudgeQQ
+1         2          yes        0.5      0.8333333333
+
+#include "all_atomtypes.itp"
+
+#include "polymer_clean.itp"
+#ifdef POSRES
+#include "posre_POL.itp"
+#endif
+#include "tfsi_clean.itp"
+#include "li_clean.itp"
+
+[ system ]
+Traj_912118
+
+[ molecules ]
+polymer 19
+LI   100
+tfsi 100
