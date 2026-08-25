@@ -368,7 +368,7 @@ def build_figure_manifest(output_dir: Path, fig8_rows: int) -> pd.DataFrame:
         },
         {
             "figure": "Fig7",
-            "panel": "A-C",
+            "panel": "A-B",
             "source_role": "out-of-fold predictions",
             "source_file": OOF_PREDICTIONS.as_posix(),
             "plotting_code": "scripts/figures/make_fig7_surrogate_reliability.py",
@@ -378,7 +378,7 @@ def build_figure_manifest(output_dir: Path, fig8_rows: int) -> pd.DataFrame:
         },
         {
             "figure": "Fig7",
-            "panel": "A-C",
+            "panel": "A-B",
             "source_role": "weighted-model selection",
             "source_file": WEIGHTED_SELECTION.as_posix(),
             "plotting_code": "scripts/figures/make_fig7_surrogate_reliability.py",
@@ -388,7 +388,7 @@ def build_figure_manifest(output_dir: Path, fig8_rows: int) -> pd.DataFrame:
         },
         {
             "figure": "Fig7",
-            "panel": "A-C",
+            "panel": "A-B",
             "source_role": "canonical-grouped baseline and selected-weighted OOF predictions",
             "source_file": GROUPED_WEIGHTED_OOF.as_posix(),
             "plotting_code": "scripts/figures/make_fig7_surrogate_reliability.py",
