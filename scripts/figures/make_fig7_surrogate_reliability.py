@@ -16,37 +16,6 @@ FIGURES_DIR = ROOT / "figures"
 POLYBERT_DIR = ROOT / "MY_PAPER_RELATED" / "polybert_con"
 OOF_CSV = POLYBERT_DIR / "oof_predictions.csv"
 MODEL_SELECTION_CSV = POLYBERT_DIR / "weighted_model_selection_canonical_group.csv"
-CONDUCTIVITY_SUMMARY_CSV = (
-    ROOT
-    / "MY_PAPER_RELATED"
-    / "MODELS"
-    / "FCD_runs"
-    / "_conductivity_eval"
-    / "conductivity_eval_summary.csv"
-)
-PROPOSED_PRED_CACHE = (
-    ROOT
-    / "figures"
-    / "generated_pool_enrichment"
-    / "cache"
-    / "proposed_transcvae_polybert_predictions.csv"
-)
-PROPOSED_PRECOMPUTED = {
-    "LOW": (
-        ROOT
-        / "MY_PAPER_RELATED"
-        / "polybert_con"
-        / "TransCVAE"
-        / "all_novel_smiles_condz_low_with_pred_conductivity.csv"
-    ),
-    "HIGH": (
-        ROOT
-        / "MY_PAPER_RELATED"
-        / "polybert_con"
-        / "TransCVAE"
-        / "all_novel_smiles_condz_high_with_pred_conductivity.csv"
-    ),
-}
 
 BASELINE_ID = "baseline_unweighted__ridge_alpha_1"
 WEIGHTED_ID = "smooth_sigmoid_tail_a6_t0p05__ridge_alpha_100"
@@ -110,44 +79,16 @@ def strip_svg_trailing_whitespace(svg_path: Path) -> None:
     svg_path.write_text("\n".join(line.rstrip() for line in lines) + "\n", encoding="utf-8")
 
 
-def load_proposed_histogram_predictions() -> pd.DataFrame:
-    if PROPOSED_PRED_CACHE.exists():
-        pred = pd.read_csv(PROPOSED_PRED_CACHE).copy()
-        required = {"condition", "target_setting", "pred_log10_sigma"}
-        missing = required.difference(pred.columns)
-        if missing:
-            raise ValueError(f"{PROPOSED_PRED_CACHE} is missing columns: {sorted(missing)}")
-        pred["pred_log10_sigma"] = pd.to_numeric(pred["pred_log10_sigma"], errors="coerce")
-        return pred.dropna(subset=["pred_log10_sigma"]).copy()
-
-    rows = []
-    for condition, path in PROPOSED_PRECOMPUTED.items():
-        require(path)
-        frame = pd.read_csv(path).copy()
-        if "pred_log10_cond" not in frame.columns:
-            raise ValueError(f"{path} is missing pred_log10_cond")
-        tmp = pd.DataFrame(
-            {
-                "condition": condition,
-                "target_setting": "lower target" if condition == "LOW" else "top-tail target",
-                "pred_log10_sigma": pd.to_numeric(frame["pred_log10_cond"], errors="coerce"),
-            }
-        )
-        rows.append(tmp.dropna(subset=["pred_log10_sigma"]))
-    return pd.concat(rows, ignore_index=True)
-
-
 def main() -> int:
     setup_matplotlib()
 
-    for path in (OOF_CSV, MODEL_SELECTION_CSV, CONDUCTIVITY_SUMMARY_CSV):
+    for path in (OOF_CSV, MODEL_SELECTION_CSV):
         require(path)
 
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
     oof = pd.read_csv(OOF_CSV)
     model_selection = pd.read_csv(MODEL_SELECTION_CSV)
-    conductivity_summary = pd.read_csv(CONDUCTIVITY_SUMMARY_CSV)
 
     required_oof = {"log10_cond", "pred_log10_cond"}
     missing_oof = required_oof.difference(oof.columns)
@@ -164,9 +105,9 @@ def main() -> int:
 
     fig, axes = plt.subplots(
         1,
-        3,
-        figsize=(7.45, 2.70),
-        gridspec_kw={"width_ratios": [1.08, 1.02, 0.86], "wspace": 0.34},
+        2,
+        figsize=(5.35, 2.80),
+        gridspec_kw={"width_ratios": [1.08, 1.0], "wspace": 0.34},
     )
     fig.patch.set_facecolor("white")
 
@@ -257,90 +198,7 @@ def main() -> int:
     add_panel_label(ax, "B")
     despine(ax)
 
-    # C. Generated-pool predicted-conductivity distribution.
-    # The histogram shows the cached candidate-level prediction distribution.
-    # The hit annotations use the repeat-level summary used in Table 1.
-    ax = axes[2]
-    pred_pool = load_proposed_histogram_predictions()
-    trans = conductivity_summary.loc[
-        conductivity_summary["model"].eq("TransCVAE")
-        & conductivity_summary["condition"].isin(["LOW", "HIGH"])
-    ].copy()
-    if len(trans) != 2:
-        raise ValueError(
-            "Expected exactly LOW and HIGH TransCVAE rows in "
-            f"{CONDUCTIVITY_SUMMARY_CSV}, found {len(trans)}."
-        )
-    order = ["LOW", "HIGH"]
-    label_map = {"LOW": "lower target", "HIGH": "top-tail target"}
-    color_map = {"LOW": "#9eb6d3", "HIGH": "#ef9a9a"}
-    trans["condition"] = pd.Categorical(trans["condition"], categories=order, ordered=True)
-    trans = trans.sort_values("condition")
-    means = trans["hit_1e4_mean"].astype(float).to_numpy()
-
-    bins = np.linspace(
-        float(np.nanpercentile(pred_pool["pred_log10_sigma"], 0.3)) - 0.05,
-        float(np.nanpercentile(pred_pool["pred_log10_sigma"], 99.7)) + 0.05,
-        42,
-    )
-    density_max = 0.0
-    for condition in order:
-        subset = pred_pool.loc[pred_pool["condition"].eq(condition), "pred_log10_sigma"]
-        density, _, _ = ax.hist(
-            subset,
-            bins=bins,
-            density=True,
-            alpha=0.72,
-            color=color_map[condition],
-            edgecolor="white",
-            linewidth=0.25,
-            label=label_map[condition],
-        )
-        density_max = max(density_max, float(np.nanmax(density)))
-
-    ax.axvline(-4.0, color="0.25", lw=1.1, ls="--", zorder=2)
-    ax.text(
-        -4.02,
-        0.70,
-        "10$^{-4}$ S cm$^{-1}$ surrogate hit threshold",
-        transform=ax.get_xaxis_transform(),
-        rotation=90,
-        ha="right",
-        va="top",
-        fontsize=4.8,
-        color="0.20",
-    )
-    ax.text(
-        0.04,
-        0.88,
-        f"lower hit = {means[0]:.3f}\n"
-        f"top-tail hit = {means[1]:.3f}",
-        transform=ax.transAxes,
-        ha="left",
-        va="top",
-        fontsize=5.0,
-        bbox=dict(facecolor="white", edgecolor="0.78", boxstyle="round,pad=0.20"),
-        zorder=8,
-    )
-    ax.set_ylim(0, max(3.80, density_max * 1.34))
-    ax.set_xlabel("PolyBERT-Ridge predicted\nlog$_{10}(\\sigma$ / S cm$^{-1})$", fontsize=9.0)
-    ax.set_ylabel("Density", fontsize=9.0)
-    ax.legend(
-        frameon=False,
-        fontsize=4.8,
-        loc="upper right",
-        bbox_to_anchor=(1.0, 0.91),
-        borderaxespad=0.20,
-        handlelength=0.95,
-        handletextpad=0.35,
-        labelspacing=0.25,
-    )
-    ax.tick_params(axis="y", labelsize=8.0, width=0.9, length=4)
-    ax.tick_params(axis="x", labelsize=8.0, width=0.9, length=4)
-    add_panel_label(ax, "C")
-    despine(ax)
-
-    fig.subplots_adjust(left=0.075, right=0.99, bottom=0.24, top=0.96, wspace=0.34)
+    fig.subplots_adjust(left=0.105, right=0.985, bottom=0.24, top=0.96, wspace=0.34)
 
     svg_path = FIGURES_DIR / "Fig7.svg"
     tif_path = FIGURES_DIR / "Fig7.tif"
@@ -356,12 +214,6 @@ def main() -> int:
 
     print(f"Saved: {svg_path}")
     print(f"Saved: {tif_path}")
-    print(
-        "Panel C source:",
-        CONDUCTIVITY_SUMMARY_CSV,
-        f"lower={means[0]:.6f}",
-        f"top-tail={means[1]:.6f}",
-    )
     return 0
 
 
