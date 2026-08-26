@@ -42,7 +42,7 @@ VISUAL_QC_NOTES = {
     2: "axes, thresholds, and table clear",
     3: "PolyBERT label has 131 px left/right clearance at 600 dpi",
     4: "both cross-attention labels clear decoder boxes",
-    5: "ACPYPE content clearance L/T/R/B is 180/163/102/173 px at 600 dpi",
+    5: "ACPYPE box matches header width; content clearance is 60/145/56/149 px",
     6: "panel titles removed; panel A retains only percentages",
     7: "metric box, bars, labels, and legend clear",
     8: "panel A spans the full top-row width above panels B and C",
@@ -56,7 +56,7 @@ VISUAL_QC_APPROVED_SHA256 = {
     2: "99ea72542dd5fab81baa00754d640e7591abc7c9576fbe9458826d42d82859ae",
     3: "02696f4f3e6f8608f39f2a5c649b7aa198540cc3ba87a66429e144f1e44297ae",
     4: "a1e352b21836768da52074736ada8f02e1d8dce82f59e1693422b72518549891",
-    5: "fc0fe009e2c90fd485485c21a16b04224e359acad79365b04162bdef4357787d",
+    5: "1a6e5aaecf44c50ff2132c9edd7f3eaea18cafd0c35d1fa66e1182df87398b58",
     6: "625c8f852f908ed369d05eee7bc24e23f8da841e93267fdaf20176e085402f2f",
     7: "3d7ae2fdd3506e9397f8d14faea2249f5e4b0aa5221dd9d3c1e4df20a764ea54",
     8: "f30b2dab1aaf4104486d732b747daa0f5c627ba5a4ac16ef14352007a52565f8",
@@ -140,6 +140,8 @@ def schematic_minimum_font(
         return max(old_final_size, 6.0)
     if figure_number == 5 and y > 270:
         return old_final_size
+    if figure_number == 5 and 120 <= y <= 208.8 and x > 590:
+        return max(old_final_size, 5.5)
     return max(old_final_size, SCHEMATIC_MIN_FONT_PT[figure_number])
 
 
@@ -150,11 +152,6 @@ def adjust_text_position(figure_number: int, text: str, element: ET.Element) -> 
             element.set("x", "231.0")
         elif text == "conductivity":
             element.set("x", "235.0")
-    if figure_number == 5 and y == 196.56:
-        if text == "-":
-            element.set("x", "676.0")
-        elif text == "ready":
-            element.set("x", "680.5")
 
 
 def normalize_schematic_svg(figure_number: int) -> dict[str, object]:
@@ -500,7 +497,7 @@ def write_qa_report(
         pdf_width_pt, pdf_height_pt = pdf_page_size(pdf_path)
         clearances = edge_clearance(tiff_path)
         targeted_clearance = targeted_content_clearance(number, tiff_path)
-        targeted_minimum = {3: 30, 5: 80}.get(number, 0)
+        targeted_minimum = {3: 30, 5: 45}.get(number, 0)
         tiff_sha256 = file_sha256(tiff_path)
         visual_approved = tiff_sha256 == VISUAL_QC_APPROVED_SHA256[number]
         panel_label_count = svg_panel_label_count(svg_path)
