@@ -566,7 +566,7 @@ ax.barh(
 ax.text(
     retained / 2,
     0,
-    f"Retained\n{retained:,}\n{retained_percent:.1%}",
+    f"{retained_percent:.1%}",
     ha="center",
     va="center",
     fontsize=8.0,
@@ -576,30 +576,19 @@ ax.text(
 ax.text(
     retained + excluded / 2,
     0,
-    f"Excluded\n{excluded:,}\n{excluded_percent:.1%}",
+    f"{excluded_percent:.1%}",
     ha="center",
     va="center",
     fontsize=8.0,
     color="black",
 )
 
-ax.text(
-    0.02,
-    0.18,
-    "Exact two-endpoint reconstruction: 1.000\nEndpoint-pair accuracy: 0.9706",
-    transform=ax.transAxes,
-    ha="left",
-    va="top",
-    fontsize=8.0,
-)
-
-ax.set_title("Endpoint-aware filtering summary", fontsize=10.5, pad=8)
 ax.set_xlim(0, total)
-ax.set_ylim(-0.50, 0.62)
+ax.set_ylim(-0.36, 0.36)
 ax.set_yticks([])
 ax.tick_params(axis="y", left=False, labelleft=False)
-ax.set_xticks([0, 10000, 20000])
-ax.set_xlabel("Generated endpoint strings", fontsize=9.5)
+ax.set_xticks([])
+ax.set_xlabel("")
 add_panel_label(ax, "A")
 despine(ax)
 ax.spines["left"].set_visible(False)
@@ -633,7 +622,6 @@ ax.set_xticks([10, 100, 1000, 10000])
 ax.set_yticks(y_pos)
 ax.set_yticklabels([short_model_label(m) for m in top_tail_df["model"]], fontsize=8.0)
 ax.invert_yaxis()
-ax.set_title("ANU yield under top-tail\nscalar conditioning", fontsize=10.5, pad=8)
 ax.set_xlabel("ANU yield, top-tail target", fontsize=9.5)
 ax.set_ylabel("")
 add_panel_label(ax, "B")
@@ -662,7 +650,6 @@ for _, row in fig3_df.iterrows():
 ax.set_yscale("log")
 ax.set_xlim(0, 29)
 ax.set_ylim(5, 8e4)
-ax.set_title("Distributional fidelity versus\nusable novelty", fontsize=10.5, pad=8)
 ax.set_xlabel("FCD", fontsize=9.5)
 ax.set_ylabel("ANU yield", fontsize=9.5)
 add_panel_label(ax, "C")
@@ -761,7 +748,6 @@ else:
     ax.set_ylabel("Hit fraction above threshold", fontsize=9.5)
     ax.set_ylim(0, 1.08)
 
-ax.set_title("Surrogate-predicted enrichment", fontsize=10.5, pad=8)
 ax.set_xticks(np.arange(len(target_order)))
 ax.set_xticklabels(
     [f"{t}\nHit = {score_hit[t]:.4f}" for t in target_order],

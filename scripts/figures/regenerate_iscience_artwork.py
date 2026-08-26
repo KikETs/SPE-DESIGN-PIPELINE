@@ -39,12 +39,12 @@ SCHEMATIC_MIN_FONT_PT = {1: 6.5, 2: 8.0, 3: 8.0, 4: 6.5, 5: 6.5}
 VISUAL_QC_NOTES = {
     1: "schematic labels and connectors clear",
     2: "axes, thresholds, and table clear",
-    3: "five-panel workflow labels clear",
-    4: "equations and cross-attention labels clear",
-    5: "topology bullets and workflow arrows clear",
-    6: "annotations clear bars; legend and titles clear",
+    3: "expanded PolyBERT embedding box contains its label",
+    4: "both cross-attention labels clear decoder boxes",
+    5: "all ACPYPE topology bullets remain inside the expanded box",
+    6: "panel titles removed; panel A retains only percentages",
     7: "metric box, bars, labels, and legend clear",
-    8: "annotations outside data axes; legend outside axes",
+    8: "panel A independent above panels B and C; annotations clear axes",
     9: "legend clears points; labels inside canvas",
 }
 
@@ -53,12 +53,12 @@ VISUAL_QC_NOTES = {
 VISUAL_QC_APPROVED_SHA256 = {
     1: "f818b5071db3c73ed85714655524022718d3186eca9d0260974e39a1e60c200f",
     2: "99ea72542dd5fab81baa00754d640e7591abc7c9576fbe9458826d42d82859ae",
-    3: "f7558237bedb31e96b60160a0c1c7615dc0d07cec30fe02e211a48568e480feb",
-    4: "df2baccfe4387a84a18b71ba423d04849392807e8ba76efc03f042725c78b13c",
-    5: "e2decc626c2a27180ec392b4a7af7d56c8638971275f4d2ed01e211d429ff353",
-    6: "9df8ba445a0d7b595de7c3fbe728ea0c9899de5d4495f07a1be266f61458187c",
+    3: "5d9873f30ff8ceed099d58b56da8bef77961592db8614f695b6a1baa3e590afc",
+    4: "a1e352b21836768da52074736ada8f02e1d8dce82f59e1693422b72518549891",
+    5: "db5fa350181033c856920fed9fce03278007cf102f818c9a85b3f6f07c36f2ea",
+    6: "625c8f852f908ed369d05eee7bc24e23f8da841e93267fdaf20176e085402f2f",
     7: "3d7ae2fdd3506e9397f8d14faea2249f5e4b0aa5221dd9d3c1e4df20a764ea54",
-    8: "c6f70eb14aa2293ee2fab942847e2e26473a118ccfa925fe20886a3ac717979e",
+    8: "1eb8d10e8de2ae654d02651326a5b0b4ef7461c84d23ebaa1172ac445e41066c",
     9: "442c61a7b3f1b696bb2f7960f332f3df9dc8a64f50823038cb8fd412210e9bfd",
 }
 
@@ -149,11 +149,6 @@ def adjust_text_position(figure_number: int, text: str, element: ET.Element) -> 
             element.set("x", "231.0")
         elif text == "conductivity":
             element.set("x", "235.0")
-    if figure_number == 4 and y in {64.8, 295.92}:
-        if text == "-":
-            element.set("x", "518.9" if y == 64.8 else "436.3")
-        elif text == "attention":
-            element.set("x", "522.5" if y == 64.8 else "439.9")
     if figure_number == 5 and y == 196.56:
         if text == "-":
             element.set("x", "676.0")
@@ -537,7 +532,7 @@ def write_qa_report(
             "- Figure 6 uses cells 0-4 of the specified notebook-export script. Its 14 plotted model/condition points and key baseline labels were checked before regeneration.",
             "- Figures 7-9 retain their existing CSV loading, validation, data coordinates, statistics, axis ranges, group order, and color mappings. Only typography, annotation formatting, layout, and export handling changed.",
             "- Minimum body-text values exclude mathematical sub/superscripts and chemical atom labels. For plotted figures the listed minimum is the smallest intentional legend/statistical annotation size; axes and tick labels meet the requested 9 pt and 8 pt targets.",
-            "- The side-by-side PNG files under `qa/` were manually reviewed at the 6.2-inch comparison scale on 2026-08-26; no generated panel was clipped and the corrected labels, annotations, and legends do not overlap incoherently.",
+            "- The side-by-side PNG files under `qa/` were manually reviewed at the 6.2-inch comparison scale on 2026-08-27; no generated panel was clipped and the corrected labels, annotations, and legends do not overlap incoherently.",
             "- Each manual visual PASS is bound to the reviewed TIFF SHA-256 in `VISUAL_QC_APPROVED_SHA256`. A rendering change therefore fails QC until the new comparison is reviewed and its digest is explicitly approved.",
             "- This report does not claim pixel identity because typography and layout intentionally changed.",
         ]

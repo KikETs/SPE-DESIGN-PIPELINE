@@ -206,12 +206,19 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
     mw = mannwhitneyu(top, bottom, alternative="two-sided")
     delta = cliffs_delta(top, bottom)
 
-    fig, axes = plt.subplots(
-        1,
-        3,
-        figsize=(6.20, 3.50),
-        gridspec_kw={"width_ratios": [1.12, 0.82, 0.86], "wspace": 0.34},
+    fig = plt.figure(figsize=(6.20, 6.35))
+    grid = fig.add_gridspec(
+        2,
+        2,
+        height_ratios=[1.08, 1.0],
+        hspace=0.78,
+        wspace=0.42,
     )
+    axes = [
+        fig.add_subplot(grid[0, :]),
+        fig.add_subplot(grid[1, 0]),
+        fig.add_subplot(grid[1, 1]),
+    ]
     fig.patch.set_facecolor("white")
 
     # A. Reference-label conductivity versus corrected static cNE0 reassessment.
@@ -233,6 +240,7 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
     ax.plot([lo, hi], [lo, hi], ls="--", lw=0.9, color="0.38", zorder=1)
     ax.set_xlim(lo, hi)
     ax.set_ylim(lo, hi)
+    ax.set_aspect("equal", adjustable="box")
     ax.set_xlabel("HTP-MD reference\nlog$_{10}$($\\sigma$ / S cm$^{-1}$)")
     ax.set_ylabel("GROMACS static cNE0\nlog$_{10}$($\\sigma$ / S cm$^{-1}$)")
     legend_handles, legend_labels = ax.get_legend_handles_labels()
@@ -314,7 +322,7 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
         handlelength=0.9,
         columnspacing=1.3,
     )
-    fig.subplots_adjust(left=0.115, right=0.975, bottom=0.25, top=0.78, wspace=0.36)
+    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.12, top=0.875)
     stats = {
         "completed": completed,
         "total_selected": total_selected,
