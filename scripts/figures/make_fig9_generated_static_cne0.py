@@ -54,14 +54,15 @@ def setup_matplotlib() -> None:
             "figure.dpi": 120,
             "savefig.dpi": 600,
             "font.family": "sans-serif",
-            "font.sans-serif": ["Liberation Sans", "Nimbus Sans", "Arial", "DejaVu Sans"],
+            "font.sans-serif": ["Arial", "Liberation Sans"],
             "font.size": 8.5,
             "axes.labelsize": 9.5,
             "xtick.labelsize": 8.0,
             "ytick.labelsize": 8.0,
-            "legend.fontsize": 6.5,
+            "legend.fontsize": 7.0,
             "axes.linewidth": 0.9,
-            "svg.fonttype": "path",
+            "svg.fonttype": "none",
+            "svg.hashsalt": "SPE-DESIGN-PIPELINE-Fig9",
         }
     )
 
@@ -73,11 +74,11 @@ def despine(ax) -> None:
 
 def panel_label(ax, label: str) -> None:
     ax.text(
-        -0.12,
-        1.04,
+        -0.14,
+        1.02,
         label,
         transform=ax.transAxes,
-        ha="right",
+        ha="left",
         va="bottom",
         fontsize=13,
         fontweight="bold",
@@ -86,7 +87,7 @@ def panel_label(ax, label: str) -> None:
 
 def save_tif_600dpi(fig, tif_path: Path) -> None:
     temp = tif_path.with_suffix(".tmp.png")
-    fig.savefig(temp, dpi=600, bbox_inches="tight", facecolor="white")
+    fig.savefig(temp, dpi=600, facecolor="white")
     with Image.open(temp) as image:
         image.convert("RGB").save(
             tif_path, format="TIFF", dpi=(600, 600), compression="tiff_lzw"
@@ -129,7 +130,7 @@ def load_data() -> pd.DataFrame:
 
 def make_figure(data: pd.DataFrame) -> plt.Figure:
     fig, axes = plt.subplots(
-        1, 2, figsize=(7.8, 3.25), gridspec_kw={"wspace": 0.24}
+        1, 2, figsize=(6.20, 3.00), gridspec_kw={"wspace": 0.28}
     )
     fig.patch.set_facecolor("white")
     y_label = r"GROMACS static cNE0 log$_{10}$($\sigma$ / S cm$^{-1}$)"
@@ -195,32 +196,42 @@ def make_figure(data: pd.DataFrame) -> plt.Figure:
     ax.set_ylabel(y_label)
     panel_label(ax, "B")
     ax.legend(
-        loc="lower right",
-        frameon=False,
+        loc="upper left",
+        bbox_to_anchor=(0.02, 0.98),
+        frameon=True,
+        facecolor="white",
+        edgecolor="none",
+        framealpha=0.92,
         handletextpad=0.30,
         borderaxespad=0.20,
         ncol=2,
         columnspacing=0.80,
     )
     despine(ax)
-    fig.subplots_adjust(left=0.085, right=0.985, bottom=0.22, top=0.92, wspace=0.28)
+    fig.subplots_adjust(left=0.09, right=0.99, bottom=0.24, top=0.93, wspace=0.30)
     return fig
 
 
-def main() -> int:
+def main(output_dir: Path | None = None, output_stem: str = "Fig9") -> int:
     setup_matplotlib()
-    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+    default_output = output_dir is None
+    output_dir = output_dir or FIGURES_DIR
+    output_dir.mkdir(parents=True, exist_ok=True)
     data = load_data()
     fig = make_figure(data)
-    svg_path = FIGURES_DIR / "Fig9.svg"
-    tif_path = FIGURES_DIR / "Fig9.tif"
-    fig.savefig(svg_path, bbox_inches="tight", facecolor="white")
+    svg_path = output_dir / f"{output_stem}.svg"
+    pdf_path = output_dir / f"{output_stem}.pdf"
+    tif_path = output_dir / f"{output_stem}{'.tif' if default_output else '.tiff'}"
+    fig.savefig(svg_path, facecolor="white", metadata={"Date": None})
+    fig.savefig(pdf_path, facecolor="white", metadata={"CreationDate": None})
     save_tif_600dpi(fig, tif_path)
     plt.close(fig)
     print(f"Saved: {svg_path}")
+    print(f"Saved: {pdf_path}")
     print(f"Saved: {tif_path}")
     print(f"Source: {SOURCE_CSV}")
     print("Validated: candidates=60 replicas=180 temperature_K=353")
+    print("Groups:", data.groupby("sample_group")["trajectory_id"].nunique().reindex(GROUP_ORDER).to_dict())
     return 0
 
 

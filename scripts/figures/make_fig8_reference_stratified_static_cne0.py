@@ -49,14 +49,15 @@ def setup_matplotlib() -> None:
             "figure.dpi": 120,
             "savefig.dpi": 600,
             "font.family": "sans-serif",
-            "font.sans-serif": ["Liberation Sans", "Nimbus Sans", "Arial", "DejaVu Sans"],
+            "font.sans-serif": ["Arial", "Liberation Sans"],
             "font.size": 8.5,
-            "axes.labelsize": 8.8,
-            "xtick.labelsize": 7.8,
-            "ytick.labelsize": 7.8,
-            "legend.fontsize": 6.8,
+            "axes.labelsize": 9.0,
+            "xtick.labelsize": 8.0,
+            "ytick.labelsize": 8.0,
+            "legend.fontsize": 7.0,
             "axes.linewidth": 0.9,
-            "svg.fonttype": "path",
+            "svg.fonttype": "none",
+            "svg.hashsalt": "SPE-DESIGN-PIPELINE-Fig8",
         }
     )
 
@@ -68,11 +69,11 @@ def despine(ax) -> None:
 
 def add_panel_label(ax, label: str) -> None:
     ax.text(
-        -0.17,
-        1.03,
+        -0.14,
+        1.02,
         label,
         transform=ax.transAxes,
-        fontsize=12.5,
+        fontsize=13,
         fontweight="bold",
         ha="left",
         va="bottom",
@@ -81,11 +82,11 @@ def add_panel_label(ax, label: str) -> None:
 
 def save_tif_600dpi(fig, tif_path: Path) -> None:
     tmp_png = tif_path.with_suffix(".tmp.png")
-    fig.savefig(tmp_png, dpi=600, bbox_inches="tight", facecolor="white")
+    fig.savefig(tmp_png, dpi=600, facecolor="white")
     with Image.open(tmp_png) as image:
-        if image.mode not in {"RGB", "RGBA"}:
-            image = image.convert("RGB")
-        image.save(tif_path, format="TIFF", dpi=(600, 600), compression="tiff_lzw")
+        image.convert("RGB").save(
+            tif_path, format="TIFF", dpi=(600, 600), compression="tiff_lzw"
+        )
     tmp_png.unlink(missing_ok=True)
 
 
@@ -96,6 +97,12 @@ def cliffs_delta(x: pd.Series, y: pd.Series) -> float:
         return float("nan")
     signs = [np.sign(a - b) for a in xv for b in yv]
     return float(np.mean(signs))
+
+
+def math_scientific(value: float, digits: int = 2) -> str:
+    exponent = int(np.floor(np.log10(abs(value))))
+    mantissa = value / (10**exponent)
+    return rf"{mantissa:.{digits}f} \times 10^{{{exponent}}}"
 
 
 def load_data() -> tuple[pd.DataFrame, int]:
@@ -202,7 +209,7 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
     fig, axes = plt.subplots(
         1,
         3,
-        figsize=(7.45, 2.70),
+        figsize=(6.20, 3.05),
         gridspec_kw={"width_ratios": [1.12, 0.82, 0.86], "wspace": 0.34},
     )
     fig.patch.set_facecolor("white")
@@ -240,7 +247,7 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
         transform=ax.transAxes,
         ha="left",
         va="top",
-        fontsize=6.4,
+        fontsize=7.0,
         bbox=dict(facecolor="white", edgecolor="0.78", boxstyle="round,pad=0.22"),
     )
     add_panel_label(ax, "A")
@@ -259,14 +266,14 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
     ax.text(
         0.05,
         0.97,
-        f"Top-bottom median shift = {median_shift:.3f} on log$_{{10}}$ scale\n"
+        f"Top-bottom median shift\n= {median_shift:.3f} log$_{{10}}$ units\n"
         f"Mann-Whitney U = {mw.statistic:.1f}\n"
-        f"p = {mw.pvalue:.2e}\n"
+        rf"Two-sided $p = {math_scientific(mw.pvalue)}$" "\n"
         f"Cliff's $\\delta$ = {delta:.3f}",
         transform=ax.transAxes,
         ha="left",
         va="top",
-        fontsize=6.2,
+        fontsize=7.0,
         bbox=dict(facecolor="white", edgecolor="0.78", boxstyle="round,pad=0.22"),
     )
     add_panel_label(ax, "B")
@@ -292,12 +299,12 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
         transform=ax.transAxes,
         ha="left",
         va="top",
-        fontsize=6.2,
+        fontsize=7.0,
         bbox=dict(facecolor="white", edgecolor="0.78", boxstyle="round,pad=0.22"),
     )
     add_panel_label(ax, "C")
 
-    fig.subplots_adjust(left=0.075, right=0.99, bottom=0.25, top=0.94, wspace=0.34)
+    fig.subplots_adjust(left=0.09, right=0.99, bottom=0.24, top=0.93, wspace=0.36)
     stats = {
         "completed": completed,
         "total_selected": total_selected,
@@ -313,19 +320,24 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
     return fig, stats
 
 
-def main() -> int:
+def main(output_dir: Path | None = None, output_stem: str = "Fig8") -> int:
     setup_matplotlib()
-    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+    default_output = output_dir is None
+    output_dir = output_dir or FIGURES_DIR
+    output_dir.mkdir(parents=True, exist_ok=True)
     data, total_selected = load_data()
     fig, stats = make_figure(data, total_selected)
 
-    svg_path = FIGURES_DIR / "Fig8.svg"
-    tif_path = FIGURES_DIR / "Fig8.tif"
-    fig.savefig(svg_path, bbox_inches="tight", facecolor="white")
+    svg_path = output_dir / f"{output_stem}.svg"
+    pdf_path = output_dir / f"{output_stem}.pdf"
+    tif_path = output_dir / f"{output_stem}{'.tif' if default_output else '.tiff'}"
+    fig.savefig(svg_path, facecolor="white", metadata={"Date": None})
+    fig.savefig(pdf_path, facecolor="white", metadata={"CreationDate": None})
     save_tif_600dpi(fig, tif_path)
     plt.close(fig)
 
     print(f"Saved: {svg_path}")
+    print(f"Saved: {pdf_path}")
     print(f"Saved: {tif_path}")
     print(
         "Source:",
@@ -337,7 +349,11 @@ def main() -> int:
         f"completed={stats['completed']}/{stats['total_selected']}",
         f"MALogE={stats['maloge']:.6f}",
         f"median_shift={stats['median_shift']:.6f}",
+        f"mann_whitney_u={stats['mann_whitney_u']:.6f}",
+        f"mann_whitney_p={stats['mann_whitney_p']:.9g}",
+        f"cliffs_delta={stats['cliffs_delta']:.6f}",
     )
+    print("Groups:", data.groupby("group", observed=True).size().to_dict())
     return 0
 
 

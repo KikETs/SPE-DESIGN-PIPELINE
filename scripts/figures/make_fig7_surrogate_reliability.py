@@ -27,15 +27,15 @@ def setup_matplotlib() -> None:
             "figure.dpi": 120,
             "savefig.dpi": 600,
             "font.family": "sans-serif",
-            "font.sans-serif": ["Liberation Sans", "Nimbus Sans", "Arial", "DejaVu Sans"],
+            "font.sans-serif": ["Arial", "Liberation Sans"],
             "mathtext.fontset": "stix",
             "font.size": 8.5,
             "axes.labelsize": 8.8,
             "xtick.labelsize": 7.8,
             "ytick.labelsize": 7.8,
-            "legend.fontsize": 6.8,
+            "legend.fontsize": 7.0,
             "axes.linewidth": 0.9,
-            "svg.fonttype": "path",
+            "svg.fonttype": "none",
             "svg.hashsalt": "SPE-DESIGN-PIPELINE-Fig7",
         }
     )
@@ -66,11 +66,11 @@ def add_panel_label(ax, label: str) -> None:
 
 def save_tif_600dpi(fig, tif_path: Path) -> None:
     tmp_png = tif_path.with_suffix(".tmp.png")
-    fig.savefig(tmp_png, dpi=600, bbox_inches="tight", facecolor="white")
+    fig.savefig(tmp_png, dpi=600, facecolor="white")
     with Image.open(tmp_png) as image:
-        if image.mode not in {"RGB", "RGBA"}:
-            image = image.convert("RGB")
-        image.save(tif_path, format="TIFF", dpi=(600, 600), compression="tiff_lzw")
+        image.convert("RGB").save(
+            tif_path, format="TIFF", dpi=(600, 600), compression="tiff_lzw"
+        )
     tmp_png.unlink(missing_ok=True)
 
 
@@ -79,13 +79,15 @@ def strip_svg_trailing_whitespace(svg_path: Path) -> None:
     svg_path.write_text("\n".join(line.rstrip() for line in lines) + "\n", encoding="utf-8")
 
 
-def main() -> int:
+def main(output_dir: Path | None = None, output_stem: str = "Fig7") -> int:
     setup_matplotlib()
+    default_output = output_dir is None
 
     for path in (OOF_CSV, MODEL_SELECTION_CSV):
         require(path)
 
-    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+    output_dir = output_dir or FIGURES_DIR
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     oof = pd.read_csv(OOF_CSV)
     model_selection = pd.read_csv(MODEL_SELECTION_CSV)
@@ -106,7 +108,7 @@ def main() -> int:
     fig, axes = plt.subplots(
         1,
         2,
-        figsize=(5.35, 2.80),
+        figsize=(6.20, 3.05),
         gridspec_kw={"width_ratios": [1.08, 1.0], "wspace": 0.34},
     )
     fig.patch.set_facecolor("white")
@@ -140,7 +142,7 @@ def main() -> int:
         transform=ax.transAxes,
         ha="left",
         va="top",
-        fontsize=5.8,
+        fontsize=7.0,
         bbox=dict(facecolor="white", edgecolor="0.78", boxstyle="round,pad=0.25"),
     )
     ax.set_xlim(lo, hi)
@@ -186,34 +188,37 @@ def main() -> int:
                 f"{val:.3f}",
                 ha="center",
                 va="bottom",
-                fontsize=6.2,
+                fontsize=7.0,
             )
     ax.set_xticks(x_pos)
     ax.set_xticklabels(labels, fontsize=8.4)
     ax.set_ylim(0, 0.86)
     ax.set_ylabel("Metric value", fontsize=9.0)
-    ax.legend(frameon=False, fontsize=6.4, loc="upper right")
+    ax.legend(frameon=False, fontsize=7.0, loc="upper right")
     ax.tick_params(axis="y", labelsize=8.0, width=0.9, length=4)
     ax.tick_params(axis="x", width=0.9, length=4)
     add_panel_label(ax, "B")
     despine(ax)
 
-    fig.subplots_adjust(left=0.105, right=0.985, bottom=0.24, top=0.96, wspace=0.34)
+    fig.subplots_adjust(left=0.105, right=0.985, bottom=0.23, top=0.93, wspace=0.32)
 
-    svg_path = FIGURES_DIR / "Fig7.svg"
-    tif_path = FIGURES_DIR / "Fig7.tif"
+    svg_path = output_dir / f"{output_stem}.svg"
+    pdf_path = output_dir / f"{output_stem}.pdf"
+    tif_path = output_dir / f"{output_stem}{'.tif' if default_output else '.tiff'}"
     fig.savefig(
         svg_path,
-        bbox_inches="tight",
         facecolor="white",
         metadata={"Date": None},
     )
+    fig.savefig(pdf_path, facecolor="white", metadata={"CreationDate": None})
     strip_svg_trailing_whitespace(svg_path)
     save_tif_600dpi(fig, tif_path)
     plt.close(fig)
 
     print(f"Saved: {svg_path}")
+    print(f"Saved: {pdf_path}")
     print(f"Saved: {tif_path}")
+    print(f"Inputs: {OOF_CSV} rows={len(oof)}; {MODEL_SELECTION_CSV} rows={len(model_selection)}")
     return 0
 
 

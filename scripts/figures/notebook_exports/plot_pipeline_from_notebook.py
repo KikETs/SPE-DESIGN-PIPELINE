@@ -6,6 +6,7 @@ from __future__ import annotations
 # %% [cell 0]
 # Cell 1. Imports, paths, and journal style
 
+import os
 from pathlib import Path
 import re
 import numpy as np
@@ -13,6 +14,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
 from matplotlib.lines import Line2D
+from PIL import Image
 from sklearn.linear_model import Ridge
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -41,14 +43,14 @@ for font_path in TIMES_FONT_DIR.glob("Times_New_Roman*.ttf"):
 
 AVAILABLE_FONTS = {font.name for font in font_manager.fontManager.ttflist}
 JOURNAL_FONT = next(
-    (font for font in ["Liberation Sans", "Nimbus Sans", "Arial"] if font in AVAILABLE_FONTS),
+    (font for font in ["Arial", "Liberation Sans"] if font in AVAILABLE_FONTS),
     "DejaVu Sans",
 )
 
 plt.rcParams.update({
     "font.family": JOURNAL_FONT,
-    "font.serif": [JOURNAL_FONT, "Liberation Sans", "Nimbus Sans"],
-    "font.sans-serif": [JOURNAL_FONT, "Liberation Sans", "Nimbus Sans", "Arial", "DejaVu Sans"],
+    "font.serif": [JOURNAL_FONT, "Arial", "Liberation Sans"],
+    "font.sans-serif": [JOURNAL_FONT, "Arial", "Liberation Sans"],
     "mathtext.fontset": "stix",
     "font.size": 9,
     "axes.labelsize": 10,
@@ -63,6 +65,8 @@ plt.rcParams.update({
     "ytick.direction": "out",
     "pdf.fonttype": 42,
     "ps.fonttype": 42,
+    "svg.fonttype": "none",
+    "svg.hashsalt": "SPE-DESIGN-PIPELINE-Figure6",
 })
 
 MODEL_NAME_MAP = {
@@ -425,12 +429,15 @@ display(check)
 # C Distributional fidelity versus usable novelty
 # D Surrogate-predicted enrichment for the proposed model
 
-FIGURE_DIR = ROOT / "figures"
+FIGURE_DIR = Path(os.environ.get("ISCIENCE_REGENERATED_DIR", ROOT / "figures"))
 FIGURE_DIR.mkdir(parents=True, exist_ok=True)
+FIGURE_STEM = os.environ.get(
+    "ISCIENCE_FIGURE6_STEM", "Figure3_generated_pool_enrichment"
+)
 
 fig, axes = plt.subplots(
     2, 2,
-    figsize=(7.6, 6.9),
+    figsize=(6.2, 5.8),
     gridspec_kw={"width_ratios": [1.0, 1.12], "height_ratios": [0.92, 1.08]},
 )
 axes = axes.ravel()
@@ -438,13 +445,13 @@ fig.patch.set_facecolor("white")
 
 def add_panel_label(ax, label):
     ax.text(
-        -0.11,
-        1.04,
+        -0.20,
+        1.14,
         label,
         transform=ax.transAxes,
         fontsize=13,
         fontweight="bold",
-        ha="right",
+        ha="left",
         va="bottom",
     )
 
@@ -562,7 +569,7 @@ ax.text(
     f"Retained\n{retained:,}\n{retained_percent:.1%}",
     ha="center",
     va="center",
-    fontsize=7.5,
+    fontsize=8.0,
     color="white",
     fontweight="bold",
 )
@@ -572,7 +579,7 @@ ax.text(
     f"Excluded\n{excluded:,}\n{excluded_percent:.1%}",
     ha="center",
     va="center",
-    fontsize=7.5,
+    fontsize=8.0,
     color="black",
 )
 
@@ -626,7 +633,7 @@ ax.set_xticks([10, 100, 1000, 10000])
 ax.set_yticks(y_pos)
 ax.set_yticklabels([short_model_label(m) for m in top_tail_df["model"]], fontsize=8.0)
 ax.invert_yaxis()
-ax.set_title("ANU yield under top-tail scalar conditioning", fontsize=10.5, pad=8)
+ax.set_title("ANU yield under top-tail\nscalar conditioning", fontsize=10.5, pad=8)
 ax.set_xlabel("ANU yield, top-tail target", fontsize=9.5)
 ax.set_ylabel("")
 add_panel_label(ax, "B")
@@ -655,7 +662,7 @@ for _, row in fig3_df.iterrows():
 ax.set_yscale("log")
 ax.set_xlim(0, 29)
 ax.set_ylim(5, 8e4)
-ax.set_title("Distributional fidelity versus usable novelty", fontsize=10.5, pad=8)
+ax.set_title("Distributional fidelity versus\nusable novelty", fontsize=10.5, pad=8)
 ax.set_xlabel("FCD", fontsize=9.5)
 ax.set_ylabel("ANU yield", fontsize=9.5)
 add_panel_label(ax, "C")
@@ -771,33 +778,34 @@ fig.legend(
     ncol=5,
     frameon=True,
     edgecolor="black",
-    fontsize=6.5,
+    fontsize=7.0,
     columnspacing=1.0,
     handletextpad=0.45,
 )
 
-fig.tight_layout(w_pad=2.2, h_pad=2.1, rect=(0.0, 0.12, 1.0, 1.0))
+fig.tight_layout(w_pad=1.8, h_pad=1.8, rect=(0.0, 0.14, 1.0, 0.99))
 
-jpeg_path = FIGURE_DIR / "Figure3_generated_pool_enrichment.jpeg"
-pdf_path = FIGURE_DIR / "Figure3_generated_pool_enrichment.pdf"
-tif_path = FIGURE_DIR / "Figure3_generated_pool_enrichment.tif"
-svg_path = FIGURE_DIR / "Figure3_generated_pool_enrichment.svg"
+pdf_path = FIGURE_DIR / f"{FIGURE_STEM}.pdf"
+tif_path = FIGURE_DIR / f"{FIGURE_STEM}.tiff"
+svg_path = FIGURE_DIR / f"{FIGURE_STEM}.svg"
+tmp_png = FIGURE_DIR / f"{FIGURE_STEM}.tmp.png"
 
-fig.savefig(
-    jpeg_path,
-    dpi=600,
-    bbox_inches="tight",
-    facecolor="white",
-    pil_kwargs={"quality": 95, "subsampling": 0},
-)
-fig.savefig(pdf_path, bbox_inches="tight", facecolor="white")
-fig.savefig(tif_path, dpi=600, bbox_inches="tight", facecolor="white", pil_kwargs={"compression": "tiff_lzw"})
-fig.savefig(svg_path, bbox_inches="tight")
+fig.savefig(pdf_path, facecolor="white", metadata={"CreationDate": None})
+fig.savefig(svg_path, facecolor="white", metadata={"Date": None})
+fig.savefig(tmp_png, dpi=600, facecolor="white")
+with Image.open(tmp_png) as image:
+    image.convert("RGB").save(
+        tif_path,
+        format="TIFF",
+        dpi=(600, 600),
+        compression="tiff_lzw",
+    )
+tmp_png.unlink(missing_ok=True)
 
 print("Figure 3 points:", len(fig3_df))
-print("Saved:", jpeg_path)
 print("Saved:", pdf_path)
 print("Saved:", tif_path)
+print("Saved:", svg_path)
 
 plt.show()
 
