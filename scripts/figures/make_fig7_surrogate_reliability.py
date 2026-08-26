@@ -200,7 +200,7 @@ def main(output_dir: Path | None = None, output_stem: str = "Fig7") -> int:
     add_panel_label(ax, "B")
     despine(ax)
 
-    fig.subplots_adjust(left=0.105, right=0.985, bottom=0.23, top=0.93, wspace=0.32)
+    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.23, top=0.88, wspace=0.32)
 
     svg_path = output_dir / f"{output_stem}.svg"
     pdf_path = output_dir / f"{output_stem}.pdf"

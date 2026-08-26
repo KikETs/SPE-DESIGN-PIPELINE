@@ -130,7 +130,7 @@ def load_data() -> pd.DataFrame:
 
 def make_figure(data: pd.DataFrame) -> plt.Figure:
     fig, axes = plt.subplots(
-        1, 2, figsize=(6.20, 3.00), gridspec_kw={"wspace": 0.28}
+        1, 2, figsize=(6.20, 3.10), gridspec_kw={"wspace": 0.28}
     )
     fig.patch.set_facecolor("white")
     y_label = r"GROMACS static cNE0 log$_{10}$($\sigma$ / S cm$^{-1}$)"
@@ -208,7 +208,7 @@ def make_figure(data: pd.DataFrame) -> plt.Figure:
         columnspacing=0.80,
     )
     despine(ax)
-    fig.subplots_adjust(left=0.09, right=0.99, bottom=0.24, top=0.93, wspace=0.30)
+    fig.subplots_adjust(left=0.11, right=0.97, bottom=0.25, top=0.88, wspace=0.32)
     return fig
 
 

@@ -585,11 +585,11 @@ ax.text(
 
 ax.text(
     0.02,
-    0.16,
+    0.18,
     "Exact two-endpoint reconstruction: 1.000\nEndpoint-pair accuracy: 0.9706",
     transform=ax.transAxes,
     ha="left",
-    va="bottom",
+    va="top",
     fontsize=8.0,
 )
 
@@ -775,15 +775,15 @@ fig.legend(
     handles=model_handles + target_handles,
     loc="lower center",
     bbox_to_anchor=(0.5, 0.012),
-    ncol=5,
+    ncol=3,
     frameon=True,
     edgecolor="black",
     fontsize=7.0,
-    columnspacing=1.0,
+    columnspacing=0.8,
     handletextpad=0.45,
 )
 
-fig.tight_layout(w_pad=1.8, h_pad=1.8, rect=(0.0, 0.14, 1.0, 0.99))
+fig.tight_layout(w_pad=1.8, h_pad=1.8, rect=(0.02, 0.18, 0.98, 0.99))
 
 pdf_path = FIGURE_DIR / f"{FIGURE_STEM}.pdf"
 tif_path = FIGURE_DIR / f"{FIGURE_STEM}.tiff"

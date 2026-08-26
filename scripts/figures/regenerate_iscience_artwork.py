@@ -17,7 +17,7 @@ from xml.etree import ElementTree as ET
 
 import cairosvg
 import pandas as pd
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFont
 from pypdf import PdfReader
 
 
@@ -36,6 +36,31 @@ ET.register_namespace("xlink", "http://www.w3.org/1999/xlink")
 PANEL_COUNTS = {1: 3, 2: 3, 3: 5, 4: 3, 5: 1, 6: 4, 7: 2, 8: 3, 9: 2}
 PANEL_LABELS = {1: "A-C", 2: "A-C", 3: "A-E", 4: "A-C", 5: "single panel", 6: "A-D", 7: "A-B", 8: "A-C", 9: "A-B"}
 SCHEMATIC_MIN_FONT_PT = {1: 6.5, 2: 8.0, 3: 8.0, 4: 6.5, 5: 6.5}
+VISUAL_QC_NOTES = {
+    1: "schematic labels and connectors clear",
+    2: "axes, thresholds, and table clear",
+    3: "five-panel workflow labels clear",
+    4: "equations and cross-attention labels clear",
+    5: "topology bullets and workflow arrows clear",
+    6: "annotations clear bars; legend and titles clear",
+    7: "metric box, bars, labels, and legend clear",
+    8: "annotations outside data axes; legend outside axes",
+    9: "legend clears points; labels inside canvas",
+}
+
+# These digests bind the manual layout review to the exact TIFFs that were
+# inspected. Any rendering change invalidates visual QC until it is reviewed.
+VISUAL_QC_APPROVED_SHA256 = {
+    1: "f818b5071db3c73ed85714655524022718d3186eca9d0260974e39a1e60c200f",
+    2: "99ea72542dd5fab81baa00754d640e7591abc7c9576fbe9458826d42d82859ae",
+    3: "f7558237bedb31e96b60160a0c1c7615dc0d07cec30fe02e211a48568e480feb",
+    4: "df2baccfe4387a84a18b71ba423d04849392807e8ba76efc03f042725c78b13c",
+    5: "e2decc626c2a27180ec392b4a7af7d56c8638971275f4d2ed01e211d429ff353",
+    6: "9df8ba445a0d7b595de7c3fbe728ea0c9899de5d4495f07a1be266f61458187c",
+    7: "3d7ae2fdd3506e9397f8d14faea2249f5e4b0aa5221dd9d3c1e4df20a764ea54",
+    8: "c6f70eb14aa2293ee2fab942847e2e26473a118ccfa925fe20886a3ac717979e",
+    9: "442c61a7b3f1b696bb2f7960f332f3df9dc8a64f50823038cb8fd412210e9bfd",
+}
 
 
 def local_name(tag: str) -> str:
@@ -317,6 +342,38 @@ def tiff_metadata(path: Path) -> dict[str, object]:
         }
 
 
+def edge_clearance(path: Path) -> tuple[int, int, int, int]:
+    with Image.open(path) as image:
+        rgb = image.convert("RGB")
+        white = Image.new("RGB", rgb.size, "white")
+        mask = ImageChops.difference(rgb, white).convert("L").point(
+            lambda value: 255 if value > 5 else 0
+        )
+        bbox = mask.getbbox()
+        if bbox is None:
+            return (rgb.width, rgb.height, rgb.width, rgb.height)
+        return (bbox[0], bbox[1], rgb.width - bbox[2], rgb.height - bbox[3])
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def svg_panel_label_count(path: Path) -> int:
+    root = ET.parse(path).getroot()
+    labels = {"A", "B", "C", "D", "E"}
+    return sum(
+        1
+        for element in root.iter()
+        if local_name(element.tag) == "text"
+        and "".join(element.itertext()).strip() in labels
+    )
+
+
 def pdf_page_size(path: Path) -> tuple[float, float]:
     page = PdfReader(path).pages[0]
     return float(page.mediabox.width), float(page.mediabox.height)
@@ -395,6 +452,11 @@ def write_qa_report(
         tiff_path = OUTPUT_DIR / f"Figure_{number}.tiff"
         metadata = tiff_metadata(tiff_path)
         pdf_width_pt, pdf_height_pt = pdf_page_size(pdf_path)
+        clearances = edge_clearance(tiff_path)
+        tiff_sha256 = file_sha256(tiff_path)
+        visual_approved = tiff_sha256 == VISUAL_QC_APPROVED_SHA256[number]
+        panel_label_count = svg_panel_label_count(svg_path)
+        expected_panel_labels = 0 if number == 5 else PANEL_COUNTS[number]
         forbidden = forbidden_svg_tokens(svg_path)
         requirements = [
             svg_path.exists(),
@@ -405,7 +467,10 @@ def write_qa_report(
             metadata["dpi_y"] == OUTPUT_DPI,
             metadata["compression"] == "tiff_lzw",
             abs(pdf_width_pt - FINAL_WIDTH_PT) < 0.01,
+            min(clearances) > 0,
+            panel_label_count == expected_panel_labels,
             not forbidden,
+            visual_approved,
         ]
         minimum_font = (
             schematic_info[number]["minimum_semantic_font_pt"]
@@ -424,6 +489,14 @@ def write_qa_report(
                 "mode": metadata["mode"],
                 "compression": metadata["compression"],
                 "pdf_size_pt": f"{pdf_width_pt:.1f}x{pdf_height_pt:.1f}",
+                "edge_clearance_px": "/".join(str(value) for value in clearances),
+                "panel_label_count": panel_label_count,
+                "visual_layout_check": (
+                    f"PASS: {VISUAL_QC_NOTES[number]} (reviewed TIFF hash matched)"
+                    if visual_approved
+                    else "FAIL: TIFF differs from manually reviewed artifact"
+                ),
+                "tiff_sha256": tiff_sha256,
                 "forbidden_math_tokens": ", ".join(forbidden) if forbidden else "none",
                 "comparison": str(make_comparison(number).relative_to(ROOT)),
             }
@@ -443,13 +516,14 @@ def write_qa_report(
         "comparisons therefore use the tracked `figures/FigN.tif` and editable "
         "`figures/FigN.svg` artifacts as the repository baselines.",
         "",
-        "| Figure | Status | Panels | Data/geometry identity | Min body text / pt | TIFF pixels | PDF points | DPI | RGB/LZW | Forbidden exponent tokens |",
-        "|---|---|---|---|---:|---:|---:|---:|---|---|",
+        "| Figure | Status | Panels | Data/geometry identity | Visual layout QC | Edge clearance L/T/R/B px | Min body text / pt | TIFF pixels | PDF points | DPI | RGB/LZW | Forbidden exponent tokens |",
+        "|---|---|---|---|---|---|---:|---:|---:|---:|---|---|",
     ]
     for row in rows:
         lines.append(
             f"| {row['figure']} | {row['status']} | {row['panels']} | "
-            f"{row['data_or_geometry_check']} | {row['minimum_semantic_font_pt']} | "
+            f"{row['data_or_geometry_check']} | {row['visual_layout_check']} | "
+            f"{row['edge_clearance_px']} | {row['minimum_semantic_font_pt']} | "
             f"{row['pixels']} | {row['pdf_size_pt']} | {row['dpi']} | "
             f"{row['mode']}/{row['compression']} | "
             f"{row['forbidden_math_tokens']} |"
@@ -463,7 +537,8 @@ def write_qa_report(
             "- Figure 6 uses cells 0-4 of the specified notebook-export script. Its 14 plotted model/condition points and key baseline labels were checked before regeneration.",
             "- Figures 7-9 retain their existing CSV loading, validation, data coordinates, statistics, axis ranges, group order, and color mappings. Only typography, annotation formatting, layout, and export handling changed.",
             "- Minimum body-text values exclude mathematical sub/superscripts and chemical atom labels. For plotted figures the listed minimum is the smallest intentional legend/statistical annotation size; axes and tick labels meet the requested 9 pt and 8 pt targets.",
-            "- The side-by-side PNG files under `qa/` were manually reviewed at the 6.2-inch comparison scale; no generated panel was clipped and the corrected labels, annotations, and legends do not overlap incoherently.",
+            "- The side-by-side PNG files under `qa/` were manually reviewed at the 6.2-inch comparison scale on 2026-08-26; no generated panel was clipped and the corrected labels, annotations, and legends do not overlap incoherently.",
+            "- Each manual visual PASS is bound to the reviewed TIFF SHA-256 in `VISUAL_QC_APPROVED_SHA256`. A rendering change therefore fails QC until the new comparison is reviewed and its digest is explicitly approved.",
             "- This report does not claim pixel identity because typography and layout intentionally changed.",
         ]
     )

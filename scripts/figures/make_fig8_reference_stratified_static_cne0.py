@@ -209,7 +209,7 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
     fig, axes = plt.subplots(
         1,
         3,
-        figsize=(6.20, 3.05),
+        figsize=(6.20, 3.50),
         gridspec_kw={"width_ratios": [1.12, 0.82, 0.86], "wspace": 0.34},
     )
     fig.patch.set_facecolor("white")
@@ -235,10 +235,10 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
     ax.set_ylim(lo, hi)
     ax.set_xlabel("HTP-MD reference\nlog$_{10}$($\\sigma$ / S cm$^{-1}$)")
     ax.set_ylabel("GROMACS static cNE0\nlog$_{10}$($\\sigma$ / S cm$^{-1}$)")
-    ax.legend(frameon=False, loc="lower right", handlelength=0.9, borderaxespad=0.25)
+    legend_handles, legend_labels = ax.get_legend_handles_labels()
     ax.text(
-        0.04,
-        0.96,
+        0.02,
+        1.04,
         f"Completed = {completed}/{total_selected}\n"
         f"MALogE = {maloge:.3f}\n"
         f"Median ratio = {median_ratio:.2f}\n"
@@ -246,7 +246,7 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
         f"Kendall $\\tau$ = {kendall:.3f}",
         transform=ax.transAxes,
         ha="left",
-        va="top",
+        va="bottom",
         fontsize=7.0,
         bbox=dict(facecolor="white", edgecolor="0.78", boxstyle="round,pad=0.22"),
     )
@@ -264,15 +264,15 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
         rng,
     )
     ax.text(
-        0.05,
-        0.97,
+        0.02,
+        1.04,
         f"Top-bottom median shift\n= {median_shift:.3f} log$_{{10}}$ units\n"
         f"Mann-Whitney U = {mw.statistic:.1f}\n"
         rf"Two-sided $p = {math_scientific(mw.pvalue)}$" "\n"
         f"Cliff's $\\delta$ = {delta:.3f}",
         transform=ax.transAxes,
         ha="left",
-        va="top",
+        va="bottom",
         fontsize=7.0,
         bbox=dict(facecolor="white", edgecolor="0.78", boxstyle="round,pad=0.22"),
     )
@@ -293,18 +293,28 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
         for group in GROUP_ORDER
     ]
     ax.text(
-        0.05,
-        0.97,
+        0.02,
+        1.04,
         "Median ratio\n" + "\n".join(ratio_lines),
         transform=ax.transAxes,
         ha="left",
-        va="top",
+        va="bottom",
         fontsize=7.0,
         bbox=dict(facecolor="white", edgecolor="0.78", boxstyle="round,pad=0.22"),
     )
     add_panel_label(ax, "C")
 
-    fig.subplots_adjust(left=0.09, right=0.99, bottom=0.24, top=0.93, wspace=0.36)
+    fig.legend(
+        legend_handles,
+        legend_labels,
+        loc="lower center",
+        bbox_to_anchor=(0.5, 0.015),
+        ncol=3,
+        frameon=False,
+        handlelength=0.9,
+        columnspacing=1.3,
+    )
+    fig.subplots_adjust(left=0.115, right=0.975, bottom=0.25, top=0.78, wspace=0.36)
     stats = {
         "completed": completed,
         "total_selected": total_selected,
