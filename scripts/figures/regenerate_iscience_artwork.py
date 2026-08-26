@@ -16,6 +16,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 import cairosvg
+import numpy as np
 import pandas as pd
 from PIL import Image, ImageChops, ImageDraw, ImageFont
 from pypdf import PdfReader
@@ -39,12 +40,12 @@ SCHEMATIC_MIN_FONT_PT = {1: 6.5, 2: 8.0, 3: 8.0, 4: 6.5, 5: 6.5}
 VISUAL_QC_NOTES = {
     1: "schematic labels and connectors clear",
     2: "axes, thresholds, and table clear",
-    3: "expanded PolyBERT embedding box contains its label",
+    3: "PolyBERT label has 131 px left/right clearance at 600 dpi",
     4: "both cross-attention labels clear decoder boxes",
-    5: "all ACPYPE topology bullets remain inside the expanded box",
+    5: "ACPYPE content clearance L/T/R/B is 180/163/102/173 px at 600 dpi",
     6: "panel titles removed; panel A retains only percentages",
     7: "metric box, bars, labels, and legend clear",
-    8: "panel A independent above panels B and C; annotations clear axes",
+    8: "panel A spans the full top-row width above panels B and C",
     9: "legend clears points; labels inside canvas",
 }
 
@@ -53,12 +54,12 @@ VISUAL_QC_NOTES = {
 VISUAL_QC_APPROVED_SHA256 = {
     1: "f818b5071db3c73ed85714655524022718d3186eca9d0260974e39a1e60c200f",
     2: "99ea72542dd5fab81baa00754d640e7591abc7c9576fbe9458826d42d82859ae",
-    3: "5d9873f30ff8ceed099d58b56da8bef77961592db8614f695b6a1baa3e590afc",
+    3: "02696f4f3e6f8608f39f2a5c649b7aa198540cc3ba87a66429e144f1e44297ae",
     4: "a1e352b21836768da52074736ada8f02e1d8dce82f59e1693422b72518549891",
-    5: "db5fa350181033c856920fed9fce03278007cf102f818c9a85b3f6f07c36f2ea",
+    5: "fc0fe009e2c90fd485485c21a16b04224e359acad79365b04162bdef4357787d",
     6: "625c8f852f908ed369d05eee7bc24e23f8da841e93267fdaf20176e085402f2f",
     7: "3d7ae2fdd3506e9397f8d14faea2249f5e4b0aa5221dd9d3c1e4df20a764ea54",
-    8: "1eb8d10e8de2ae654d02651326a5b0b4ef7461c84d23ebaa1172ac445e41066c",
+    8: "f30b2dab1aaf4104486d732b747daa0f5c627ba5a4ac16ef14352007a52565f8",
     9: "442c61a7b3f1b696bb2f7960f332f3df9dc8a64f50823038cb8fd412210e9bfd",
 }
 
@@ -350,6 +351,56 @@ def edge_clearance(path: Path) -> tuple[int, int, int, int]:
         return (bbox[0], bbox[1], rgb.width - bbox[2], rgb.height - bbox[3])
 
 
+def array_bbox(mask: np.ndarray) -> tuple[int, int, int, int]:
+    y_values, x_values = np.nonzero(mask)
+    if not len(x_values):
+        raise ValueError("Expected rendered pixels were not found")
+    return (
+        int(x_values.min()),
+        int(y_values.min()),
+        int(x_values.max()),
+        int(y_values.max()),
+    )
+
+
+def targeted_content_clearance(
+    figure_number: int, path: Path
+) -> tuple[int, int, int, int] | None:
+    if figure_number not in {3, 5}:
+        return None
+
+    with Image.open(path) as image:
+        pixels = np.asarray(image.convert("RGB"))
+
+    if figure_number == 3:
+        x0, y0, x1, y1 = 350, 1750, 1900, 2350
+        roi = pixels[y0:y1, x0:x1]
+        border = np.all(roi == np.array([93, 115, 154]), axis=2)
+        bx0, by0, bx1, by1 = array_bbox(border)
+        box = (bx0 + x0, by0 + y0, bx1 + x0, by1 + y0)
+        inset = pixels[box[1] + 10 : box[3] - 10, box[0] + 10 : box[2] - 10]
+        content = np.all(inset == np.array([55, 64, 66]), axis=2)
+        tx0, ty0, tx1, ty1 = array_bbox(content)
+        text = (tx0 + box[0] + 10, ty0 + box[1] + 10, tx1 + box[0] + 10, ty1 + box[1] + 10)
+    else:
+        x0, y0, x1, y1 = 2000, 250, 3200, 1150
+        roi = pixels[y0:y1, x0:x1]
+        border = np.all(roi == np.array([55, 115, 206]), axis=2)
+        bx0, by0, bx1, by1 = array_bbox(border)
+        box = (bx0 + x0, by0 + y0, bx1 + x0, by1 + y0)
+        inset = pixels[box[1] + 25 : box[3] - 25, box[0] + 25 : box[2] - 25]
+        content = np.all(inset < 20, axis=2)
+        tx0, ty0, tx1, ty1 = array_bbox(content)
+        text = (tx0 + box[0] + 25, ty0 + box[1] + 25, tx1 + box[0] + 25, ty1 + box[1] + 25)
+
+    return (
+        text[0] - box[0],
+        text[1] - box[1],
+        box[2] - text[2],
+        box[3] - text[3],
+    )
+
+
 def file_sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -448,6 +499,8 @@ def write_qa_report(
         metadata = tiff_metadata(tiff_path)
         pdf_width_pt, pdf_height_pt = pdf_page_size(pdf_path)
         clearances = edge_clearance(tiff_path)
+        targeted_clearance = targeted_content_clearance(number, tiff_path)
+        targeted_minimum = {3: 30, 5: 80}.get(number, 0)
         tiff_sha256 = file_sha256(tiff_path)
         visual_approved = tiff_sha256 == VISUAL_QC_APPROVED_SHA256[number]
         panel_label_count = svg_panel_label_count(svg_path)
@@ -466,6 +519,7 @@ def write_qa_report(
             panel_label_count == expected_panel_labels,
             not forbidden,
             visual_approved,
+            targeted_clearance is None or min(targeted_clearance) >= targeted_minimum,
         ]
         minimum_font = (
             schematic_info[number]["minimum_semantic_font_pt"]
@@ -485,6 +539,11 @@ def write_qa_report(
                 "compression": metadata["compression"],
                 "pdf_size_pt": f"{pdf_width_pt:.1f}x{pdf_height_pt:.1f}",
                 "edge_clearance_px": "/".join(str(value) for value in clearances),
+                "targeted_content_clearance_px": (
+                    "/".join(str(value) for value in targeted_clearance)
+                    if targeted_clearance is not None
+                    else "not applicable"
+                ),
                 "panel_label_count": panel_label_count,
                 "visual_layout_check": (
                     f"PASS: {VISUAL_QC_NOTES[number]} (reviewed TIFF hash matched)"
@@ -511,14 +570,15 @@ def write_qa_report(
         "comparisons therefore use the tracked `figures/FigN.tif` and editable "
         "`figures/FigN.svg` artifacts as the repository baselines.",
         "",
-        "| Figure | Status | Panels | Data/geometry identity | Visual layout QC | Edge clearance L/T/R/B px | Min body text / pt | TIFF pixels | PDF points | DPI | RGB/LZW | Forbidden exponent tokens |",
-        "|---|---|---|---|---|---|---:|---:|---:|---:|---|---|",
+        "| Figure | Status | Panels | Data/geometry identity | Visual layout QC | Edge clearance L/T/R/B px | Targeted content clearance L/T/R/B px | Min body text / pt | TIFF pixels | PDF points | DPI | RGB/LZW | Forbidden exponent tokens |",
+        "|---|---|---|---|---|---|---|---:|---:|---:|---:|---|---|",
     ]
     for row in rows:
         lines.append(
             f"| {row['figure']} | {row['status']} | {row['panels']} | "
             f"{row['data_or_geometry_check']} | {row['visual_layout_check']} | "
-            f"{row['edge_clearance_px']} | {row['minimum_semantic_font_pt']} | "
+            f"{row['edge_clearance_px']} | {row['targeted_content_clearance_px']} | "
+            f"{row['minimum_semantic_font_pt']} | "
             f"{row['pixels']} | {row['pdf_size_pt']} | {row['dpi']} | "
             f"{row['mode']}/{row['compression']} | "
             f"{row['forbidden_math_tokens']} |"

@@ -240,7 +240,6 @@ def make_figure(data: pd.DataFrame, total_selected: int) -> tuple[plt.Figure, di
     ax.plot([lo, hi], [lo, hi], ls="--", lw=0.9, color="0.38", zorder=1)
     ax.set_xlim(lo, hi)
     ax.set_ylim(lo, hi)
-    ax.set_aspect("equal", adjustable="box")
     ax.set_xlabel("HTP-MD reference\nlog$_{10}$($\\sigma$ / S cm$^{-1}$)")
     ax.set_ylabel("GROMACS static cNE0\nlog$_{10}$($\\sigma$ / S cm$^{-1}$)")
     legend_handles, legend_labels = ax.get_legend_handles_labels()
