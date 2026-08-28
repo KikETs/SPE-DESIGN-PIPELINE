@@ -17,7 +17,7 @@ reassessment workflow.
 - `MY_PAPER_RELATED/gromacs_eval_pred_conductivity`: generated-candidate MD
   preparation/analysis workflow, representative inputs, and compact numerical
   reassessment results.
-- `reproducibility/`: JCIM-oriented protocol, provenance, split, seed, data,
+- `reproducibility/`: iScience-oriented protocol, provenance, split, seed, data,
   manuscript-source, and external-archive indexes.
 - `vendor/`: local `psmiles` packaging and its small canonicalization
   dependency.

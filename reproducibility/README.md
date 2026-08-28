@@ -1,4 +1,4 @@
-# JCIM reproducibility package
+# iScience reproducibility package
 
 This directory is an additive index over the archived scientific sources. It
 does not replace or rewrite the source MD/ML outputs. All paths are relative to
